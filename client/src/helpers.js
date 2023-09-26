@@ -1,58 +1,56 @@
 
-let mocksFetched = [
-  {
-    idDrink: 2
-  },
-  {
-    idDrink: 1
-  },
-  {
-    idDrink: 3
-  },
-  {
-    idDrink: 4
-  },
-  { 
-    idDrink: 5
-  }
-]
-
-let mocksExist = [
-  {
-    idDrink:2,
-    matchedIngredients:1
-  }
-]
-
-
-export function updateFilteredCocktails (existingCocktails, fetchedCocktails) {
-  if(existingCocktails.length){
-    for (let i=0; i<fetchedCocktails.length; i++){
-      for(let j=0; j<existingCocktails.length; j++) {
-        if(existingCocktails[j].idDrink === fetchedCocktails[i].idDrink){
-        
-          existingCocktails[j].matchedIngredients++
-
-        }  else {
-          fetchedCocktails[i].matchedIngredients = 1
-          existingCocktails.push(fetchedCocktails[i])
+export function updateFilteredCocktails (existingCocktails, fetchedCocktails, requestType) {
+  if(!fetchedCocktails) return existingCocktails.slice()
+  if(requestType === 'add'){
+    let newExistingCocktails = existingCocktails.slice()
+    let helperFetchedArr = fetchedCocktails.slice()
+    if(newExistingCocktails.length){
+      for (let j=0; j<newExistingCocktails.length; j++){
+        for(let i=0; i<fetchedCocktails.length; i++) {
+          if(newExistingCocktails[j].idDrink === fetchedCocktails[i].idDrink){
+            newExistingCocktails[j].matchedIngredients++
+            helperFetchedArr.splice(i,1)
         }
       }
     }
-  } else {
-    for (let i=0; i<fetchedCocktails.length; i++) {
-      fetchedCocktails[i].matchedIngredients = 1
+    for (let i=0; i<helperFetchedArr.length; i++){
+      helperFetchedArr[i].matchedIngredients = 1
+      newExistingCocktails.push(helperFetchedArr[i])
     }
-    existingCocktails = fetchedCocktails
+    } else {
+      for (let i=0; i<fetchedCocktails.length; i++) {
+        fetchedCocktails[i].matchedIngredients = 1
+      }
+      newExistingCocktails = fetchedCocktails
+    }
+
+    function compareMatchedIngredients(a,b) {
+      return b.matchedIngredients - a.matchedIngredients
+    }
+    newExistingCocktails.sort(compareMatchedIngredients)
+    console.log('Cocktails state variable', newExistingCocktails)
+    return newExistingCocktails
   }
-  function compareMatchedIngredients(a,b) {
-    return b.matchedIngredients - a.matchedIngredients
+  if(requestType === 'remove'){
+    console.log('existing cocktails in helpers', existingCocktails)
+    console.log('fetched list', fetchedCocktails)
+    for(let j=0; j<fetchedCocktails.length; j++) {
+      for(let i=0; i<existingCocktails.length; i++) {
+        if(existingCocktails[i].idDrink === fetchedCocktails[j].idDrink) {
+          existingCocktails[i].matchedIngredients--;
+          if(existingCocktails[i].matchedIngredients === 0){
+            console.log('MATCHED INGREDIENTS', existingCocktails[i].matchedIngredients)
+            existingCocktails.splice(i,1)
+          }
+        }
+      }
+    }
+    const newExistingCocktails = existingCocktails.slice()
+    console.log('new existing cocktails in helpers', newExistingCocktails)
+    return newExistingCocktails
   }
-  existingCocktails.sort(compareMatchedIngredients)
-  return existingCocktails.slice()
 }
 
-console.log(updateFilteredCocktails(mocksExist, mocksFetched))
 
 
 

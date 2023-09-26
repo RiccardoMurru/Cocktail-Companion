@@ -6,15 +6,14 @@ export async function addUser (username, password){
     username: username,
     password: password
   }
-  const user = await fetch(`${rootUrl}/add-user`, {
+  const res = await fetch(`${rootUrl}/add-user`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    credentials: 'inclue',
-    mode:'cors',
     body: JSON.stringify(credentialsObj)
   })
+  const user = res.json()
   return user
   } catch(err) {
     console.log('Error creating user')
@@ -26,15 +25,14 @@ export async function getUser(username, password) {
       username: username,
       password: password
     }
-    const user = await fetch(`${rootUrl}/user-profile`, {
+    const res = await fetch(`${rootUrl}/user-profile`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'inclue',
-      mode: 'cors',
       body: JSON.stringify(credentialsObj)
     })
+    const user = await res.json()
     return user
   } catch(err) {
     console.log('Error retrieving profile')
@@ -47,15 +45,14 @@ export async function addFavourite (username, faveId) {
       username: username,
       faveId: faveId
     }
-    const updatedUser = await fetch(`${rootUrl}/newfave`, {
+    const res = await fetch(`${rootUrl}/newfave`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
-      mode: 'cors',
       body: JSON.stringify(dataObj)
     })
+    const updatedUser = await res.json()
     return updatedUser
   } catch (err) {
     console.log('Error saving favourite')
@@ -68,15 +65,14 @@ export async function removeFavourite (username, faveId) {
       username: username,
       faveId: faveId
     }
-    const updatedUser = await fetch(`${rootUrl}/remove-fave`, {
+    const res = await fetch(`${rootUrl}/remove-fave`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
-      mode: 'cors',
       body: JSON.stringify(dataObj)
     })
+    const updatedUser = res.json()
     return updatedUser
   } catch (err) {
     console.log('Error saving favourite')
