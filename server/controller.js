@@ -3,14 +3,19 @@ const bcrypt = require('bcrypt')
 
 async function getUser(req,res){
   try {
+    console.log('ITS HERE')
+    console.log(req.body)
     const {username, password} = req.body;
     const user = await User.findOne({username: username});
     const passwordMatches = await bcrypt.compare(password, user.password); 
-    if(!passwordMatches) throw new Error();
-    // req.session.uid = user._id;
+    if(!passwordMatches) {
+      res.status(400).json({error: 400, message: 'User or Password incorrect'})
+    }
+    // // req.session.uid = user._id;
     res.status(200).send(user)
   } catch(err) {
-    res.status(401).send('Credentials invalid')
+    res.status(500)
+    console.log(err)
   }
 }
 

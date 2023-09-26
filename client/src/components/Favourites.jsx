@@ -1,18 +1,27 @@
 import React from 'react'
 import { removeFavourite } from '../apiComs/myApi'
 import { getCocktailById } from '../apiComs/cocktailDbApi'
+import { useState, useEffect} from 'react'
 import Cocktail from './Cocktail'
-export default function Favourites({user,setUser, displayedFavourites, setDisplayedFavourites}) {
+export default function Favourites({user, setUser, setPage, page}) {
   
+  const [displayedFavourites, setDisplayedFavourites] = useState([])
 
   async function loadFavourites(user){
     const userFavourites = user.favourites
-    const cocktailList = userFavourites.map(async function (id){
-      return await getCocktailById(id)
-    })
+    const cocktailList = []
+    console.log('USER FAVOURITES',userFavourites)
+    for (let i =0; i<userFavourites.length; i++) {
+      const cocktail = await getCocktailById(userFavourites[i])
+      cocktailList.push(cocktail)
+    }
     setDisplayedFavourites(cocktailList)
   }
-  async function handleRemoveFromFavourites(faveId){
+  async function getCocktail(id){
+    const cocktail = await getCocktailById(id)
+    return cocktail
+  }
+  async function handleRemoveFromFavourites(user, faveId){
 
     for(let i=0; i<displayedFavourites.length; i++){
       if(displayedFavourites[i].idDrink === faveId) {
@@ -21,14 +30,21 @@ export default function Favourites({user,setUser, displayedFavourites, setDispla
         setDisplayedFavourites(newFavourites)
       }
     }
-    const updateUser = await removeFavourite(user.username, faveId)
+    const updatedUser = await removeFavourite(user.username, faveId)
+    setUser(updatedUser)
   }
   useEffect(()=>{
     loadFavourites(user)
-  },[])
+  },[user])
   return (
     <div>
-      {displayedFavourites.map(cocktail => <Cocktail handleRemoveFromFavourites={handleRemoveFromFavourites} user={user} setUser={setUser} cocktail={cocktail} key={cocktail.idDrink}/>)}
+      <div>
+        <p onClick={()=>setPage('search')}>Search-page</p>
+        <p onClick={()=>setUser('')}>Logout</p>
+      </div>
+      <div>
+        {displayedFavourites.map(cocktail => <Cocktail page={page} setPage={setPage} handleRemoveFromFavourites={handleRemoveFromFavourites} user={user} setUser={setUser} cocktail={cocktail} key={cocktail.idDrink}/>)}
+      </div>
     </div>
   )
 }

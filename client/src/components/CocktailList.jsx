@@ -1,10 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import Cocktail from './Cocktail'
-import { updateFilteredCocktails } from '../helpers'
 import { getCocktailById, getCocktailByIngredient } from '../apiComs/cocktailDbApi'
 
-export default function CocktailList({cocktails,selectedIngs}) {
+export default function CocktailList({cocktails,selectedIngs, user, setUser, page}) {
   
   const [displayedCocktails, setDisplayedCocktails] = useState([])
 
@@ -37,11 +36,11 @@ export default function CocktailList({cocktails,selectedIngs}) {
     }
     setDisplayedCocktails(newCocktailList)
   }
-  
+
   return (
     <>
     <div>
-      {displayedCocktails.map(cocktail => <Cocktail selectedIngs={selectedIngs} cocktail={cocktail} key={cocktail.idDrink}/>)}
+      {displayedCocktails.map(cocktail => <Cocktail page={page} user={user} setUser={setUser} selectedIngs={selectedIngs} cocktail={cocktail} key={cocktail.idDrink}/>)}
     </div>
     <button onClick={()=>fetchTenMoreCocktails()}>Show More</button>
     </>
