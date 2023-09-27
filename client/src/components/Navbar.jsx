@@ -1,6 +1,5 @@
 import React from 'react'
 import { useState,useEffect } from 'react';
-import { getAllIngredients,getAllCategories } from '../apiComs/cocktailDbApi';
 
 export default function Navbar({handleAddToSelected,ingredients}) {
   
@@ -18,10 +17,10 @@ export default function Navbar({handleAddToSelected,ingredients}) {
   }
   
   return (
-    <div>
+    <div className='NavBar' >
       <h3>Enter ingredient here!</h3>
       <form id="ingredient-search" onReset={()=>setIngList([])}>
-      <input name="search-bar"  type="text" onChange={handleChange}/>
+      <input className='form-input' name="search-bar"  type="text" onChange={handleChange}/>
       </form>
       <div className="ingredients-selector">
       { ingList.length? 

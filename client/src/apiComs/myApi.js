@@ -7,13 +7,6 @@ export async function addUser (username, password){
     username: username,
     password: password
   }
-  // const res = await fetch(`${rootUrl}/add-user`, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify(credentialsObj)
-  // })
   const res = await axios.post(`${rootUrl}/add-user`, credentialsObj, {
     headers: {
       'Content-Type': 'application/json'
@@ -38,14 +31,6 @@ export async function getUser(username, password) {
       },
       mode: 'no-cors'
     });
-    // const res = await fetch(`${rootUrl}/user-profile`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   mode: "no-cors",
-    //   body:JSON.stringify(credentialsObj)
-    // })
     const user = await res.data
     return user
   } catch(err) {
@@ -59,13 +44,6 @@ export async function addFavourite (username, faveId) {
       username: username,
       faveId: faveId
     }
-    // const res = await fetch(`${rootUrl}/newfave`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(dataObj)
-    // })
     const res = await axios.put(`${rootUrl}/addfave`, dataObj, {
       headers: {
         'Content-Type': 'application/json'

@@ -38,6 +38,7 @@ export async function getRandomCocktails () {
     const relevantDataArr = randomCocktails.map(cocktail => {
     const slimmedCocktail = {}
     for (let key in cocktail) {
+      //clean the data as it comes with lots of null values
       if(cocktail[key] !== null) slimmedCocktail[key] = cocktail[key]
     }
     return slimmedCocktail
@@ -65,9 +66,9 @@ export async function getCocktailById(id){
     const relevantCocktailInfo = {}
     const cocktail = allCocktailInfo.drinks[0]
     for (let key in cocktail) {
+      //clean the data as it comes with lots of null values
       if(cocktail[key] !== null) relevantCocktailInfo[key] = cocktail[key]
     }
-    // console.log(relevantCocktailInfo)
     return relevantCocktailInfo
   } catch(err) {
     console.log('Failed to fetch cocktail by id')

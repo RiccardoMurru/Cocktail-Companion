@@ -3,10 +3,11 @@ import { removeFavourite } from '../apiComs/myApi'
 import { getCocktailById } from '../apiComs/cocktailDbApi'
 import { useState, useEffect} from 'react'
 import Cocktail from './Cocktail'
+
 export default function Favourites({user, setUser, setPage, page}) {
   
   const [displayedFavourites, setDisplayedFavourites] = useState([])
-
+  console.log('USER IN FAVOURITES', user)
   async function loadFavourites(user){
     const userFavourites = user.favourites
     const cocktailList = []
@@ -16,10 +17,6 @@ export default function Favourites({user, setUser, setPage, page}) {
       cocktailList.push(cocktail)
     }
     setDisplayedFavourites(cocktailList)
-  }
-  async function getCocktail(id){
-    const cocktail = await getCocktailById(id)
-    return cocktail
   }
   async function handleRemoveFromFavourites(user, faveId){
 
@@ -36,14 +33,22 @@ export default function Favourites({user, setUser, setPage, page}) {
   useEffect(()=>{
     loadFavourites(user)
   },[user])
+
+  function handleLogout(){
+    setPage('search')
+    setUser('')
+  }
+
   return (
-    <div>
+    <div className='list-page'>
       <div>
         <p onClick={()=>setPage('search')}>Search-page</p>
-        <p onClick={()=>setUser('')}>Logout</p>
+        <p onClick={()=>handleLogout()}>Logout</p>
       </div>
       <div>
+      <div className='CocktailList'>
         {displayedFavourites.map(cocktail => <Cocktail page={page} setPage={setPage} handleRemoveFromFavourites={handleRemoveFromFavourites} user={user} setUser={setUser} cocktail={cocktail} key={cocktail.idDrink}/>)}
+      </div>
       </div>
     </div>
   )

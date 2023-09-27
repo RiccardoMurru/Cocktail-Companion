@@ -1,4 +1,9 @@
 
+//This function takes checks how many times a cocktail has appeared in searches, gives a count and orders
+//based on that count, as well as the reverse when removing ingredients from selected ingredients
+//for example, if you search vodka, lime juice and orange juice, any cocktail that contains all three
+//will be at the top of the list and will be rendered first, followed by cocktails that match two etc
+
 export function updateFilteredCocktails (existingCocktails, fetchedCocktails, requestType) {
   if(!fetchedCocktails) return existingCocktails.slice()
   if(requestType === 'add'){
@@ -28,7 +33,6 @@ export function updateFilteredCocktails (existingCocktails, fetchedCocktails, re
       return b.matchedIngredients - a.matchedIngredients
     }
     newExistingCocktails.sort(compareMatchedIngredients)
-    console.log('Cocktails state variable', newExistingCocktails)
     return newExistingCocktails
   }
   if(requestType === 'remove'){
@@ -39,14 +43,12 @@ export function updateFilteredCocktails (existingCocktails, fetchedCocktails, re
         if(existingCocktails[i].idDrink === fetchedCocktails[j].idDrink) {
           existingCocktails[i].matchedIngredients--;
           if(existingCocktails[i].matchedIngredients === 0){
-            console.log('MATCHED INGREDIENTS', existingCocktails[i].matchedIngredients)
             existingCocktails.splice(i,1)
           }
         }
       }
     }
     const newExistingCocktails = existingCocktails.slice()
-    console.log('new existing cocktails in helpers', newExistingCocktails)
     return newExistingCocktails
   }
 }

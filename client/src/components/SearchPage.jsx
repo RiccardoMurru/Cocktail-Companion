@@ -2,6 +2,7 @@ import React from 'react'
 import {useState, useEffect} from 'react'
 import CocktailList from './CocktailList'
 import Navbar from './Navbar'
+import logo from '../assets/LOGO.png'
 import MyIngredients from './MyIngredients'
 import { updateFilteredCocktails } from '../helpers'
 import { getAllCategories, getAllIngredients, getCocktailByIngredient } from '../apiComs/cocktailDbApi'
@@ -17,7 +18,6 @@ export default function SearchPage({user, setUser, page, setPage}) {
     fillIngredientsAndCategories()
   },[])
 
-
   async function handleAddToSelected(ing) {
 
     const element = document.getElementById('ingredient-search').reset()
@@ -29,10 +29,8 @@ export default function SearchPage({user, setUser, page, setPage}) {
   }
 
   async function handleRemoveFromSelected(ing){
-    console.log('starting ings', ingredients)
     const updatedIngredients = ingredients.slice()
     updatedIngredients.push(ing)
-    console.log('updated ings', updatedIngredients)
     const cocktailToReduce = await getCocktailByIngredient(ing)
     setIngredients(updatedIngredients)
     setCocktails(updateFilteredCocktails(cocktails,cocktailToReduce,'remove'))
@@ -46,31 +44,37 @@ export default function SearchPage({user, setUser, page, setPage}) {
   }
 
   if(user.username) return (
-    <div>
-      <div>
+    <div className='list-page'>
+      <div className='img-container'>
+      <img className='logo' src={logo}/>
+      </div>
+      <div className='navigation-buttons'>
         <p onClick={()=> setPage('favourites')}>Favourites</p>
         <p onClick={()=> setUser('')}>Logout</p>
       </div>
       <h2>Welcome back {user.username}! What are we drinking today?</h2>
-      <Navbar selectedIngs={selectedIngs} handleAddToSelected={handleAddToSelected}
+      <Navbar className='NavBar' selectedIngs={selectedIngs} handleAddToSelected={handleAddToSelected}
       ingredients={ingredients} categories={categories}/>
     
       <MyIngredients selectedIngs={selectedIngs} setSelectedIngs={setSelectedIngs}
       handleRemoveFromSelected={handleRemoveFromSelected} setIngredients={setIngredients}/>
     
-      {cocktails.length && <CocktailList page={page} selectedIngs={selectedIngs} cocktails={cocktails}
+      {cocktails.length && <CocktailList  page={page} selectedIngs={selectedIngs} cocktails={cocktails}
       user={user} setUser={setUser}/>}
     </div>
   )
   return (
-    <div>
+    <div className='list-page'>
+      <div className='img-container'>
+      <img className='logo' src={logo}/>
+      </div>
       <div>
         <p onClick={()=> setPage('login')}>Login</p>
       </div>
       <Navbar selectedIngs={selectedIngs} handleAddToSelected={handleAddToSelected}
       ingredients={ingredients} categories={categories}/>
     
-      <MyIngredients selectedIngs={selectedIngs} setSelectedIngs={setSelectedIngs}
+      <MyIngredients className='MyIngredients' selectedIngs={selectedIngs} setSelectedIngs={setSelectedIngs}
       handleRemoveFromSelected={handleRemoveFromSelected} setIngredients={setIngredients}/>
     
       {cocktails.length && <CocktailList selectedIngs={selectedIngs} cocktails={cocktails}

@@ -11,7 +11,7 @@ export default function MyIngredients({selectedIngs, setSelectedIngs, handleRemo
   }
   if (selectedIngs) return (
     <div className="selected-ings-list">
-      {selectedIngs.length ? selectedIngs.map(ing => <p key={ing} onClick={()=>unselectIngs(ing)}>{ing}</p>) : undefined}
+      {selectedIngs.length ? selectedIngs.map(ing => <p className='selected-ing' key={ing} onClick={()=>unselectIngs(ing)}>{ing}</p>) : undefined}
     </div> 
   )
 }
