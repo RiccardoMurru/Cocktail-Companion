@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express';
 const controller = require('./controller')
 const router = express.Router()
 
@@ -9,4 +9,4 @@ router.put('/remove-fave', controller.removeFavourite)
 
 
 
-module.exports = router
+export default router;

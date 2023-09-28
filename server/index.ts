@@ -1,8 +1,8 @@
-const express = require('express')
-const session = require('express-session')
-const cors = require('cors')
+import express from 'express';
+import cors from 'cors';
+import router from './router';
+
 const app = express()
-const router = require('./router')
 const secret = 'abc123'
 const port = 3001
 const corsConfig = {
@@ -25,7 +25,6 @@ app.use(router)
 //       secure: false
 //     }
 // }))
-app.listen(port, (err)=>{
-  if (err) console.log('Meep Maap')
-  else console.log('Our server is running successfully sire')
+app.listen(port, ()=>{
+  console.log('Our server is running successfully sire')
 })

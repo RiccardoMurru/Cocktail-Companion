@@ -13,8 +13,7 @@ const userSchema = new mongoose.Schema({
   ingredients: [String]
 })
 
-const User = mongoose.model('User', userSchema);
+const UserModel = mongoose.model('User', userSchema);
 
-
-module.exports = User;
+export default UserModel;
 

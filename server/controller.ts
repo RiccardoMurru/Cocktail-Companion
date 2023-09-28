@@ -1,13 +1,14 @@
-const User = require('./models/user')
+import { Request, Response } from 'express';
+
+import UserModel from './models/user';
+
 const bcrypt = require('bcrypt')
 
-async function getUser(req,res){
+async function getUser(req: Request , res: Response){
   try {
-    console.log('ITS HERE')
-    console.log(req.body)
-    const {username, password} = req.body;
-    const user = await User.findOne({username: username});
-    const passwordMatches = await bcrypt.compare(password, user.password); 
+    const { username, password } = req.body;
+    const user = await UserModel.findOne({username: username});
+    const passwordMatches = await bcrypt.compare(password, user.password);
     if(!passwordMatches) {
       res.status(400).json({error: 400, message: 'User or Password incorrect'})
     }
@@ -19,23 +20,23 @@ async function getUser(req,res){
   }
 }
 
-async function addUser(req,res){
+async function addUser(req: Request , res: Response){
   try {
     const {username, password} = req.body
-    const userExists = await User.findOne({username})
+    const userExists = await UserModel.findOne({username})
     if(userExists) throw new Error()
     const hashedPass = await bcrypt.hash(password, 10)
-    const newUser = await User.create({username: username, password: hashedPass})
+    const newUser = await UserModel.create({username: username, password: hashedPass})
     res.status(200).send(newUser)
   } catch(err) {
     res.status(401).send('Username already in use')
   }
 }
 
-async function addFavourite(req,res){
+async function addFavourite(req: Request , res: Response){
   try {
     const {username, faveId} = req.body
-    const user = await User.findOne({username: username})
+    const user = await UserModel.findOne({username: username})
     user.favourites.push(faveId)
     const updatedUser = await user.save()
     res.status(200).send(updatedUser)
@@ -44,10 +45,10 @@ async function addFavourite(req,res){
   }
 }
 
-async function removeFavourite(req,res) {
+async function removeFavourite(req: Request , res: Response) {
   try {
     const {username, faveId} = req.body
-    const user = await User.findOne({username: username})
+    const user = await UserModel.findOne({username: username})
     const indexToRemove = user.favourites.indexOf(faveId)
     user.favourites.splice(indexToRemove,1)
     const updatedUser = await user.save()
@@ -58,4 +59,9 @@ async function removeFavourite(req,res) {
 }
 
 
-module.exports = {getUser,addFavourite,removeFavourite,addUser}
+module.exports = {
+  getUser,
+  addFavourite,
+  removeFavourite,
+  addUser
+}
