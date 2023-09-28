@@ -1,9 +1,11 @@
 const rootUrl = 'http://localhost:3001'
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
+import { User } from '../interfaces/User';
 
-export async function addUser (username, password){
+export async function addUser (user: User) {
+  const { username, password } = user;
   try {
-    const credentialsObj = {
+    const credentialsObj: User = {
     username: username,
     password: password
   }
@@ -12,14 +14,15 @@ export async function addUser (username, password){
       'Content-Type': 'application/json'
     },
     mode: 'no-cors'
-  });
+  } as AxiosRequestConfig);
   const user = res.data
   return user
   } catch(err) {
     console.log('Error creating user')
-  } 
+  }
 }
-export async function getUser(username, password) {
+export async function getUser(user: User) {
+  const { username, password } = user;
   try {
     const credentialsObj = {
       username: username,
@@ -30,7 +33,7 @@ export async function getUser(username, password) {
         'Content-Type': 'application/json'
       },
       mode: 'no-cors'
-    });
+    } as AxiosRequestConfig);
     const user = await res.data
     return user
   } catch(err) {
@@ -38,7 +41,7 @@ export async function getUser(username, password) {
   }
 }
 
-export async function addFavourite (username, faveId) {
+export async function addFavourite (username: string, faveId: number) {
   try {
     const dataObj = {
       username: username,
@@ -49,7 +52,7 @@ export async function addFavourite (username, faveId) {
         'Content-Type': 'application/json'
       },
       mode: 'no-cors'
-    });
+    } as AxiosRequestConfig);
     const updatedUser = await res.data
     return updatedUser
   } catch (err) {
@@ -57,7 +60,7 @@ export async function addFavourite (username, faveId) {
   }
 }
 
-export async function removeFavourite (username, faveId) {
+export async function removeFavourite (username: string, faveId: number) {
   try {
     const dataObj = {
       username: username,
@@ -68,7 +71,7 @@ export async function removeFavourite (username, faveId) {
         'Content-Type': 'application/json'
       },
       mode: 'no-cors'
-    });
+    } as AxiosRequestConfig);
     const updatedUser = res.data
     return updatedUser
   } catch (err) {
