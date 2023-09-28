@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 
 import UserModel from './models/user';
 
-const bcrypt = require('bcrypt')
+
 
 async function getUser(req: Request , res: Response){
   try {
