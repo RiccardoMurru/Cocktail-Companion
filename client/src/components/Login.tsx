@@ -2,8 +2,9 @@
 
 import React from "react";
 import { getUser } from "../apiComs/myApi";
+import { PageProps } from "../interfaces/Props";
 
-export default function Login({ setUser, setPage }) {
+export default function Login({ setUser, setPage }:PageProps) {
   async function handleSubmit(event) {
     event.preventDefault();
 

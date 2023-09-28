@@ -3,8 +3,9 @@ import { removeFavourite } from "../apiComs/myApi";
 import { getCocktailById } from "../apiComs/cocktailDbApi";
 import { useState, useEffect } from "react";
 import Cocktail from "./Cocktail";
+import { PageProps } from "../interfaces/Props";
 
-export default function Favourites({ user, setUser, setPage, page }) {
+export default function Favourites({ user, setUser, setPage, page }: PageProps) {
   const [displayedFavourites, setDisplayedFavourites] = useState([]);
   console.log("USER IN FAVOURITES", user);
   async function loadFavourites(user) {
