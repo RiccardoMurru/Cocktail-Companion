@@ -34,9 +34,14 @@ export default function CocktailComponent({
         ingredientsWithMeasures.push(
           standardizedMeasure + ' ' + standardizedIngredient
         );
+        console.log(standardizedMeasure + ' ' + standardizedIngredient);
+          console.log(selectedIngs);
+
         if (
           page !== 'favourites' &&
-          selectedIngs!.includes({ strIngredient1: standardizedIngredient })
+          selectedIngs!.some(
+            ingredient => ingredient.strIngredient1 === standardizedIngredient
+          )
         ) {
           comparisonArr.push(
             standardizedMeasure + ' ' + standardizedIngredient
