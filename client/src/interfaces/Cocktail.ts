@@ -51,5 +51,5 @@ export interface Cocktail {
   strImageAttributio?: string;
   strCreativeCommonsConfirmed?: string;
   dateModified?: string;
-  matchedIngredients?: number;
+  matchedIngredients?: string;
 }

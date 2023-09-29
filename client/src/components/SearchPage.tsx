@@ -25,30 +25,63 @@ export default function SearchPage({user, setUser, page, setPage}: PageProps) {
     fillIngredientsAndCategories()
   },[])
 
+  // async function handleAddToSelected(ingredient: Ingredient): Promise<void> {
+  //   try {
+  //     const updatedIngredients = ingredients.filter(el => el !== ingredient)
+  //     const newCocktails  = await getCocktailByIngredient(ingredient)
+  //     if (newCocktails && cocktails) {
+  //       setCocktails(updateFilteredCocktails(cocktails,newCocktails,'add'))
+  //       setIngredients(updatedIngredients)
+  //       setSelectedIngs([...selectedIngs, ingredient])
+  //     }
+     
+  //   } catch (err) {
+  //     throw(err);
+  //   }
+
+  // }
+
+  // async function handleRemoveFromSelected(ingredient: Ingredient): Promise<void> {
+  //   try {
+  //     const updatedIngredients = ingredients.slice()
+  //     updatedIngredients.push(ingredient)
+  //     const cocktailToReduce = await getCocktailByIngredient(ingredient)
+  //     setIngredients(updatedIngredients)
+  //     setCocktails(updateFilteredCocktails(cocktails,cocktailToReduce,'remove'))
+  //   } catch (err) {
+  //     throw(err);
+  //   } 
+  // }
+
   async function handleAddToSelected(ingredient: Ingredient): Promise<void> {
     try {
-      const updatedIngredients = ingredients.filter(el => el !== ingredient)
-      const newCocktails = await getCocktailByIngredient(ingredient)
-      setCocktails(updateFilteredCocktails(cocktails,newCocktails,'add'))
-      setIngredients(updatedIngredients)
-      setSelectedIngs([...selectedIngs, ingredient])
+      const updatedIngredients = ingredients.filter(el => el !== ingredient);
+      const newCocktails = await getCocktailByIngredient(ingredient);
+      if (newCocktails && Array.isArray(newCocktails)) {
+        const filteredCocktails = newCocktails.filter(cocktail => 'idDrink' in cocktail);
+        setCocktails(updateFilteredCocktails(cocktails, filteredCocktails as Cocktail[], 'add'));
+        setIngredients(updatedIngredients);
+        setSelectedIngs([...selectedIngs, ingredient]);
+      }
     } catch (err) {
-      throw(err);
+      console.error(err);
     }
-
   }
-
+  
   async function handleRemoveFromSelected(ingredient: Ingredient): Promise<void> {
     try {
-      const updatedIngredients = ingredients.slice()
-      updatedIngredients.push(ingredient)
-      const cocktailToReduce = await getCocktailByIngredient(ingredient)
-      setIngredients(updatedIngredients)
-      setCocktails(updateFilteredCocktails(cocktails,cocktailToReduce,'remove'))
+      const updatedIngredients = [...ingredients, ingredient];
+      const cocktailToReduce = await getCocktailByIngredient(ingredient);
+      if (cocktailToReduce && Array.isArray(cocktailToReduce)) {
+        const filteredCocktails = cocktailToReduce.filter(cocktail => 'idDrink' in cocktail);
+        setCocktails(updateFilteredCocktails(cocktails, filteredCocktails as Cocktail[], 'remove'));
+        setIngredients(updatedIngredients);
+      }
     } catch (err) {
-      throw(err);
-    } 
+      console.error(err);
+    }
   }
+  
 
   async function fillIngredientsAndCategories(): Promise<void>{
     try {
