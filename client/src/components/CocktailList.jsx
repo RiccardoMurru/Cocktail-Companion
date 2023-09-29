@@ -1,14 +1,14 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import Cocktail from "./Cocktail";
-import { getCocktailById } from "../apiComs/cocktailDbApi";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import Cocktail from './Cocktail';
+import { getCocktailById } from '../apiComs/cocktailDbApi';
 
 export default function CocktailList({
   cocktails,
   selectedIngs,
   user,
   setUser,
-  page,
+  page
 }) {
   const [displayedCocktails, setDisplayedCocktails] = useState([]);
 
@@ -35,7 +35,7 @@ export default function CocktailList({
         i++
       ) {
         const fetchedCocktail = await getCocktailById(cocktails[i].idDrink);
-        console.log("more cocktails one", fetchedCocktail);
+        console.log('more cocktails one', fetchedCocktail);
         newCocktailList.push(fetchedCocktail);
       }
     }
@@ -44,7 +44,7 @@ export default function CocktailList({
 
   return (
     <div>
-      <div className="CocktailList">
+      <div className='CocktailList'>
         <div>
           {displayedCocktails.map((cocktail) => (
             <Cocktail
