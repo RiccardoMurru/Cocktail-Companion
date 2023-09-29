@@ -1,3 +1,4 @@
+import CocktailList from '../components/CocktailList';
 import { Category } from '../interfaces/Category';
 import { Cocktail } from '../interfaces/Cocktail';
 import { Drinks } from '../interfaces/Drink';
@@ -54,10 +55,17 @@ export async function getRandomCocktails() {
     const relevantDataArr = res.drinks
       .filter((cocktail): cocktail is Cocktail => 'strDrink' in cocktail)
       .map((cocktail) => {
-        const slimmedCocktail: Cocktail = {};
+        const slimmedCocktail: Cocktail = {
+          idDrink:'',
+          strDrink: '',
+          strCategory: '',
+          strAlcoholic: '',
+          strGlass: ''
+        };
         for (let key in cocktail) {
-          //clean the data as it comes with lots of null values
-          if (cocktail[key] !== null) slimmedCocktail[key] = cocktail[key];
+          const typedKey = key as keyof Cocktail;
+          const value = cocktail[typedKey];
+          if (value) slimmedCocktail[typedKey] = value;
         }
         return slimmedCocktail;
       });
@@ -67,9 +75,9 @@ export async function getRandomCocktails() {
   }
 }
 
-export async function getCocktailByIngredient(ingredient: string) {
+export async function getCocktailByIngredient(ingredient: Ingredient) {
   try {
-    const res = await fetch(`${rootUrl}/filter.php?i=${ingredient}`);
+    const res = await fetch(`${rootUrl}/filter.php?i=${ingredient.strIngredient1}`);
     const cocktails: Drinks = await res.json();
     return cocktails.drinks;
   } catch (err) {
@@ -81,11 +89,18 @@ export async function getCocktailById(id: string | undefined) {
   try {
     const res = await fetch(`${rootUrl}/lookup.php?i=${id}`);
     const allCocktailInfo: Drinks = await res.json();
-    const relevantCocktailInfo: Cocktail = {};
-    const cocktail: Cocktail = allCocktailInfo.drinks[0];
+    const relevantCocktailInfo: Cocktail = {
+        idDrink:'',
+        strDrink: '',
+        strCategory: '',
+        strAlcoholic: '',
+        strGlass: ''
+    };
+    const cocktail: Cocktail = allCocktailInfo.drinks[0] as Cocktail;
     for (let key in cocktail) {
-      //clean the data as it comes with lots of null values
-      if (cocktail[key] !== null) relevantCocktailInfo[key] = cocktail[key];
+      const typedKey = key as keyof Cocktail;
+      const value = cocktail[typedKey];
+      if(value) relevantCocktailInfo[typedKey] = value;
     }
     return relevantCocktailInfo;
   } catch (err) {
