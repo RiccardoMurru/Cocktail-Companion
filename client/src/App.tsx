@@ -20,7 +20,9 @@ function App() {
         className='list-page'
         user={user}
         setUser={setUser}
-        setPage={setPage}></SearchPage>
+        setPage={setPage}
+        page={page}
+      ></SearchPage>
     );
   if (page === 'favourites')
     return (
@@ -34,7 +36,12 @@ function App() {
     );
   if (page === 'login')
     return (
-      <Login className='login-page' setUser={setUser} setPage={setPage}></Login>
+      <Login 
+      className='login-page' 
+      user={user}
+      setUser={setUser}
+      page={page}
+      setPage={setPage}></Login>
     );
 }
 
