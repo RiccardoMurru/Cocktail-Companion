@@ -1,7 +1,9 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import Cocktail from "./Cocktail";
-import { getCocktailById } from "../apiComs/cocktailDbApi";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import { getCocktailById } from '../apiComs/cocktailDbApi';
+import { CocktailListProps } from '../interfaces/Props';
+import { type Cocktail as CocktailType} from '../interfaces/Cocktail';
+import Cocktail from './Cocktail';
 
 export default function CocktailList({
   cocktails,
@@ -9,8 +11,8 @@ export default function CocktailList({
   user,
   setUser,
   page,
-}) {
-  const [displayedCocktails, setDisplayedCocktails] = useState([]);
+}: CocktailListProps) {
+  const [displayedCocktails, setDisplayedCocktails] = useState<CocktailType[]>([]);
 
   useEffect(() => {
     fetchFirstTenCocktails();
@@ -27,15 +29,15 @@ export default function CocktailList({
   }
 
   async function fetchTenMoreCocktails() {
-    const newCocktailList = displayedCocktails.slice();
+    const newCocktailList: CocktailType[] = displayedCocktails.slice();
     if (newCocktailList.length) {
       for (
         let i = displayedCocktails.length;
         i < displayedCocktails.length + 10;
         i++
       ) {
-        const fetchedCocktail = await getCocktailById(cocktails[i].idDrink);
-        console.log("more cocktails one", fetchedCocktail);
+        const fetchedCocktail: CocktailType = await getCocktailById(cocktails[i].idDrink);
+        console.log('more cocktails one', fetchedCocktail);
         newCocktailList.push(fetchedCocktail);
       }
     }
@@ -44,9 +46,9 @@ export default function CocktailList({
 
   return (
     <div>
-      <div className="CocktailList">
+      <div className='CocktailList'>
         <div>
-          {displayedCocktails.map((cocktail) => (
+          {displayedCocktails.map(cocktail => (
             <Cocktail
               page={page}
               user={user}

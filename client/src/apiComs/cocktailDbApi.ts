@@ -77,7 +77,7 @@ export async function getCocktailByIngredient(ingredient: string) {
   }
 }
 
-export async function getCocktailById(id: string) {
+export async function getCocktailById(id: string | undefined) {
   try {
     const res = await fetch(`${rootUrl}/lookup.php?i=${id}`);
     const allCocktailInfo: Drinks = await res.json();

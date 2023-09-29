@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { addFavourite, removeFavourite } from '../apiComs/myApi';
 import { CocktailProps } from '../interfaces/Props';
+import { Cocktail } from '../interfaces/Cocktail';
 
 export default function Cocktail({
   cocktail,
@@ -27,12 +28,14 @@ export default function Cocktail({
 
     // if (cocktail[ingKey]) {
     // if (cocktail[measureKey]) {
+    type ingredientKey = keyof typeof cocktail;
+    type measureKey = keyof typeof cocktail;
 
-    if (ingKey in cocktail) {
-      if (measureKey in cocktail) {
+    if ((cocktail as Cocktail)[ingKey]) {
+      if ((cocktail as Cocktail)[measureKey]) {
         //some entries all words start with capital letters, some not, have to standardise it here
         let wordsArrMeasure: string = cocktail[measureKey].split(' ');
-        let wordsArrIng: string = cocktail[ingKey].split(' ');
+        let wordsArrIng: string = cocktail[ingKey ].split(' ');
 
         let firstLetterCapMeasure = wordsArrMeasure.map(
           word => word.charAt(0).toUpperCase() + word.slice(1)

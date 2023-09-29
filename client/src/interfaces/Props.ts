@@ -20,3 +20,9 @@ export interface CocktailProps extends PageProps {
   selectedIngs: Ingredient[];
   handleRemoveFromFavourites: (user: User, idDrink: string) => void;
 }
+
+export interface CocktailListProps extends PageProps {
+  cocktails: Cocktail[];
+  selectedIngs: Ingredient[];
+}
+
