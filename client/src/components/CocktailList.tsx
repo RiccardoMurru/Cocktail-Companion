@@ -1,7 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import Cocktail from "./Cocktail";
+import CocktailComponent from "./Cocktail";
 import { getCocktailById } from "../apiComs/cocktailDbApi";
+import { CocktailListProps, CocktailProps } from "../interfaces/Props";
+import  {Cocktail as CocktailType} from "../interfaces/Cocktail";
+
 
 export default function CocktailList({
   cocktails,
@@ -9,34 +12,45 @@ export default function CocktailList({
   user,
   setUser,
   page,
-}) {
-  const [displayedCocktails, setDisplayedCocktails] = useState([]);
+  setPage
+}: CocktailListProps) {
+  const [displayedCocktails, setDisplayedCocktails] = useState<CocktailType[]>([]);
 
   useEffect(() => {
     fetchFirstTenCocktails();
   }, [cocktails]);
 
   async function fetchFirstTenCocktails() {
+
     if (!cocktails.length) setDisplayedCocktails([]);
     const tenCocktails = cocktails.slice(0, 10);
     for (let i = 0; i < tenCocktails.length; i++) {
-      const details = await getCocktailById(tenCocktails[i].idDrink);
-      tenCocktails[i] = details;
+      try {
+        const details = await getCocktailById(tenCocktails[i].idDrink);
+        if (details) tenCocktails[i] = details;
+      } catch (e) {
+        console.log(e);
+      }
     }
     setDisplayedCocktails(tenCocktails);
+
   }
 
   async function fetchTenMoreCocktails() {
-    const newCocktailList = displayedCocktails.slice();
+  
+    const newCocktailList: CocktailType[] = displayedCocktails.slice();
     if (newCocktailList.length) {
       for (
         let i = displayedCocktails.length;
         i < displayedCocktails.length + 10;
         i++
       ) {
-        const fetchedCocktail = await getCocktailById(cocktails[i].idDrink);
-        console.log("more cocktails one", fetchedCocktail);
-        newCocktailList.push(fetchedCocktail);
+        try {
+          const fetchedCocktail: CocktailType | undefined = await getCocktailById(cocktails[i].idDrink);
+          if (fetchedCocktail) newCocktailList.push(fetchedCocktail);
+        } catch (e) {
+          console.log(e);
+        }
       }
     }
     setDisplayedCocktails(newCocktailList);
@@ -47,13 +61,14 @@ export default function CocktailList({
       <div className="CocktailList">
         <div>
           {displayedCocktails.map((cocktail) => (
-            <Cocktail
+            <CocktailComponent
               page={page}
               user={user}
               setUser={setUser}
               selectedIngs={selectedIngs}
               cocktail={cocktail}
               key={cocktail.idDrink}
+              setPage= {setPage}
             />
           ))}
         </div>

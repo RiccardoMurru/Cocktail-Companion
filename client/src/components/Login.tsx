@@ -5,11 +5,16 @@ import { getUser } from "../apiComs/myApi";
 import { PageProps } from "../interfaces/Props";
 
 export default function Login({ setUser, setPage }:PageProps) {
-  async function handleSubmit(event) {
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const username = event.target[0].value;
-    const password = event.target[1].value;
+    // Cast event.target to HTMLFormElement
+    const form = event.target as HTMLFormElement;
+
+    // Access input values using their name attributes
+    const username = form.username.value;
+    const password = form.password.value;
 
     const response = await getUser(username, password);
 

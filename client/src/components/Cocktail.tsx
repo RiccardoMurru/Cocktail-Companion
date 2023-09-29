@@ -1,84 +1,70 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { addFavourite, removeFavourite } from '../apiComs/myApi';
+import { User } from '../interfaces/User';
+import { Cocktail } from '../interfaces/Cocktail';
 import { CocktailProps } from '../interfaces/Props';
-
-export default function Cocktail({
+export default function CocktailComponent({
   cocktail,
   selectedIngs,
   handleRemoveFromFavourites,
   user,
   setUser,
-  page,
+  page
 }: CocktailProps) {
   const [isFave, setIsFave] = useState(false);
   //this useEffect works if logged in to check if a drink is already favourites so it renders with a remove button
   useEffect(() => {
     initialCheckIsFave(cocktail.idDrink);
   }, [user]);
-
   const ingredientsWithMeasures: string[] = [];
-
   const comparisonArr: string[] = []; //used in rendering to make ingredients that you've searched for highlighted green
-  for (let i = 0; i < 16; i++) {
-    //DB send cocktail ingredients in this format: {strIngredient1: Vodka / strMeasure1: 5 litres etc}
-    const ingKey: string = 'strIngredient' + i;
-    const measureKey: string = 'strMeasure' + i;
-
-    // if (cocktail[ingKey]) {
-    // if (cocktail[measureKey]) {
-
-    if (ingKey in cocktail) {
-      if (measureKey in cocktail) {
-        //some entries all words start with capital letters, some not, have to standardise it here
-        let wordsArrMeasure: string = cocktail[measureKey].split(' ');
-        let wordsArrIng: string = cocktail[ingKey].split(' ');
-
-        let firstLetterCapMeasure = wordsArrMeasure.map(
-          word => word.charAt(0).toUpperCase() + word.slice(1)
-        );
-        let firstLetterCapIng = wordsArrIng.map(
-          word => word.charAt(0).toUpperCase() + word.slice(1)
-        );
-
-        cocktail[measureKey] = firstLetterCapMeasure.join(' ');
-        cocktail[ingKey] = firstLetterCapIng.join(' ');
-
-        ingredientsWithMeasures.push(
-          cocktail[measureKey] + ' ' + cocktail[ingKey]
-        );
-
-        if (page !== 'favourites' && selectedIngs.includes(cocktail[ingKey])) {
-          comparisonArr.push(cocktail[measureKey] + ' ' + cocktail[ingKey]);
-        }
-      } else {
-        ingredientsWithMeasures.push(cocktail[ingKey]);
-        if (page !== 'favourites' && selectedIngs.includes(cocktail[ingKey])) {
-          comparisonArr.push(cocktail[ingKey]);
+  for (let i = 1; i <= 16; i++) {
+    const ingKey = 'strIngredient' + i.toString();
+    const measureKey = 'strMeasure' + i.toString();
+    const ingredientValue  = cocktail[ingKey as keyof Cocktail];
+    const measureValue = cocktail[measureKey as keyof Cocktail];
+    if (ingredientValue) {
+      const standardizedIngredient =
+        ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1);
+      const standardizedMeasure = measureValue
+        ? measureValue.charAt(0).toUpperCase() + measureValue.slice(1)
+        : '';
+      ingredientsWithMeasures.push(
+        standardizedMeasure + ' ' + standardizedIngredient
+      );
+      if (
+        page !== 'favourites' &&
+        selectedIngs!.includes({strIngredient1 : standardizedIngredient})
+      ) {
+        comparisonArr.push(standardizedMeasure + ' ' + standardizedIngredient);
+      }
+    }
+  }
+  function initialCheckIsFave(faveId: string) {
+    if ( user) {
+      if (user.favourites) {
+        for (let i = 0; i < user.favourites.length; i++) {
+          if (Number(faveId) === user.favourites[i]) setIsFave(true);
         }
       }
     }
   }
-
-  function initialCheckIsFave(faveId) {
-    if (user.favourites) {
-      for (let i = 0; i < user.favourites.length; i++) {
-        if (Number(faveId) === user.favourites[i]) setIsFave(true);
+  async function toggleFave(user: User, faveId: string) {
+    
+      if (isFave === true) {
+        const updatedUser = await removeFavourite(user.username, faveId);
+        setUser(updatedUser);
+     
       }
+      if (isFave === false) {
+        const updatedUser = await addFavourite(user.username, faveId);
+        setUser(updatedUser);
+      }
+      setIsFave(!isFave);
+    
     }
-  }
-
-  async function toggleFave(user, faveId) {
-    if (isFave === true) {
-      const updatedUser = await removeFavourite(user.username, faveId);
-      setUser(updatedUser);
-    }
-    if (isFave === false) {
-      const updatedUser = await addFavourite(user.username, faveId);
-      setUser(updatedUser);
-    }
-    setIsFave(!isFave);
-  }
+    
   //checks if cocktail being rendered on favourites page as this function would not be handed down otherwise
   if (handleRemoveFromFavourites)
     return (
@@ -87,15 +73,16 @@ export default function Cocktail({
         <div className='cocktail-details'>
           <h2>{cocktail.strDrink}</h2>
           <div>
-            {ingredientsWithMeasures.map(ing => (
+            {ingredientsWithMeasures.map((ing) => (
               <p key={ing}>{ing}</p>
             ))}
           </div>
-          <p>{cocktail.instructions}</p>
+          <p>{cocktail.strInstructions}</p>
         </div>
         <button
           className='fave-button'
-          onClick={() => handleRemoveFromFavourites(user, cocktail.idDrink)}>
+          onClick={() => handleRemoveFromFavourites(user, cocktail.idDrink)}
+        >
           Remove From Favourites
         </button>
       </div>
@@ -108,10 +95,11 @@ export default function Cocktail({
         <div className='cocktail-details'>
           <h2>{cocktail.strDrink}</h2>
           <div>
-            {ingredientsWithMeasures.map(ing => (
+            {ingredientsWithMeasures.map((ing) => (
               <p
                 key={ing}
-                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}>
+                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}
+              >
                 {ing}
               </p>
             ))}
@@ -129,12 +117,13 @@ export default function Cocktail({
           <div className='cocktail-details'>
             <h2>{cocktail.strDrink}</h2>
             <div>
-              {ingredientsWithMeasures.map(ing => (
+              {ingredientsWithMeasures.map((ing) => (
                 <p
                   key={ing}
                   className={
                     comparisonArr.includes(ing) ? 'matched-ing' : 'ing'
-                  }>
+                  }
+                >
                   {ing}
                 </p>
               ))}
@@ -143,7 +132,8 @@ export default function Cocktail({
           </div>
           <button
             className='fave-button'
-            onClick={() => toggleFave(user, cocktail.idDrink)}>
+            onClick={() => toggleFave(user, cocktail.idDrink)}
+          >
             Remove From Favourites
           </button>
         </div>
@@ -153,12 +143,13 @@ export default function Cocktail({
           <div className='cocktail-details'>
             <h2>{cocktail.strDrink}</h2>
             <div>
-              {ingredientsWithMeasures.map(ing => (
+              {ingredientsWithMeasures.map((ing) => (
                 <p
                   key={ing}
                   className={
                     comparisonArr.includes(ing) ? 'matched-ing' : 'ing'
-                  }>
+                  }
+                >
                   {ing}
                 </p>
               ))}
@@ -167,7 +158,8 @@ export default function Cocktail({
           </div>
           <button
             className='fave-button'
-            onClick={() => toggleFave(user, cocktail.idDrink)}>
+            onClick={() => toggleFave(user, cocktail.idDrink)}
+          >
             Add To Favourites
           </button>
         </div>

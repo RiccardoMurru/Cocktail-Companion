@@ -4,8 +4,13 @@
 //for example, if you search vodka, lime juice and orange juice, any cocktail that contains all three
 //will be at the top of the list and will be rendered first, followed by cocktails that match two etc
 
-export function updateFilteredCocktails (existingCocktails, fetchedCocktails, requestType) {
+import { Cocktail } from "./interfaces/Cocktail"
+
+
+export function updateFilteredCocktails (existingCocktails: Cocktail[], fetchedCocktails: Cocktail[], requestType: string) {
+  
   if(!fetchedCocktails) return existingCocktails.slice()
+  
   if(requestType === 'add'){
     let newExistingCocktails = existingCocktails.slice()
     let helperFetchedArr = fetchedCocktails.slice()
@@ -13,7 +18,7 @@ export function updateFilteredCocktails (existingCocktails, fetchedCocktails, re
       for (let j=0; j<newExistingCocktails.length; j++){
         for(let i=0; i<fetchedCocktails.length; i++) {
           if(newExistingCocktails[j].idDrink === fetchedCocktails[i].idDrink){
-            newExistingCocktails[j].matchedIngredients++
+            newExistingCocktails[j].matchedIngredients= (newExistingCocktails[j].matchedIngredients || 0) + 1;
             helperFetchedArr.splice(i,1)
         }
       }
@@ -29,8 +34,8 @@ export function updateFilteredCocktails (existingCocktails, fetchedCocktails, re
       newExistingCocktails = fetchedCocktails
     }
 
-    function compareMatchedIngredients(a,b) {
-      return b.matchedIngredients - a.matchedIngredients
+    function compareMatchedIngredients(a: Cocktail,b: Cocktail) {
+      return (b.matchedIngredients??0) - (a.matchedIngredients??0)
     }
     newExistingCocktails.sort(compareMatchedIngredients)
     return newExistingCocktails
@@ -41,7 +46,7 @@ export function updateFilteredCocktails (existingCocktails, fetchedCocktails, re
     for(let j=0; j<fetchedCocktails.length; j++) {
       for(let i=0; i<existingCocktails.length; i++) {
         if(existingCocktails[i].idDrink === fetchedCocktails[j].idDrink) {
-          existingCocktails[i].matchedIngredients--;
+          existingCocktails[i].matchedIngredients = (existingCocktails[i].matchedIngredients ||1)-1;
           if(existingCocktails[i].matchedIngredients === 0){
             existingCocktails.splice(i,1)
           }

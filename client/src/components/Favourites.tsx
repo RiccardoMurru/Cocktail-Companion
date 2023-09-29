@@ -2,23 +2,30 @@ import React from "react";
 import { removeFavourite } from "../apiComs/myApi";
 import { getCocktailById } from "../apiComs/cocktailDbApi";
 import { useState, useEffect } from "react";
-import Cocktail from "./Cocktail";
+import CocktailComponent from "./Cocktail";
 import { PageProps } from "../interfaces/Props";
+import { User } from "../interfaces/User";
+import { Cocktail } from "../interfaces/Cocktail";
 
 export default function Favourites({ user, setUser, setPage, page }: PageProps) {
-  const [displayedFavourites, setDisplayedFavourites] = useState([]);
-  console.log("USER IN FAVOURITES", user);
-  async function loadFavourites(user) {
+  const [displayedFavourites, setDisplayedFavourites] = useState<Cocktail[]>([]);
+  async function loadFavourites(user : User) : Promise<void> {
     const userFavourites = user.favourites;
     const cocktailList = [];
-    console.log("USER FAVOURITES", userFavourites);
-    for (let i = 0; i < userFavourites.length; i++) {
-      const cocktail = await getCocktailById(userFavourites[i]);
-      cocktailList.push(cocktail);
+    if (userFavourites)  {
+      for (let i = 0; i < userFavourites.length; i++) {
+        let stringifiedUserFav = userFavourites[i].toString()
+        const cocktail = await getCocktailById(stringifiedUserFav);
+        //check if it exists
+        if(cocktail) {
+          cocktailList.push(cocktail);
+        }
+      }
+      setDisplayedFavourites(cocktailList);
     }
-    setDisplayedFavourites(cocktailList);
   }
-  async function handleRemoveFromFavourites(user, faveId) {
+// add type for user and faveId
+  async function handleRemoveFromFavourites(user: User, faveId: string) {
     for (let i = 0; i < displayedFavourites.length; i++) {
       if (displayedFavourites[i].idDrink === faveId) {
         const newFavourites = displayedFavourites.slice();
@@ -35,7 +42,10 @@ export default function Favourites({ user, setUser, setPage, page }: PageProps) 
 
   function handleLogout() {
     setPage("search");
-    setUser("");
+    setUser({
+      username: '',
+      password: ''
+    });
   }
 
   return (
@@ -47,7 +57,7 @@ export default function Favourites({ user, setUser, setPage, page }: PageProps) 
       <div>
         <div className="CocktailList">
           {displayedFavourites.map((cocktail) => (
-            <Cocktail
+            <CocktailComponent
               page={page}
               setPage={setPage}
               handleRemoveFromFavourites={handleRemoveFromFavourites}

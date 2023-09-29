@@ -6,7 +6,7 @@ import { NavbarProps } from '../interfaces/Props';
 export default function Navbar({ handleAddToSelected, ingredients } : NavbarProps) {
   const [ingList, setIngList] = useState<Ingredient[]>([]);
 
-  function handleChange(event: Event) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     //search ingredients list and return all ingredients that match text in event
     if (event.target) {
       const value = (event.target as HTMLInputElement).value;
@@ -29,7 +29,7 @@ export default function Navbar({ handleAddToSelected, ingredients } : NavbarProp
           className='form-input'
           name='search-bar'
           type='text'
-          onChange={() => handleChange}
+          onChange={(event) => handleChange(event)}
         />
       </form>
       <div className='ingredients-selector'>
