@@ -25,22 +25,37 @@ export default function CocktailComponent({
     const ingredientValue = cocktail[ingKey as keyof Cocktail];
     const measureValue = cocktail[measureKey as keyof Cocktail];
     if (ingredientValue) {
-      const standardizedIngredient =
-        ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1);
-      const standardizedMeasure = measureValue
-        ? measureValue.charAt(0).toUpperCase() + measureValue.slice(1)
-        : '';
-      ingredientsWithMeasures.push(
-        standardizedMeasure + ' ' + standardizedIngredient
-      );
-      if (
-        page !== 'favourites' &&
-        selectedIngs!.includes({ strIngredient1: standardizedIngredient })
-      ) {
-        comparisonArr.push(standardizedMeasure + ' ' + standardizedIngredient);
+      if (measureValue) {
+        const standardizedIngredient =
+          ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1);
+        const standardizedMeasure = measureValue
+          ? measureValue.charAt(0).toUpperCase() + measureValue.slice(1)
+          : '';
+        ingredientsWithMeasures.push(
+          standardizedMeasure + ' ' + standardizedIngredient
+        );
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.some(
+            (ingredient) => ingredient.strIngredient1 === standardizedIngredient
+          )
+        ) {
+          comparisonArr.push(
+            standardizedMeasure + ' ' + standardizedIngredient
+          );
+        }
+      } else {
+        ingredientsWithMeasures.push(ingredientValue);
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes({ strIngredient1: ingredientValue })
+        ) {
+          comparisonArr.push(ingredientValue);
+        }
       }
     }
   }
+
   function initialCheckIsFave(faveId: string) {
     if (user) {
       if (user.favourites) {
