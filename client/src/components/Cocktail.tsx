@@ -10,7 +10,7 @@ export default function CocktailComponent({
   handleRemoveFromFavourites,
   user,
   setUser,
-  page
+  page,
 }: CocktailProps) {
   const [isFave, setIsFave] = useState(false);
   //this useEffect works if logged in to check if a drink is already favourites so it renders with a remove button
@@ -25,19 +25,31 @@ export default function CocktailComponent({
     const ingredientValue = cocktail[ingKey as keyof Cocktail];
     const measureValue = cocktail[measureKey as keyof Cocktail];
     if (ingredientValue) {
-      const standardizedIngredient =
-        ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1);
-      const standardizedMeasure = measureValue
-        ? measureValue.charAt(0).toUpperCase() + measureValue.slice(1)
-        : '';
-      ingredientsWithMeasures.push(
-        standardizedMeasure + ' ' + standardizedIngredient
-      );
-      if (
-        page !== 'favourites' &&
-        selectedIngs!.includes({ strIngredient1: standardizedIngredient })
-      ) {
-        comparisonArr.push(standardizedMeasure + ' ' + standardizedIngredient);
+      if (measureValue) {
+        const standardizedIngredient =
+          ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1);
+        const standardizedMeasure = measureValue
+          ? measureValue.charAt(0).toUpperCase() + measureValue.slice(1)
+          : '';
+        ingredientsWithMeasures.push(
+          standardizedMeasure + ' ' + standardizedIngredient
+        );
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes({ strIngredient1: standardizedIngredient })
+        ) {
+          comparisonArr.push(
+            standardizedMeasure + ' ' + standardizedIngredient
+          );
+        }
+      } else {
+        ingredientsWithMeasures.push(ingredientValue);
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes({ strIngredient1: ingredientValue })
+        ) {
+          comparisonArr.push(ingredientValue);
+        }
       }
     }
   }
@@ -61,7 +73,6 @@ export default function CocktailComponent({
     }
     setIsFave(!isFave);
   }
-
   //checks if cocktail being rendered on favourites page as this function would not be handed down otherwise
   if (handleRemoveFromFavourites)
     return (
@@ -70,7 +81,7 @@ export default function CocktailComponent({
         <div className='cocktail-details'>
           <h2>{cocktail.strDrink}</h2>
           <div>
-            {ingredientsWithMeasures.map((ing) => (
+            {ingredientsWithMeasures.map(ing => (
               <p key={ing}>{ing}</p>
             ))}
           </div>
@@ -78,8 +89,7 @@ export default function CocktailComponent({
         </div>
         <button
           className='fave-button'
-          onClick={() => handleRemoveFromFavourites(user, cocktail.idDrink)}
-        >
+          onClick={() => handleRemoveFromFavourites(user, cocktail.idDrink)}>
           Remove From Favourites
         </button>
       </div>
@@ -92,11 +102,10 @@ export default function CocktailComponent({
         <div className='cocktail-details'>
           <h2>{cocktail.strDrink}</h2>
           <div>
-            {ingredientsWithMeasures.map((ing) => (
+            {ingredientsWithMeasures.map(ing => (
               <p
                 key={ing}
-                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}
-              >
+                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}>
                 {ing}
               </p>
             ))}
@@ -114,13 +123,12 @@ export default function CocktailComponent({
           <div className='cocktail-details'>
             <h2>{cocktail.strDrink}</h2>
             <div>
-              {ingredientsWithMeasures.map((ing) => (
+              {ingredientsWithMeasures.map(ing => (
                 <p
                   key={ing}
                   className={
                     comparisonArr.includes(ing) ? 'matched-ing' : 'ing'
-                  }
-                >
+                  }>
                   {ing}
                 </p>
               ))}
@@ -129,8 +137,7 @@ export default function CocktailComponent({
           </div>
           <button
             className='fave-button'
-            onClick={() => toggleFave(user, cocktail.idDrink)}
-          >
+            onClick={() => toggleFave(user, cocktail.idDrink)}>
             Remove From Favourites
           </button>
         </div>
@@ -140,13 +147,12 @@ export default function CocktailComponent({
           <div className='cocktail-details'>
             <h2>{cocktail.strDrink}</h2>
             <div>
-              {ingredientsWithMeasures.map((ing) => (
+              {ingredientsWithMeasures.map(ing => (
                 <p
                   key={ing}
                   className={
                     comparisonArr.includes(ing) ? 'matched-ing' : 'ing'
-                  }
-                >
+                  }>
                   {ing}
                 </p>
               ))}
@@ -155,8 +161,7 @@ export default function CocktailComponent({
           </div>
           <button
             className='fave-button'
-            onClick={() => toggleFave(user, cocktail.idDrink)}
-          >
+            onClick={() => toggleFave(user, cocktail.idDrink)}>
             Add To Favourites
           </button>
         </div>
