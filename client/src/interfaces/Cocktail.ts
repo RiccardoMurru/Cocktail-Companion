@@ -1,13 +1,13 @@
 export interface Cocktail {
-  idDrink?: string;
-  strDrink?: string;
+  idDrink: string;
+  strDrink: string;
   strDrinkAlternat?: string;
   strTag?: string;
   strVide?: string;
-  strCategory?: string;
+  strCategory: string;
   strIB?: string;
-  strAlcoholic?: string;
-  strGlass?: string;
+  strAlcoholic: string;
+  strGlass: string;
   strInstructions?: string;
   strInstructionsE?: string;
   strInstructionsDE?: string;
@@ -50,4 +50,5 @@ export interface Cocktail {
   strImageAttributio?: string;
   strCreativeCommonsConfirmed?: string;
   dateModified?: string;
+  matchedIngredients?: string;
 }
