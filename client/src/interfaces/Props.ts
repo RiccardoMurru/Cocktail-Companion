@@ -19,8 +19,8 @@ export interface NavbarProps {
   categories: Category[];
 }
 
-export interface CocktailProps  {
-  cocktail: Cocktail; 
+export interface CocktailProps {
+  cocktail: Cocktail;
   selectedIngs?: Ingredient[];
   handleRemoveFromFavourites?: (user: User, idDrink: string) => void;
   user: User;
@@ -29,23 +29,16 @@ export interface CocktailProps  {
   setPage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-
 export interface CocktailListProps extends PageProps {
   setPage: React.Dispatch<React.SetStateAction<string>>;
   cocktails: Cocktail[];
-  selectedIngs : Ingredient[];
+  selectedIngs: Ingredient[];
 }
 
 export interface MyIngredientsProps {
-  className : string;
-  setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>
+  className: string;
+  setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>;
   selectedIngs: Ingredient[];
   setSelectedIngs: React.Dispatch<React.SetStateAction<Ingredient[]>>;
-  handleRemoveFromSelected: (ingredient: Ingredient) => Promise<void>
+  handleRemoveFromSelected: (ingredient: Ingredient) => Promise<void>;
 }
-
-export interface CocktailListProps extends PageProps {
-  cocktails: Cocktail[];
-  selectedIngs: Ingredient[];
-}
-

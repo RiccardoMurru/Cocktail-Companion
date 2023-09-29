@@ -1,10 +1,9 @@
-
-import React from "react";
-import { useState, useEffect } from "react";
-import CocktailComponent from "./Cocktail";
-import { getCocktailById } from "../apiComs/cocktailDbApi";
-import { CocktailListProps, CocktailProps } from "../interfaces/Props";
-import  {Cocktail as CocktailType} from "../interfaces/Cocktail";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import CocktailComponent from './Cocktail';
+import { getCocktailById } from '../apiComs/cocktailDbApi';
+import { CocktailListProps, CocktailProps } from '../interfaces/Props';
+import { Cocktail as CocktailType } from '../interfaces/Cocktail';
 
 export default function CocktailList({
   cocktails,
@@ -14,7 +13,9 @@ export default function CocktailList({
   page,
   setPage
 }: CocktailListProps) {
-  const [displayedCocktails, setDisplayedCocktails] = useState<CocktailType[]>([]);
+  const [displayedCocktails, setDisplayedCocktails] = useState<CocktailType[]>(
+    []
+  );
 
   useEffect(() => {
     fetchFirstTenCocktails();
@@ -37,7 +38,6 @@ export default function CocktailList({
   }
 
   async function fetchTenMoreCocktails() {
-
     const newCocktailList: CocktailType[] = displayedCocktails.slice();
     if (newCocktailList.length) {
       for (
@@ -46,7 +46,8 @@ export default function CocktailList({
         i++
       ) {
         try {
-          const fetchedCocktail: CocktailType | undefined = await getCocktailById(cocktails[i].idDrink);
+          const fetchedCocktail: CocktailType | undefined =
+            await getCocktailById(cocktails[i].idDrink);
           if (fetchedCocktail) newCocktailList.push(fetchedCocktail);
         } catch (e) {
           console.log(e);
@@ -68,7 +69,7 @@ export default function CocktailList({
               selectedIngs={selectedIngs}
               cocktail={cocktail}
               key={cocktail.idDrink}
-              setPage= {setPage}
+              setPage={setPage}
             />
           ))}
         </div>

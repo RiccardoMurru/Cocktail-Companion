@@ -56,7 +56,7 @@ export async function getRandomCocktails() {
       .filter((cocktail): cocktail is Cocktail => 'strDrink' in cocktail)
       .map((cocktail) => {
         const slimmedCocktail: Cocktail = {
-          idDrink:'',
+          idDrink: '',
           strDrink: '',
           strCategory: '',
           strAlcoholic: '',
@@ -77,9 +77,28 @@ export async function getRandomCocktails() {
 
 export async function getCocktailByIngredient(ingredient: Ingredient) {
   try {
-    const res = await fetch(`${rootUrl}/filter.php?i=${ingredient.strIngredient1}`);
+    const res = await fetch(
+      `${rootUrl}/filter.php?i=${ingredient.strIngredient1}`
+    );
     const cocktails: Drinks = await res.json();
-    return cocktails.drinks;
+    const relevantDataArr = cocktails.drinks
+      .filter((cocktail): cocktail is Cocktail => 'strDrink' in cocktail)
+      .map((cocktail) => {
+        const slimmedCocktail: Cocktail = {
+          idDrink: '',
+          strDrink: '',
+          strCategory: '',
+          strAlcoholic: '',
+          strGlass: ''
+        };
+        for (let key in cocktail) {
+          const typedKey = key as keyof Cocktail;
+          const value = cocktail[typedKey];
+          if (value) slimmedCocktail[typedKey] = value;
+        }
+        return slimmedCocktail;
+      });
+    return relevantDataArr;
   } catch (err) {
     console.log('Get cocktails by ingredient failed');
   }
@@ -90,17 +109,17 @@ export async function getCocktailById(id: string | undefined) {
     const res = await fetch(`${rootUrl}/lookup.php?i=${id}`);
     const allCocktailInfo: Drinks = await res.json();
     const relevantCocktailInfo: Cocktail = {
-        idDrink:'',
-        strDrink: '',
-        strCategory: '',
-        strAlcoholic: '',
-        strGlass: ''
+      idDrink: '',
+      strDrink: '',
+      strCategory: '',
+      strAlcoholic: '',
+      strGlass: ''
     };
     const cocktail: Cocktail = allCocktailInfo.drinks[0] as Cocktail;
     for (let key in cocktail) {
       const typedKey = key as keyof Cocktail;
       const value = cocktail[typedKey];
-      if(value) relevantCocktailInfo[typedKey] = value;
+      if (value) relevantCocktailInfo[typedKey] = value;
     }
     return relevantCocktailInfo;
   } catch (err) {

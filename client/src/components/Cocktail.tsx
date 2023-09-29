@@ -22,7 +22,7 @@ export default function CocktailComponent({
   for (let i = 1; i <= 16; i++) {
     const ingKey = 'strIngredient' + i.toString();
     const measureKey = 'strMeasure' + i.toString();
-    const ingredientValue  = cocktail[ingKey as keyof Cocktail];
+    const ingredientValue = cocktail[ingKey as keyof Cocktail];
     const measureValue = cocktail[measureKey as keyof Cocktail];
     if (ingredientValue) {
       const standardizedIngredient =
@@ -35,14 +35,14 @@ export default function CocktailComponent({
       );
       if (
         page !== 'favourites' &&
-        selectedIngs!.includes({strIngredient1 : standardizedIngredient})
+        selectedIngs!.includes({ strIngredient1: standardizedIngredient })
       ) {
         comparisonArr.push(standardizedMeasure + ' ' + standardizedIngredient);
       }
     }
   }
   function initialCheckIsFave(faveId: string) {
-    if ( user) {
+    if (user) {
       if (user.favourites) {
         for (let i = 0; i < user.favourites.length; i++) {
           if (Number(faveId) === user.favourites[i]) setIsFave(true);
@@ -51,19 +51,16 @@ export default function CocktailComponent({
     }
   }
   async function toggleFave(user: User, faveId: string) {
-
-      if (isFave === true) {
-        const updatedUser = await removeFavourite(user.username, faveId);
-        setUser(updatedUser);
-
-      }
-      if (isFave === false) {
-        const updatedUser = await addFavourite(user.username, faveId);
-        setUser(updatedUser);
-      }
-      setIsFave(!isFave);
-
+    if (isFave === true) {
+      const updatedUser = await removeFavourite(user.username, faveId);
+      setUser(updatedUser);
     }
+    if (isFave === false) {
+      const updatedUser = await addFavourite(user.username, faveId);
+      setUser(updatedUser);
+    }
+    setIsFave(!isFave);
+  }
 
   //checks if cocktail being rendered on favourites page as this function would not be handed down otherwise
   if (handleRemoveFromFavourites)

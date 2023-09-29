@@ -1,11 +1,10 @@
-"use strict";
+'use strict';
 
-import React from "react";
-import { getUser } from "../apiComs/myApi";
-import { PageProps } from "../interfaces/Props";
+import React from 'react';
+import { getUser } from '../apiComs/myApi';
+import { PageProps } from '../interfaces/Props';
 
-export default function Login({ setUser, setPage }:PageProps) {
-
+export default function Login({ setUser, setPage }: PageProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -19,29 +18,29 @@ export default function Login({ setUser, setPage }:PageProps) {
     const response = await getUser(username, password);
 
     if (response.error) {
-      window.alert("Username or password incorrect");
+      window.alert('Username or password incorrect');
     } else {
       setUser(response);
-      setPage("search");
+      setPage('search');
     }
   }
 
   return (
-    <div className="login-page">
+    <div className='login-page'>
       <form onSubmit={(e) => handleSubmit(e)}>
         <input
-          className="form-input"
-          name="username"
-          placeholder="Enter username here"
+          className='form-input'
+          name='username'
+          placeholder='Enter username here'
           required={true}
         ></input>
         <input
-          className="form-input"
-          name="password"
-          placeholder="Enter password here"
+          className='form-input'
+          name='password'
+          placeholder='Enter password here'
           required={true}
         ></input>
-        <button type="submit">Login</button>
+        <button type='submit'>Login</button>
       </form>
     </div>
   );

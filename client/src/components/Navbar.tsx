@@ -3,7 +3,10 @@ import { useState } from 'react';
 import { Ingredient } from '../interfaces/Ingredient';
 import { NavbarProps } from '../interfaces/Props';
 
-export default function Navbar({ handleAddToSelected, ingredients } : NavbarProps) {
+export default function Navbar({
+  handleAddToSelected,
+  ingredients
+}: NavbarProps) {
   const [ingList, setIngList] = useState<Ingredient[]>([]);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -12,11 +15,10 @@ export default function Navbar({ handleAddToSelected, ingredients } : NavbarProp
       const value = (event.target as HTMLInputElement).value;
       const firstUppercase: string =
         value.charAt(0).toUpperCase() + value.slice(1);
-      const filteredArr: Ingredient[] = ingredients.filter(
-        (ingredient: Ingredient) => {
+      const filteredArr: Ingredient[] =
+        ingredients.filter((ingredient: Ingredient) => {
           return ingredient.strIngredient1.includes(firstUppercase);
-        }
-      ) || [];
+        }) || [];
       setIngList(filteredArr);
     }
   }
@@ -34,10 +36,11 @@ export default function Navbar({ handleAddToSelected, ingredients } : NavbarProp
       </form>
       <div className='ingredients-selector'>
         {ingList.length ? (
-          ingList.map(ingredient => (
+          ingList.map((ingredient) => (
             <p
               key={ingredient.strIngredient1}
-              onClick={() => handleAddToSelected(ingredient)}>
+              onClick={() => handleAddToSelected(ingredient)}
+            >
               {' '}
               {ingredient.strIngredient1}{' '}
             </p>
