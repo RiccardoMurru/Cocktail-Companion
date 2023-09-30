@@ -6,7 +6,9 @@ import { Glass } from '../interfaces/Glass';
 import { Ingredient } from '../interfaces/Ingredient';
 
 const rootUrl = 'https://thecocktaildb.com/api/json/v2/9973533';
-
+export function isPositive(n: number) {
+  return n>0;
+}
 export async function getAllIngredients() {
   try {
     const res = await fetch(
@@ -35,7 +37,6 @@ export async function getAllCategories() {
   }
 }
 
-//NOT USED 
 export async function getAllGlassTypes() {
   try {
     const dbArray = await fetch(`${rootUrl}/list.php?g=list`);
@@ -49,7 +50,6 @@ export async function getAllGlassTypes() {
   }
 }
 
-//NOT USED 
 export async function getRandomCocktails() {
   try {
     const randomCocktails = await fetch(`${rootUrl}/randomselection.php`);
@@ -89,7 +89,6 @@ export async function getCocktailByIngredient(ingredient: Ingredient) {
   }
 }
 
-//NOT USED 
 export async function getCocktailById(id: string) {
   try {
     const res = await fetch(`${rootUrl}/lookup.php?i=${id}`);

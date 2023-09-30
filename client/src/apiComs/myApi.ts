@@ -21,44 +21,44 @@ export async function addUser (user: User) {
     console.log('Error creating user')
   }
 }
-// export async function getUser(user: User) {
-//   const { username, password } = user;
-//   try {
-//     const credentialsObj = {
-//       username: username,
-//       password: password
-//     }
-//     const res = await axios.post(`${rootUrl}/user-profile`, credentialsObj, {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       mode: 'no-cors'
-//     } as AxiosRequestConfig);
-//     const user = await res.data
-//     return user
-//   } catch(err) {
-//     console.log('Error retrieving profile')
-//   }
-// }
-
-export async function getUser(username: string, password: string) {
+export async function getUser(user: User) {
+  const { username, password } = user;
   try {
     const credentialsObj = {
       username: username,
-      password: password,
-    };
+      password: password
+    }
     const res = await axios.post(`${rootUrl}/user-profile`, credentialsObj, {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      mode: 'no-cors',
+      mode: 'no-cors'
     } as AxiosRequestConfig);
-    const user = await res.data;
-    return user;
-  } catch (err) {
-    console.log('Error retrieving profile');
+    const user = await res.data
+    return user
+  } catch(err) {
+    console.log('Error retrieving profile')
   }
 }
+
+// export async function getUser(username: string, password: string) {
+//   try {
+//     const credentialsObj = {
+//       username: username,
+//       password: password,
+//     };
+//     const res = await axios.post(`${rootUrl}/user-profile`, credentialsObj, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       mode: 'no-cors',
+//     } as AxiosRequestConfig);
+//     const user = await res.data;
+//     return user;
+//   } catch (err) {
+//     console.log('Error retrieving profile');
+//   }
+// }
 
 
 export async function addFavourite (username: string, faveId: string) {
