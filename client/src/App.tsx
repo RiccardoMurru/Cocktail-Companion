@@ -21,8 +21,7 @@ function App() {
         user={user}
         setUser={setUser}
         setPage={setPage}
-        page={page}
-      ></SearchPage>
+        page={page}></SearchPage>
     );
   if (page === 'favourites')
     return (

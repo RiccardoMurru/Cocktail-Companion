@@ -1,22 +1,22 @@
 import React from 'react';
-import { useState } from 'react';
-import { Ingredient } from '../interfaces/Ingredient';
 import { NavbarProps } from '../interfaces/Props';
 
-export default function Navbar({ handleAddToSelected, ingredients } : NavbarProps) {
-  const [ingList, setIngList] = useState<Ingredient[]>([]);
-
+export default function Navbar({
+  handleAddToSelected,
+  ingredients,
+  ingList,
+  setIngList
+}: NavbarProps) {
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     //search ingredients list and return all ingredients that match text in event
     if (event.target) {
       const value = (event.target as HTMLInputElement).value;
       const firstUppercase: string =
         value.charAt(0).toUpperCase() + value.slice(1);
-      const filteredArr: Ingredient[] = ingredients.filter(
-        (ingredient: Ingredient) => {
-          return ingredient.strIngredient1.includes(firstUppercase);
-        }
-      ) || [];
+      const filteredArr: string[] =
+        ingredients.filter((ingredient: string) =>
+          ingredient.includes(firstUppercase)
+        ) || [];
       setIngList(filteredArr);
     }
   }
@@ -34,12 +34,10 @@ export default function Navbar({ handleAddToSelected, ingredients } : NavbarProp
       </form>
       <div className='ingredients-selector'>
         {ingList.length ? (
-          ingList.map(ingredient => (
-            <p
-              key={ingredient.strIngredient1}
-              onClick={() => handleAddToSelected(ingredient)}>
+          ingList.map((ingredient) => (
+            <p key={ingredient} onClick={() => handleAddToSelected(ingredient)}>
               {' '}
-              {ingredient.strIngredient1}{' '}
+              {ingredient}{' '}
             </p>
           ))
         ) : (

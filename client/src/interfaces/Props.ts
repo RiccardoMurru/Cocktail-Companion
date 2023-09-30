@@ -1,7 +1,5 @@
 import { User } from './User';
-import { Ingredient } from './Ingredient';
 import { Cocktail } from './Cocktail';
-import { Category } from './Category';
 
 export interface PageProps {
   className?: string;
@@ -13,15 +11,17 @@ export interface PageProps {
 
 export interface NavbarProps {
   className: string;
-  handleAddToSelected: (ingredient: Ingredient) => void;
-  ingredients: Ingredient[];
-  selectedIngs: Ingredient[];
-  categories: Category[];
+  handleAddToSelected: (ingredient: string) => void;
+  ingredients: string[];
+  selectedIngs: string[];
+  ingList: string[];
+  setIngList: React.Dispatch<React.SetStateAction<string[]>>;
+  categories: string[];
 }
 
-export interface CocktailProps  {
-  cocktail: Cocktail; 
-  selectedIngs?: Ingredient[];
+export interface CocktailProps {
+  cocktail: Cocktail;
+  selectedIngs?: string[];
   handleRemoveFromFavourites?: (user: User, idDrink: string) => void;
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
@@ -29,17 +29,13 @@ export interface CocktailProps  {
   setPage: React.Dispatch<React.SetStateAction<string>>;
 }
 
-
 export interface CocktailListProps extends PageProps {
   setPage: React.Dispatch<React.SetStateAction<string>>;
   cocktails: Cocktail[];
-  selectedIngs : Ingredient[];
+  selectedIngs: string[];
 }
 
 export interface MyIngredientsProps {
-  className : string;
-  setIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>
-  selectedIngs: Ingredient[];
-  setSelectedIngs: React.Dispatch<React.SetStateAction<Ingredient[]>>;
-  handleRemoveFromSelected: (ingredient: Ingredient) => Promise<void>
+  selectedIngs: string[];
+  handleRemoveFromSelected: (ingredient: string) => Promise<void>;
 }
