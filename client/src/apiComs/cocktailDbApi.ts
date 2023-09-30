@@ -35,6 +35,7 @@ export async function getAllCategories() {
   }
 }
 
+//NOT USED 
 export async function getAllGlassTypes() {
   try {
     const dbArray = await fetch(`${rootUrl}/list.php?g=list`);
@@ -48,6 +49,7 @@ export async function getAllGlassTypes() {
   }
 }
 
+//NOT USED 
 export async function getRandomCocktails() {
   try {
     const randomCocktails = await fetch(`${rootUrl}/randomselection.php`);
@@ -79,12 +81,15 @@ export async function getCocktailByIngredient(ingredient: Ingredient) {
   try {
     const res = await fetch(`${rootUrl}/filter.php?i=${ingredient.strIngredient1}`);
     const cocktails: Drinks = await res.json();
+    console.log(ingredient.strIngredient1);
+    // console.log('the cocktails',cocktails)
     return cocktails.drinks;
   } catch (err) {
     console.log('Get cocktails by ingredient failed');
   }
 }
 
+//NOT USED 
 export async function getCocktailById(id: string) {
   try {
     const res = await fetch(`${rootUrl}/lookup.php?i=${id}`);
