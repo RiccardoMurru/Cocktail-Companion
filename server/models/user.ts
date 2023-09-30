@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  favourites: [Number],
+  favourites: [String],
   ingredients: [String]
 })
 
