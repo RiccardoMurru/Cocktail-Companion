@@ -2,8 +2,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import CocktailComponent from './Cocktail';
 import { getCocktailById } from '../apiComs/cocktailDbApi';
-import { CocktailListProps, CocktailProps } from '../interfaces/Props';
-import { Cocktail as CocktailType } from '../interfaces/Cocktail';
+import { CocktailListProps } from '../interfaces/Props';
+import { Cocktail } from '../interfaces/Cocktail';
 
 export default function CocktailList({
   cocktails,
@@ -13,9 +13,7 @@ export default function CocktailList({
   page,
   setPage
 }: CocktailListProps) {
-  const [displayedCocktails, setDisplayedCocktails] = useState<CocktailType[]>(
-    []
-  );
+  const [displayedCocktails, setDisplayedCocktails] = useState<Cocktail[]>([]);
 
   useEffect(() => {
     fetchFirstTenCocktails();
@@ -28,7 +26,7 @@ export default function CocktailList({
     for (let i = 0; i < tenCocktails.length; i++) {
       try {
         const details = await getCocktailById(tenCocktails[i].idDrink);
-        if (details) tenCocktails[i] = details;
+        if (!Array.isArray(details)) tenCocktails[i] = details;
       } catch (e) {
         console.log(e);
       }
@@ -38,7 +36,7 @@ export default function CocktailList({
   }
 
   async function fetchTenMoreCocktails() {
-    const newCocktailList: CocktailType[] = displayedCocktails.slice();
+    const newCocktailList: Cocktail[] = displayedCocktails.slice();
     if (newCocktailList.length) {
       for (
         let i = displayedCocktails.length;
@@ -46,9 +44,11 @@ export default function CocktailList({
         i++
       ) {
         try {
-          const fetchedCocktail: CocktailType | undefined =
-            await getCocktailById(cocktails[i].idDrink);
-          if (fetchedCocktail) newCocktailList.push(fetchedCocktail);
+          const fetchedCocktail: Cocktail | Cocktail[] = await getCocktailById(
+            cocktails[i].idDrink
+          );
+          if (!Array.isArray(fetchedCocktail))
+            newCocktailList.push(fetchedCocktail);
         } catch (e) {
           console.log(e);
         }

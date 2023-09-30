@@ -22,9 +22,11 @@ export default function Favourites({
     if (userFavourites) {
       for (let i = 0; i < userFavourites.length; i++) {
         let stringifiedUserFav = userFavourites[i].toString();
-        const cocktail = await getCocktailById(stringifiedUserFav);
+        const cocktail: Cocktail | Cocktail[] = await getCocktailById(
+          stringifiedUserFav
+        );
         //check if it exists
-        if (cocktail) {
+        if (!Array.isArray(cocktail)) {
           cocktailList.push(cocktail);
         }
       }

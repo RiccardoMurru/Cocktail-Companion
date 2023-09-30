@@ -1,3 +1,3 @@
 export interface Category {
-  strCategory: string
+  strCategory: string;
 }

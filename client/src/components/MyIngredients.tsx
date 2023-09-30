@@ -1,18 +1,12 @@
 import React from 'react';
 import { MyIngredientsProps } from '../interfaces/Props';
-import { Ingredient } from '../interfaces/Ingredient';
 
 export default function MyIngredients({
   selectedIngs,
-  setSelectedIngs,
   handleRemoveFromSelected
 }: MyIngredientsProps) {
-  function unselectIngs(ingredient: Ingredient): void {
-    const index = selectedIngs.indexOf(ingredient);
-    const newSelectedIngs = selectedIngs.slice();
-    const restIng = newSelectedIngs.splice(index, 1);
-    handleRemoveFromSelected(ingredient);
-    setSelectedIngs(restIng);
+  async function unselectIngs(ingredient: string) {
+    await handleRemoveFromSelected(ingredient);
   }
   if (selectedIngs)
     return (
@@ -21,10 +15,10 @@ export default function MyIngredients({
           ? selectedIngs.map((ing) => (
               <p
                 className='selected-ing'
-                key={ing.strIngredient1}
+                key={ing}
                 onClick={() => unselectIngs(ing)}
               >
-                {ing.strIngredient1}
+                {ing}
               </p>
             ))
           : undefined}

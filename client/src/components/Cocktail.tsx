@@ -2,7 +2,6 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { addFavourite, removeFavourite } from '../apiComs/myApi';
 import { User } from '../interfaces/User';
-import { Cocktail } from '../interfaces/Cocktail';
 import { CocktailProps } from '../interfaces/Props';
 export default function CocktailComponent({
   cocktail,
@@ -19,11 +18,9 @@ export default function CocktailComponent({
   }, [user]);
   const ingredientsWithMeasures: string[] = [];
   const comparisonArr: string[] = []; //used in rendering to make ingredients that you've searched for highlighted green
-  for (let i = 1; i <= 16; i++) {
-    const ingKey = 'strIngredient' + i.toString();
-    const measureKey = 'strMeasure' + i.toString();
-    const ingredientValue = cocktail[ingKey as keyof Cocktail];
-    const measureValue = cocktail[measureKey as keyof Cocktail];
+  for (let i = 0; i < 16; i++) {
+    const ingredientValue = cocktail.ingredients![i];
+    const measureValue = cocktail.measures![i];
     if (ingredientValue) {
       if (measureValue) {
         const standardizedIngredient =
@@ -34,14 +31,9 @@ export default function CocktailComponent({
         ingredientsWithMeasures.push(
           standardizedMeasure + ' ' + standardizedIngredient
         );
-        console.log(standardizedMeasure + ' ' + standardizedIngredient);
-          console.log(selectedIngs);
-
         if (
           page !== 'favourites' &&
-          selectedIngs!.some(
-            ingredient => ingredient.strIngredient1 === standardizedIngredient
-          )
+          selectedIngs!.includes(standardizedIngredient)
         ) {
           comparisonArr.push(
             standardizedMeasure + ' ' + standardizedIngredient
@@ -49,15 +41,13 @@ export default function CocktailComponent({
         }
       } else {
         ingredientsWithMeasures.push(ingredientValue);
-        if (
-          page !== 'favourites' &&
-          selectedIngs!.includes({ strIngredient1: ingredientValue })
-        ) {
+        if (page !== 'favourites' && selectedIngs!.includes(ingredientValue)) {
           comparisonArr.push(ingredientValue);
         }
       }
     }
   }
+
   function initialCheckIsFave(faveId: string) {
     if (user) {
       if (user.favourites) {
@@ -82,15 +72,15 @@ export default function CocktailComponent({
   if (handleRemoveFromFavourites)
     return (
       <div className='Cocktail'>
-        <img className='cocktail-img' src={cocktail.strDrinkThumb} />
+        <img className='cocktail-img' src={cocktail.drinkThumb} />
         <div className='cocktail-details'>
-          <h2>{cocktail.strDrink}</h2>
+          <h2>{cocktail.drink}</h2>
           <div>
             {ingredientsWithMeasures.map(ing => (
               <p key={ing}>{ing}</p>
             ))}
           </div>
-          <p>{cocktail.strInstructions}</p>
+          <p>{cocktail.instructions}</p>
         </div>
         <button
           className='fave-button'
@@ -103,9 +93,9 @@ export default function CocktailComponent({
   if (!user.username)
     return (
       <div className='Cocktail'>
-        <img className='cocktail-img' src={cocktail.strDrinkThumb} />
+        <img className='cocktail-img' src={cocktail.drinkThumb} />
         <div className='cocktail-details'>
-          <h2>{cocktail.strDrink}</h2>
+          <h2>{cocktail.drink}</h2>
           <div>
             {ingredientsWithMeasures.map(ing => (
               <p
@@ -115,7 +105,7 @@ export default function CocktailComponent({
               </p>
             ))}
           </div>
-          <p>{cocktail.strInstructions}</p>
+          <p>{cocktail.instructions}</p>
         </div>
       </div>
     );
@@ -124,9 +114,9 @@ export default function CocktailComponent({
     <>
       {isFave ? (
         <div className='Cocktail'>
-          <img className='cocktail-img' src={cocktail.strDrinkThumb} />
+          <img className='cocktail-img' src={cocktail.drinkThumb} />
           <div className='cocktail-details'>
-            <h2>{cocktail.strDrink}</h2>
+            <h2>{cocktail.drink}</h2>
             <div>
               {ingredientsWithMeasures.map(ing => (
                 <p
@@ -138,7 +128,7 @@ export default function CocktailComponent({
                 </p>
               ))}
             </div>
-            <p>{cocktail.strInstructions}</p>
+            <p>{cocktail.instructions}</p>
           </div>
           <button
             className='fave-button'
@@ -148,9 +138,9 @@ export default function CocktailComponent({
         </div>
       ) : (
         <div className='Cocktail'>
-          <img className='cocktail-img' src={cocktail.strDrinkThumb} />
+          <img className='cocktail-img' src={cocktail.drinkThumb} />
           <div className='cocktail-details'>
-            <h2>{cocktail.strDrink}</h2>
+            <h2>{cocktail.drink}</h2>
             <div>
               {ingredientsWithMeasures.map(ing => (
                 <p
@@ -162,7 +152,7 @@ export default function CocktailComponent({
                 </p>
               ))}
             </div>
-            <p>{cocktail.strInstructions}</p>
+            <p>{cocktail.instructions}</p>
           </div>
           <button
             className='fave-button'
