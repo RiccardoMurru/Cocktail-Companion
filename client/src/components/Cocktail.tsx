@@ -75,11 +75,14 @@ export default function CocktailComponent({
         <img className='cocktail-img' src={cocktail.drinkThumb} />
         <div className='cocktail-details'>
           <h2>{cocktail.drink}</h2>
-          <div>
+          <ul>
             {ingredientsWithMeasures.map(ing => (
-              <p key={ing}>{ing}</p>
+              <li key={ing}>
+                <span>{ing}</span>
+              </li>
             ))}
-          </div>
+          </ul>
+          <h3>How to make it:</h3>
           <p>{cocktail.instructions}</p>
         </div>
         <button
@@ -96,71 +99,43 @@ export default function CocktailComponent({
         <img className='cocktail-img' src={cocktail.drinkThumb} />
         <div className='cocktail-details'>
           <h2>{cocktail.drink}</h2>
-          <div>
+          <ul>
             {ingredientsWithMeasures.map(ing => (
-              <p
+              <li
                 key={ing}
                 className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}>
-                {ing}
-              </p>
+                <span>{ing}</span>
+              </li>
             ))}
-          </div>
+          </ul>
+          <h3>How to make it:</h3>
           <p>{cocktail.instructions}</p>
         </div>
       </div>
     );
   //else it means we are logged in and on search page so check if cocktail is favourite then render
   return (
-    <>
-      {isFave ? (
-        <div className='Cocktail'>
-          <img className='cocktail-img' src={cocktail.drinkThumb} />
-          <div className='cocktail-details'>
-            <h2>{cocktail.drink}</h2>
-            <div>
-              {ingredientsWithMeasures.map(ing => (
-                <p
-                  key={ing}
-                  className={
-                    comparisonArr.includes(ing) ? 'matched-ing' : 'ing'
-                  }>
-                  {ing}
-                </p>
-              ))}
-            </div>
-            <p>{cocktail.instructions}</p>
-          </div>
-          <button
-            className='fave-button'
-            onClick={() => toggleFave(user, cocktail.idDrink)}>
-            Remove From Favourites
-          </button>
-        </div>
-      ) : (
-        <div className='Cocktail'>
-          <img className='cocktail-img' src={cocktail.drinkThumb} />
-          <div className='cocktail-details'>
-            <h2>{cocktail.drink}</h2>
-            <div>
-              {ingredientsWithMeasures.map(ing => (
-                <p
-                  key={ing}
-                  className={
-                    comparisonArr.includes(ing) ? 'matched-ing' : 'ing'
-                  }>
-                  {ing}
-                </p>
-              ))}
-            </div>
-            <p>{cocktail.instructions}</p>
-          </div>
-          <button
-            className='fave-button'
-            onClick={() => toggleFave(user, cocktail.idDrink)}>
-            Add To Favourites
-          </button>
-        </div>
-      )}
-    </>
+    <div className='Cocktail'>
+      <img className='cocktail-img' src={cocktail.drinkThumb} />
+      <div className='cocktail-details'>
+        <h2>{cocktail.drink}</h2>
+        <ul>
+          {ingredientsWithMeasures.map(ing => (
+            <li
+              key={ing}
+              className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}>
+              {ing}
+            </li>
+          ))}
+        </ul>
+        <h3>How to make it:</h3>
+        <p>{cocktail.instructions}</p>
+      </div>
+      <button
+        className='fave-button'
+        onClick={() => toggleFave(user, cocktail.idDrink)}>
+        {isFave ? 'Remove From Favourites' : 'Add To Favourites'}
+      </button>
+    </div>
   );
 }

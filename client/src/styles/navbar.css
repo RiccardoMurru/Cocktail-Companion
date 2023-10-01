@@ -1,0 +1,21 @@
+.NavBar {
+  h3 {
+    margin: 20px 0;
+    font-size: 40px;
+  }
+  input {
+    -webkit-appearance: none;
+    width: 100%;
+    max-width: 350px;
+    height: 50px;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 1rem;
+    background: var(--inputBg);
+    border: 1px solid var(--border) ;
+    outline: none;
+    margin-bottom: 30px;
+    color: var(--mainColor);
+  }
+}

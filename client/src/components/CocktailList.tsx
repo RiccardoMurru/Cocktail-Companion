@@ -11,7 +11,7 @@ export default function CocktailList({
   user,
   setUser,
   page,
-  setPage
+  setPage,
 }: CocktailListProps) {
   const [displayedCocktails, setDisplayedCocktails] = useState<Cocktail[]>([]);
 
@@ -20,7 +20,6 @@ export default function CocktailList({
   }, [cocktails]);
 
   async function fetchFirstTenCocktails() {
-
     if (!cocktails.length) setDisplayedCocktails([]);
     const tenCocktails = cocktails.slice(0, 10);
     for (let i = 0; i < tenCocktails.length; i++) {
@@ -32,7 +31,6 @@ export default function CocktailList({
       }
     }
     setDisplayedCocktails(tenCocktails);
-
   }
 
   async function fetchTenMoreCocktails() {
@@ -58,23 +56,27 @@ export default function CocktailList({
   }
 
   return (
-    <div>
+    <>
       <div className='CocktailList'>
-        <div>
-          {displayedCocktails.map((cocktail) => (
-            <CocktailComponent
-              page={page}
-              user={user}
-              setUser={setUser}
-              selectedIngs={selectedIngs}
-              cocktail={cocktail}
-              key={cocktail.idDrink}
-              setPage={setPage}
-            />
-          ))}
+        {displayedCocktails.map(cocktail => (
+          <CocktailComponent
+            page={page}
+            user={user}
+            setUser={setUser}
+            selectedIngs={selectedIngs}
+            cocktail={cocktail}
+            key={cocktail.idDrink}
+            setPage={setPage}
+          />
+        ))}
+      </div>
+      <div className='btn-container'>
+        <div className="wrapper">
+        <button className='show-more' onClick={() => fetchTenMoreCocktails()}>
+          Show More
+        </button>
         </div>
       </div>
-      <button onClick={() => fetchTenMoreCocktails()}>Show More</button>
-    </div>
+    </>
   );
 }
