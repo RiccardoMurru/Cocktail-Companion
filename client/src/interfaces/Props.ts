@@ -1,5 +1,6 @@
 import { User } from './User';
 import { Cocktail } from './Cocktail';
+import { Ingredient } from './Ingredient';
 
 export interface PageProps {
   className?: string;
@@ -11,12 +12,12 @@ export interface PageProps {
 
 export interface NavbarProps {
   className: string;
-  handleAddToSelected: (ingredient: string) => void;
-  ingredients: string[];
-  selectedIngs: string[];
   ingList: string[];
   setIngList: React.Dispatch<React.SetStateAction<string[]>>;
-  categories: string[];
+  setCocktails: React.Dispatch<React.SetStateAction<Cocktail[]>>;
+  cocktails: Cocktail[];
+  ingredients: string[];
+  setIngredients: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export interface CocktailProps {

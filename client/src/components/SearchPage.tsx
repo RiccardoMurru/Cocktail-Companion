@@ -20,52 +20,35 @@ export default function SearchPage({
 }: PageProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([]);
-  const [selectedIngs, setSelectedIngs] = useState<string[]>([]);
   const [ingList, setIngList] = useState<string[]>([]);
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
+  const [selectedIngs, setSelectedIngs] = useState<string[]>([]);
 
   useEffect(() => {
     fillIngredientsAndCategories();
   }, []);
 
-  async function handleAddToSelected(ingredient: string): Promise<void> {
-    try {
-      const updatedIngredients = ingredients.filter(el => el !== ingredient);
-      const newCocktails: Cocktail | Cocktail[] = await getCocktailByIngredient(
-        ingredient
-      );
-      if (Array.isArray(newCocktails)) {
-        if (!selectedIngs.includes(ingredient)) {
-          setCocktails(updateFilteredCocktails(cocktails, newCocktails, 'add'));
-          setIngredients(updatedIngredients);
-          setSelectedIngs([...selectedIngs, ingredient]);
-        }
-      }
-    } catch (err) {
-      throw err;
-    }
-  }
+  // async function handleRemoveFromSelected(ingredient: string): Promise<void> {
+  //   try {
+  //     const updatedIngredients = ingredients.slice();
+  //     updatedIngredients.push(ingredient);
+  //     const cocktailsToReduce: Cocktail | Cocktail[] =
+  //       await getCocktailByIngredient(ingredient);
+  //     setIngredients(updatedIngredients);
+  //     if (Array.isArray(cocktailsToReduce)) {
+  //       setCocktails(
+  //         updateFilteredCocktails(cocktails, cocktailsToReduce, 'remove')
+  //       );
+  //       const resultingIngredients = selectedIngs.filter(
+  //         el => el !== ingredient
+  //       );
+  //       setSelectedIngs([...resultingIngredients]);
+  //     }
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // }
 
-  async function handleRemoveFromSelected(ingredient: string): Promise<void> {
-    try {
-      const updatedIngredients = ingredients.slice();
-      updatedIngredients.push(ingredient);
-      const cocktailsToReduce: Cocktail | Cocktail[] =
-        await getCocktailByIngredient(ingredient);
-      setIngredients(updatedIngredients);
-      if (Array.isArray(cocktailsToReduce)) {
-        setCocktails(
-          updateFilteredCocktails(cocktails, cocktailsToReduce, 'remove')
-        );
-        const resultingIngredients = selectedIngs.filter(
-          el => el !== ingredient
-        );
-        setSelectedIngs([...resultingIngredients]);
-      }
-    } catch (err) {
-      throw err;
-    }
-  }
   async function fillIngredientsAndCategories(): Promise<void> {
     try {
       const fetchedIngs = await getAllIngredients();
@@ -101,26 +84,24 @@ export default function SearchPage({
         <h2>Welcome back {user.username}! What are we drinking today?</h2>
         <Navbar
           className='NavBar'
-          selectedIngs={selectedIngs}
-          handleAddToSelected={handleAddToSelected}
-          ingredients={ingredients}
-          categories={categories}
           setIngList={setIngList}
           ingList={ingList}
+          setCocktails={setCocktails}
+          cocktails={cocktails}
+          ingredients={ingredients}
+          setIngredients={setIngredients}
         />
-        <MyIngredients
-          selectedIngs={selectedIngs}
-          handleRemoveFromSelected={handleRemoveFromSelected}
-        />
-        {cocktails.length && (
+        {cocktails.length ? (
           <CocktailList
-            page={page}
+            page=''
+            setPage={setPage}
             selectedIngs={selectedIngs}
             cocktails={cocktails}
             user={user}
             setUser={setUser}
-            setPage={setPage}
           />
+        ) : (
+          <p>No ingredients selected.</p>
         )}
       </div>
     );
@@ -134,18 +115,14 @@ export default function SearchPage({
       </header>
       <Navbar
         className=''
-        selectedIngs={selectedIngs}
-        handleAddToSelected={handleAddToSelected}
-        ingredients={ingredients}
-        categories={categories}
         setIngList={setIngList}
         ingList={ingList}
+        cocktails={cocktails}
+        setCocktails={setCocktails}
+        setIngredients={setIngredients}
+        ingredients={ingredients}
       />
-      <MyIngredients
-        selectedIngs={selectedIngs}
-        handleRemoveFromSelected={handleRemoveFromSelected}
-      />
-      {cocktails.length && (
+      {cocktails.length ? (
         <CocktailList
           page=''
           setPage={setPage}
@@ -154,7 +131,7 @@ export default function SearchPage({
           user={user}
           setUser={setUser}
         />
-      )}
+      ) : <p>No ingredients selected.</p>}
     </div>
   );
 }

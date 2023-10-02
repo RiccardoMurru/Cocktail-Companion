@@ -5,6 +5,8 @@ export default function MyIngredients({
   selectedIngs,
   handleRemoveFromSelected,
 }: MyIngredientsProps) {
+
+
   async function unselectIngs(ingredient: string) {
     await handleRemoveFromSelected(ingredient);
   }
