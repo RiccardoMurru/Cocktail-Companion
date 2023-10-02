@@ -17,14 +17,6 @@ export async function register(req: Request, res: Response): Promise<void> {
       UserModel.create({ username, password: hashedPassword });
 
       res.status(201).json({ message: 'User registered successfully' });
-      const token = jwt.sign(
-        { username: user.username },
-        process.env.JWT_SECRET as string,
-        {
-          expiresIn: '1h'
-        }
-      );
-      res.status(200).json({ token });
     } else {
       res.status(400).json({ message: 'Registration failed' });
     }
