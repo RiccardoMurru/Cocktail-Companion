@@ -5,7 +5,9 @@ import { Glass } from '../interfaces/Glass';
 import { Ingredient } from '../interfaces/Ingredient';
 
 const rootUrl = 'https://thecocktaildb.com/api/json/v2/9973533';
-
+export function isPositive(n: number) {
+  return n>0;
+}
 export async function getAllIngredients() {
   try {
     const res = await fetch(

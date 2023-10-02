@@ -28,7 +28,6 @@ export function updateFilteredCocktails(
           }
         }
       }
-
       for (let i = 0; i < helperFetchedArr.length; i++) {
         helperFetchedArr[i].matchedIngredients = '1';
         newExistingCocktails.push(helperFetchedArr[i]);
@@ -39,7 +38,6 @@ export function updateFilteredCocktails(
       }
       newExistingCocktails = fetchedCocktails;
     }
-
     function compareMatchedIngredients(a: Cocktail, b: Cocktail) {
       return +(b.matchedIngredients ?? 0) - +(a.matchedIngredients ?? 0);
     }

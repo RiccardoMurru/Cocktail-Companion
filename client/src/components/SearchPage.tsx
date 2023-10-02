@@ -35,9 +35,11 @@ export default function SearchPage({
         ingredient
       );
       if (Array.isArray(newCocktails)) {
-        setCocktails(updateFilteredCocktails(cocktails, newCocktails, 'add'));
-        setIngredients(updatedIngredients);
-        setSelectedIngs([...selectedIngs, ingredient]);
+        if (!selectedIngs.includes(ingredient)) {
+          setCocktails(updateFilteredCocktails(cocktails, newCocktails, 'add'));
+          setIngredients(updatedIngredients);
+          setSelectedIngs([...selectedIngs, ingredient]);
+        }
       }
     } catch (err) {
       throw err;
