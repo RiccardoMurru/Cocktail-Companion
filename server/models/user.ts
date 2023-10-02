@@ -1,4 +1,4 @@
-const mongoose = require('../db')
+const mongoose = require('../db');
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -11,9 +11,8 @@ const userSchema = new mongoose.Schema({
   },
   favourites: [String],
   ingredients: [String]
-})
+});
 
 const UserModel = mongoose.model('User', userSchema);
 
 export default UserModel;
-
