@@ -4,6 +4,7 @@ import Login from './components/Login';
 import './App.css';
 import Favourites from './components/Favourites';
 import { User } from './interfaces/User';
+import Register from './components/Register';
 
 function App() {
   const [page, setPage] = useState<string>('search');
@@ -42,6 +43,15 @@ function App() {
       page={page}
       setPage={setPage}></Login>
     );
+  if (page ==='register')
+    return (
+      <Register
+        className='register-page'
+        user={user}
+        setUser={setUser}
+        page={page}
+        setPage={setPage}></Register>
+    )
 }
 
 export default App;

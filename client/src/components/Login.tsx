@@ -15,7 +15,7 @@ export default function Login({ setUser, setPage }: PageProps) {
     const username = form.username.value;
     const password = form.password.value;
 
-    const response = await getUser(username);
+    const response = await getUser(username, password);
 
     if (response.error) {
       window.alert('Username or password incorrect');
