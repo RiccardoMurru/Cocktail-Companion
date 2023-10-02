@@ -4,7 +4,7 @@ import React from 'react';
 import { getUser } from '../apiComs/myApi';
 import { PageProps } from '../interfaces/Props';
 
-export default function Login({ setUser, setPage }: PageProps) {
+export default function Login({ user, setUser, setPage }: PageProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -40,7 +40,10 @@ export default function Login({ setUser, setPage }: PageProps) {
           placeholder='Enter password here'
           required={true}
         ></input>
-        <button type='submit'>Login</button>
+        {/* <button type='submit'>Login</button> */}
+        <button type='submit'>
+          {user.username ? 'Logged In' : 'Login'}
+        </button>
       </form>
     </div>
   );

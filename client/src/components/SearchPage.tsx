@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import CocktailList from './CocktailList';
 import Navbar from './Navbar';
@@ -12,6 +13,15 @@ import {
 } from '../apiComs/cocktailDbApi';
 import { PageProps } from '../interfaces/Props';
 import { Cocktail } from '../interfaces/Cocktail';
+
+const buttonStyle = {
+  display: 'inline-block',
+  padding: '10px 20px',
+  backgroundColor: '#F9D077', // Button background color
+  color: '#000000', // Button text color
+  borderRadius: '5px', // Optional: Adds rounded corners to the button
+  textDecoration: 'none', // Removes default underline style for the link
+}; 
 export default function SearchPage({
   user,
   setUser,
@@ -80,6 +90,10 @@ export default function SearchPage({
       throw err;
     }
   }
+  function handleLoginClick() {
+    return <Navigate to="/login" />;
+  }
+  
   if (user.username)
     return (
       <div className='list-page'>
@@ -129,7 +143,10 @@ export default function SearchPage({
       <header className='page-header'>
         <div className='header-wrapper'>
           <img className='logo' src={logo} />
-          <button onClick={() => setPage('login')}>Login</button>
+          {/* <button onClick={() => setPage('login')}>Login</button>
+          <button onClick={() => setPage('register')}>Register</button> */}
+        <Link to="/login" className ='login-button' style={buttonStyle}>Login</Link>
+        <Link to="/register" className ='register-button' style={buttonStyle}>Register</Link>
         </div>
       </header>
       <Navbar
@@ -145,7 +162,7 @@ export default function SearchPage({
         selectedIngs={selectedIngs}
         handleRemoveFromSelected={handleRemoveFromSelected}
       />
-      {cocktails.length && (
+      {cocktails.length ? (
         <CocktailList
           page=''
           setPage={setPage}
@@ -154,7 +171,7 @@ export default function SearchPage({
           user={user}
           setUser={setUser}
         />
-      )}
+      ) : <p>No selected ingredient</p>}
     </div>
   );
 }

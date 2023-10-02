@@ -41,7 +41,7 @@ export default function Navbar({
             </li>
           ))
         ) : (
-          <p>Such a thing does not exist</p>
+          <p></p>
         )}
       </ul>
     </div>

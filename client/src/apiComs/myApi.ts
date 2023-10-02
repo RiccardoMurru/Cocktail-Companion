@@ -9,9 +9,9 @@ export async function addUser(user: User) {
       username: username,
       password: password
     };
-    const res = await axios.post(`${rootUrl}/add-user`, credentialsObj, {
+    const res = await axios.post(`${rootUrl}/register`, credentialsObj, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       mode: 'no-cors'
     } as AxiosRequestConfig);
@@ -47,7 +47,7 @@ export async function getUser(username: string, password: string) {
       username: username,
       password: password
     };
-    const res = await axios.post(`${rootUrl}/user-profile`, credentialsObj, {
+    const res = await axios.post(`${rootUrl}/login`, credentialsObj, {
       headers: {
         'Content-Type': 'application/json'
       },

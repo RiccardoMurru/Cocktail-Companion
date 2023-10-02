@@ -1,32 +1,54 @@
+
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 import UserModel from './models/user';
 
+// export async function register(req: Request, res: Response): Promise<void> {
+//   try {
+//     const { username, password } = req.body;
+//     const user = await UserModel.findOne({ username });
+//     if (!user) {
+//       const hashedPassword = bcrypt.hashSync(password, 10);
+
+//       UserModel.create({ username, password: hashedPassword });
+      
+//       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET as string, {
+//         expiresIn: '1h' // Token expires in 1 hour, you can adjust this as needed
+//       } as SignOptions);
+
+//       res.status(201).json({ message: 'User registered successfully' }, token);
+//     } else {
+//       res.status(400).json({ message: 'Registration failed' });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Registration failed' });
+//   }
+// }
+
 export async function register(req: Request, res: Response): Promise<void> {
   try {
     const { username, password } = req.body;
     const user = await UserModel.findOne({ username });
+
     if (!user) {
       const hashedPassword = bcrypt.hashSync(password, 10);
 
-      UserModel.create({ username, password: hashedPassword });
+      const newUser = await UserModel.create({ username, password: hashedPassword });
 
-      res.status(201).json({ message: 'User registered successfully' });
-      const token = jwt.sign(
-        { username: user.username },
-        process.env.JWT_SECRET as string,
-        {
-          expiresIn: '1h'
-        }
-      );
-      res.status(200).json({ token });
+      // Generate JWT token
+      const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET as string, {
+        expiresIn: '1h' 
+      });
+
+      res.status(201).json({ message: 'User registered successfully', token });
     } else {
-      res.status(400).json({ message: 'Registration failed' });
+      res.status(400).json({ message: 'Registration failed, username already exists' });
     }
   } catch (error) {
     console.error(error);
