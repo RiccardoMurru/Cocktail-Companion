@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SearchPage from './components/SearchPage';
 import Login from './components/Login';
-import './App.css';
+import './styles/App.css';
 import Favourites from './components/Favourites';
 import { User } from './interfaces/User';
 import Register from './components/Register';

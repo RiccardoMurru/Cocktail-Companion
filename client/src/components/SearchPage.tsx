@@ -8,7 +8,7 @@ import { updateFilteredCocktails } from '../helpers';
 import {
   getAllCategories,
   getAllIngredients,
-  getCocktailByIngredient
+  getCocktailByIngredient,
 } from '../apiComs/cocktailDbApi';
 import { PageProps } from '../interfaces/Props';
 import { Cocktail } from '../interfaces/Cocktail';
@@ -16,7 +16,7 @@ export default function SearchPage({
   user,
   setUser,
   page,
-  setPage
+  setPage,
 }: PageProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([]);
@@ -30,7 +30,7 @@ export default function SearchPage({
 
   async function handleAddToSelected(ingredient: string): Promise<void> {
     try {
-      const updatedIngredients = ingredients.filter((el) => el !== ingredient);
+      const updatedIngredients = ingredients.filter(el => el !== ingredient);
       const newCocktails: Cocktail | Cocktail[] = await getCocktailByIngredient(
         ingredient
       );
@@ -58,7 +58,7 @@ export default function SearchPage({
           updateFilteredCocktails(cocktails, cocktailsToReduce, 'remove')
         );
         const resultingIngredients = selectedIngs.filter(
-          (el) => el !== ingredient
+          el => el !== ingredient
         );
         setSelectedIngs([...resultingIngredients]);
       }
@@ -92,10 +92,9 @@ export default function SearchPage({
             onClick={() =>
               setUser({
                 username: '',
-                password: ''
+                password: '',
               })
-            }
-          >
+            }>
             Logout
           </p>
         </div>
@@ -127,12 +126,12 @@ export default function SearchPage({
     );
   return (
     <div className='list-page'>
-      <div className='img-container'>
-        <img className='logo' src={logo} />
-      </div>
-      <div>
-        <p onClick={() => setPage('login')}>Login</p>
-      </div>
+      <header className='page-header'>
+        <div className='header-wrapper'>
+          <img className='logo' src={logo} />
+          <button onClick={() => setPage('login')}>Login</button>
+        </div>
+      </header>
       <Navbar
         className=''
         selectedIngs={selectedIngs}

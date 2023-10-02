@@ -3,25 +3,24 @@ import { MyIngredientsProps } from '../interfaces/Props';
 
 export default function MyIngredients({
   selectedIngs,
-  handleRemoveFromSelected
+  handleRemoveFromSelected,
 }: MyIngredientsProps) {
   async function unselectIngs(ingredient: string) {
     await handleRemoveFromSelected(ingredient);
   }
   if (selectedIngs)
     return (
-      <div className='selected-ings-list'>
+      <ul className='selected-ings-list'>
         {selectedIngs.length
-          ? selectedIngs.map((ing) => (
-              <p
+          ? selectedIngs.map(ing => (
+              <li
                 className='selected-ing'
                 key={ing}
-                onClick={() => unselectIngs(ing)}
-              >
+                onClick={() => unselectIngs(ing)}>
                 {ing}
-              </p>
+              </li>
             ))
           : undefined}
-      </div>
+      </ul>
     );
 }
