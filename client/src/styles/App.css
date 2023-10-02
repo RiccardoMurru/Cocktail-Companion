@@ -1,6 +1,7 @@
 @import 'searchpage.css';
 @import 'navbar.css';
 @import 'cocktail.css';
+@import 'login.css';
 
  #root {
   width: 100%;

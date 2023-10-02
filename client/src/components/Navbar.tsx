@@ -9,6 +9,19 @@ export default function Navbar({
 }: NavbarProps) {
   const [inputText, setInputText] = useState('');
 
+
+  function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const value = event.currentTarget;
+    const formElements = value.elements as typeof value.elements & {
+      searchBar: { value: string };
+    };
+    if (ingredients.filter(el => el === formElements.searchBar.value)) {
+      handleAddToSelected(formElements.searchBar.value);
+    }
+    setInputText('');
+  }
+
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     //search ingredients list and return all ingredients that match text in event
     if (event.target) {
@@ -31,8 +44,9 @@ export default function Navbar({
   return (
     <div className='NavBar'>
       <h3>Enter ingredient here!</h3>
-      <form id='ingredient-search' onReset={() => setInputText('')}>
+      <form id='ingredient-search' onSubmit={(e) => handleSubmit(e)}>
         <input
+          id='searchBar'
           className='form-input'
           name='search-bar'
           type='text'
