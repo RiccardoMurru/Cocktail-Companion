@@ -11,7 +11,7 @@ export default function CocktailList({
   user,
   setUser,
   page,
-  setPage,
+  setPage
 }: CocktailListProps) {
   const [displayedCocktails, setDisplayedCocktails] = useState<Cocktail[]>([]);
 
@@ -58,7 +58,7 @@ export default function CocktailList({
   return (
     <>
       <div className='CocktailList'>
-        {displayedCocktails.map(cocktail => (
+        {displayedCocktails.map((cocktail) => (
           <CocktailComponent
             page={page}
             user={user}
@@ -71,10 +71,10 @@ export default function CocktailList({
         ))}
       </div>
       <div className='btn-container'>
-        <div className="wrapper">
-        <button className='show-more' onClick={() => fetchTenMoreCocktails()}>
-          Show More
-        </button>
+        <div className='wrapper'>
+          <button className='show-more' onClick={() => fetchTenMoreCocktails()}>
+            Show More
+          </button>
         </div>
       </div>
     </>

@@ -57,7 +57,6 @@ export function updateFilteredCocktails(
       }
     }
     const newExistingCocktails = existingCocktails.slice();
-    console.log(newExistingCocktails);
     return newExistingCocktails;
   }
 

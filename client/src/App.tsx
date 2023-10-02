@@ -12,17 +12,18 @@ function App() {
     username: '',
     password: '',
     favourites: [],
-    ingredients: [],
+    ingredients: []
   });
 
   if (page === 'search')
     return (
       <SearchPage
+        page=''
         className='list-page'
         user={user}
         setUser={setUser}
         setPage={setPage}
-        page={page}></SearchPage>
+      ></SearchPage>
     );
   if (page === 'favourites')
     return (
@@ -36,22 +37,24 @@ function App() {
     );
   if (page === 'login')
     return (
-      <Login 
-      className='login-page' 
-      user={user}
-      setUser={setUser}
-      page={page}
-      setPage={setPage}></Login>
+      <Login
+        page={page}
+        user={user}
+        className='login-page'
+        setUser={setUser}
+        setPage={setPage}
+      ></Login>
     );
-  if (page ==='register')
+  if (page === 'register')
     return (
       <Register
         className='register-page'
         user={user}
         setUser={setUser}
         page={page}
-        setPage={setPage}></Register>
-    )
+        setPage={setPage}
+      ></Register>
+    );
 }
 
 export default App;

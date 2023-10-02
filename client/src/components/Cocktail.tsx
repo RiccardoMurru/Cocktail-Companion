@@ -9,7 +9,7 @@ export default function CocktailComponent({
   handleRemoveFromFavourites,
   user,
   setUser,
-  page,
+  page
 }: CocktailProps) {
   const [isFave, setIsFave] = useState(false);
   //this useEffect works if logged in to check if a drink is already favourites so it renders with a remove button
@@ -18,15 +18,14 @@ export default function CocktailComponent({
   }, [user]);
   const ingredientsWithMeasures: string[] = [];
   const comparisonArr: string[] = []; //used in rendering to make ingredients that you've searched for highlighted green
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 15; i++) {
     const ingredientValue = cocktail.ingredients![i];
     const measureValue = cocktail.measures![i];
     if (ingredientValue) {
       if (measureValue) {
-        const standardizedIngredient =
-          ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1);
+        const standardizedIngredient = ingredientValue.toLowerCase();
         const standardizedMeasure = measureValue
-          ? measureValue.charAt(0).toUpperCase() + measureValue.slice(1)
+          ? measureValue.toLowerCase()
           : '';
         ingredientsWithMeasures.push(
           standardizedMeasure + ' ' + standardizedIngredient
@@ -40,9 +39,12 @@ export default function CocktailComponent({
           );
         }
       } else {
-        ingredientsWithMeasures.push(ingredientValue);
-        if (page !== 'favourites' && selectedIngs!.includes(ingredientValue)) {
-          comparisonArr.push(ingredientValue);
+        ingredientsWithMeasures.push(ingredientValue.toLowerCase());
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes(ingredientValue.toLowerCase())
+        ) {
+          comparisonArr.push(ingredientValue.toLowerCase());
         }
       }
     }
@@ -76,7 +78,7 @@ export default function CocktailComponent({
         <div className='cocktail-details'>
           <h2>{cocktail.drink}</h2>
           <ul>
-            {ingredientsWithMeasures.map(ing => (
+            {ingredientsWithMeasures.map((ing) => (
               <li key={ing}>
                 <span>{ing}</span>
               </li>
@@ -87,7 +89,8 @@ export default function CocktailComponent({
         </div>
         <button
           className='fave-button'
-          onClick={() => handleRemoveFromFavourites(user, cocktail.idDrink)}>
+          onClick={() => handleRemoveFromFavourites(user, cocktail.idDrink)}
+        >
           Remove From Favourites
         </button>
       </div>
@@ -100,10 +103,11 @@ export default function CocktailComponent({
         <div className='cocktail-details'>
           <h2>{cocktail.drink}</h2>
           <ul>
-            {ingredientsWithMeasures.map(ing => (
+            {ingredientsWithMeasures.map((ing) => (
               <li
                 key={ing}
-                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}>
+                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}
+              >
                 <span>{ing}</span>
               </li>
             ))}
@@ -120,10 +124,11 @@ export default function CocktailComponent({
       <div className='cocktail-details'>
         <h2>{cocktail.drink}</h2>
         <ul>
-          {ingredientsWithMeasures.map(ing => (
+          {ingredientsWithMeasures.map((ing) => (
             <li
               key={ing}
-              className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}>
+              className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}
+            >
               {ing}
             </li>
           ))}
@@ -133,7 +138,8 @@ export default function CocktailComponent({
       </div>
       <button
         className='fave-button'
-        onClick={() => toggleFave(user, cocktail.idDrink)}>
+        onClick={() => toggleFave(user, cocktail.idDrink)}
+      >
         {isFave ? 'Remove From Favourites' : 'Add To Favourites'}
       </button>
     </div>
