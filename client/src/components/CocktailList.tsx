@@ -56,23 +56,27 @@ export default function CocktailList({
   }
 
   return (
-    <div>
+    <>
       <div className='CocktailList'>
-        <div>
-          {displayedCocktails.map((cocktail) => (
-            <CocktailComponent
-              page={page}
-              user={user}
-              setUser={setUser}
-              selectedIngs={selectedIngs}
-              cocktail={cocktail}
-              key={cocktail.idDrink}
-              setPage={setPage}
-            />
-          ))}
+        {displayedCocktails.map((cocktail) => (
+          <CocktailComponent
+            page={page}
+            user={user}
+            setUser={setUser}
+            selectedIngs={selectedIngs}
+            cocktail={cocktail}
+            key={cocktail.idDrink}
+            setPage={setPage}
+          />
+        ))}
+      </div>
+      <div className='btn-container'>
+        <div className='wrapper'>
+          <button className='show-more' onClick={() => fetchTenMoreCocktails()}>
+            Show More
+          </button>
         </div>
       </div>
-      <button onClick={() => fetchTenMoreCocktails()}>Show More</button>
-    </div>
+    </>
   );
 }

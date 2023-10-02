@@ -30,20 +30,30 @@ export default function Navbar({
           name='search-bar'
           type='text'
           onChange={(event) => handleChange(event)}
+<<<<<<< HEAD
+=======
+          placeholder='Search an ingredient...'
+>>>>>>> 296b1cf5aea2273478d4dea770101d65b4b08849
         />
       </form>
-      <div className='ingredients-selector'>
+      <ul className='ingredients-selector'>
         {ingList.length ? (
           ingList.map((ingredient) => (
+<<<<<<< HEAD
             <p key={ingredient} onClick={() => handleAddToSelected(ingredient)}>
               {' '}
               {ingredient}{' '}
             </p>
+=======
+            <li className='ingredient' key={ingredient} onClick={() => handleAddToSelected(ingredient)}>
+              {ingredient}
+            </li>
+>>>>>>> 296b1cf5aea2273478d4dea770101d65b4b08849
           ))
         ) : (
           <p>Such a thing does not exist</p>
         )}
-      </div>
+      </ul>
     </div>
   );
 }

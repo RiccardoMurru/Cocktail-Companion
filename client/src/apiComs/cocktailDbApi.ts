@@ -5,7 +5,9 @@ import { Glass } from '../interfaces/Glass';
 import { Ingredient } from '../interfaces/Ingredient';
 
 const rootUrl = 'https://thecocktaildb.com/api/json/v2/9973533';
-
+export function isPositive(n: number) {
+  return n > 0;
+}
 export async function getAllIngredients() {
   try {
     const res = await fetch(
@@ -47,23 +49,6 @@ export async function getCocktailByIngredient(ingredient: string) {
   return getCocktails(`filter.php?i=${ingredient}`);
 }
 
-<<<<<<< HEAD
 export async function getCocktailById(id: string) {
   return getCocktails(`lookup.php?i=${id}`);
-=======
-export async function getCocktailById(id: string | undefined) {
-  try {
-    const res = await fetch(`${rootUrl}/lookup.php?i=${id}`);
-    const allCocktailInfo: Drinks = await res.json();
-    const relevantCocktailInfo: Cocktail = {};
-    const cocktail: Cocktail = allCocktailInfo.drinks[0];
-    for (let key in cocktail) {
-      //clean the data as it comes with lots of null values
-      if (cocktail[key] !== null) relevantCocktailInfo[key] = cocktail[key];
-    }
-    return relevantCocktailInfo;
-  } catch (err) {
-    console.log('Failed to fetch cocktail by id');
-  }
->>>>>>> origin/riccardo2
 }

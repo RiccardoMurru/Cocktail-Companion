@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 296b1cf5aea2273478d4dea770101d65b4b08849
 import React from 'react';
 import { removeFavourite } from '../apiComs/myApi';
 import { getCocktailById } from '../apiComs/cocktailDbApi';
@@ -36,6 +39,7 @@ export default function Favourites({
   }
   // add type for user and faveId
   async function handleRemoveFromFavourites(user: User, faveId: string) {
+<<<<<<< HEAD
 =======
 import React from "react";
 import { removeFavourite } from "../apiComs/myApi";
@@ -59,6 +63,8 @@ export default function Favourites({ user, setUser, setPage, page }: PageProps) 
   }
   async function handleRemoveFromFavourites(user, faveId) {
 >>>>>>> origin/riccardo2
+=======
+>>>>>>> 296b1cf5aea2273478d4dea770101d65b4b08849
     for (let i = 0; i < displayedFavourites.length; i++) {
       if (displayedFavourites[i].idDrink === faveId) {
         const newFavourites = displayedFavourites.slice();
@@ -75,6 +81,9 @@ export default function Favourites({ user, setUser, setPage, page }: PageProps) 
 
   function handleLogout() {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 296b1cf5aea2273478d4dea770101d65b4b08849
     setPage('search');
     setUser({
       username: '',
@@ -92,6 +101,7 @@ export default function Favourites({ user, setUser, setPage, page }: PageProps) 
         <div className='CocktailList'>
           {displayedFavourites.map((cocktail) => (
             <CocktailComponent
+<<<<<<< HEAD
 =======
     setPage("search");
     setUser("");
@@ -108,6 +118,8 @@ export default function Favourites({ user, setUser, setPage, page }: PageProps) 
           {displayedFavourites.map((cocktail) => (
             <Cocktail
 >>>>>>> origin/riccardo2
+=======
+>>>>>>> 296b1cf5aea2273478d4dea770101d65b4b08849
               page={page}
               setPage={setPage}
               handleRemoveFromFavourites={handleRemoveFromFavourites}

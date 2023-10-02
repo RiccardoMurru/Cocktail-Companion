@@ -1,13 +1,17 @@
-#root {
-  max-width: 100vw;
-  margin: 0 auto;
-  text-align: center;
-  background-color: beige;
-  color:black;
+@import 'searchpage.css';
+@import 'navbar.css';
+@import 'cocktail.css';
+
+ #root {
+  width: 100%;
+  height: 100%;
 }
-* {
-  border-radius: 5px;
+.list-page,
+.login-page {
+  height: 100%;
+  width: 100%;
 }
+/*
 .matched-ing {
   background-color: greenyellow;
   margin: 0px;
@@ -47,16 +51,17 @@
 }
 .form-input {
   padding: 10px;
-}
+} */
 /*COCKTAIL LIST*/
-.CocktailList {
+/* .CocktailList {
   display:flex;
   flex-direction: column;
   width:95%;
   margin-left:30px
-}
+} */
+
 /*COCKTAIL CARD*/
-.ing {
+/* .ing {
   margin:0px;
 }
 .Cocktail {
@@ -83,4 +88,4 @@
 .fave-button {
   margin-bottom: 300px;
 
-}
+} */
