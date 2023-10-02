@@ -38,7 +38,7 @@ export default function SearchPage({
         if (!selectedIngs.includes(ingredient)) {
           setCocktails(updateFilteredCocktails(cocktails, newCocktails, 'add'));
           setIngredients(updatedIngredients);
-          setSelectedIngs([...selectedIngs, ingredient]);
+          setSelectedIngs([...selectedIngs, ingredient.toLowerCase()]);
         }
       }
     } catch (err) {
@@ -48,11 +48,11 @@ export default function SearchPage({
 
   async function handleRemoveFromSelected(ingredient: string): Promise<void> {
     try {
-      const updatedIngredients = ingredients.slice();
-      updatedIngredients.push(ingredient);
+      setIngredients([...ingredients, ingredient]);
+
       const cocktailsToReduce: Cocktail | Cocktail[] =
         await getCocktailByIngredient(ingredient);
-      setIngredients(updatedIngredients);
+
       if (Array.isArray(cocktailsToReduce)) {
         setCocktails(
           updateFilteredCocktails(cocktails, cocktailsToReduce, 'remove')
@@ -66,12 +66,13 @@ export default function SearchPage({
       throw err;
     }
   }
+
   async function fillIngredientsAndCategories(): Promise<void> {
     try {
       const fetchedIngs = await getAllIngredients();
       const fetchedCats = await getAllCategories();
       if (fetchedIngs) {
-        setIngredients(fetchedIngs);
+        setIngredients(fetchedIngs.map((el) => el.toLowerCase()));
       }
       if (fetchedCats) {
         setCategories(fetchedCats);
@@ -146,7 +147,7 @@ export default function SearchPage({
         selectedIngs={selectedIngs}
         handleRemoveFromSelected={handleRemoveFromSelected}
       />
-      {cocktails.length && (
+      {cocktails.length ? (
         <CocktailList
           page=''
           setPage={setPage}
@@ -155,6 +156,8 @@ export default function SearchPage({
           user={user}
           setUser={setUser}
         />
+      ) : (
+        <p>No ingredients selected.</p>
       )}
     </div>
   );

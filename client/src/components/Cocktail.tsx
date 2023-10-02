@@ -18,15 +18,14 @@ export default function CocktailComponent({
   }, [user]);
   const ingredientsWithMeasures: string[] = [];
   const comparisonArr: string[] = []; //used in rendering to make ingredients that you've searched for highlighted green
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 15; i++) {
     const ingredientValue = cocktail.ingredients![i];
     const measureValue = cocktail.measures![i];
     if (ingredientValue) {
       if (measureValue) {
-        const standardizedIngredient =
-          ingredientValue.charAt(0).toUpperCase() + ingredientValue.slice(1);
+        const standardizedIngredient = ingredientValue.toLowerCase();
         const standardizedMeasure = measureValue
-          ? measureValue.charAt(0).toUpperCase() + measureValue.slice(1)
+          ? measureValue.toLowerCase()
           : '';
         ingredientsWithMeasures.push(
           standardizedMeasure + ' ' + standardizedIngredient
@@ -40,9 +39,12 @@ export default function CocktailComponent({
           );
         }
       } else {
-        ingredientsWithMeasures.push(ingredientValue);
-        if (page !== 'favourites' && selectedIngs!.includes(ingredientValue)) {
-          comparisonArr.push(ingredientValue);
+        ingredientsWithMeasures.push(ingredientValue.toLowerCase());
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes(ingredientValue.toLowerCase())
+        ) {
+          comparisonArr.push(ingredientValue.toLowerCase());
         }
       }
     }
