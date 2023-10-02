@@ -3,14 +3,21 @@ import SearchPage from './components/SearchPage';
 import Login from './components/Login';
 import './App.css';
 import Favourites from './components/Favourites';
+import { User } from './interfaces/User';
 
 function App() {
-  const [page, setPage] = useState('search');
-  const [user, setUser] = useState({});
+  const [page, setPage] = useState<string>('search');
+  const [user, setUser] = useState<User>({
+    username: '',
+    password: '',
+    favourites: [],
+    ingredients: []
+  });
 
   if (page === 'search')
     return (
       <SearchPage
+        page=''
         className='list-page'
         user={user}
         setUser={setUser}
@@ -29,7 +36,13 @@ function App() {
     );
   if (page === 'login')
     return (
-      <Login className='login-page' setUser={setUser} setPage={setPage}></Login>
+      <Login
+        page={page}
+        user={user}
+        className='login-page'
+        setUser={setUser}
+        setPage={setPage}
+      ></Login>
     );
 }
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from 'react';
 import { removeFavourite } from '../apiComs/myApi';
 import { getCocktailById } from '../apiComs/cocktailDbApi';
@@ -35,6 +36,29 @@ export default function Favourites({
   }
   // add type for user and faveId
   async function handleRemoveFromFavourites(user: User, faveId: string) {
+=======
+import React from "react";
+import { removeFavourite } from "../apiComs/myApi";
+import { getCocktailById } from "../apiComs/cocktailDbApi";
+import { useState, useEffect } from "react";
+import Cocktail from "./Cocktail";
+import { PageProps } from "../interfaces/Props";
+
+export default function Favourites({ user, setUser, setPage, page }: PageProps) {
+  const [displayedFavourites, setDisplayedFavourites] = useState([]);
+  console.log("USER IN FAVOURITES", user);
+  async function loadFavourites(user) {
+    const userFavourites = user.favourites;
+    const cocktailList = [];
+    console.log("USER FAVOURITES", userFavourites);
+    for (let i = 0; i < userFavourites.length; i++) {
+      const cocktail = await getCocktailById(userFavourites[i]);
+      cocktailList.push(cocktail);
+    }
+    setDisplayedFavourites(cocktailList);
+  }
+  async function handleRemoveFromFavourites(user, faveId) {
+>>>>>>> origin/riccardo2
     for (let i = 0; i < displayedFavourites.length; i++) {
       if (displayedFavourites[i].idDrink === faveId) {
         const newFavourites = displayedFavourites.slice();
@@ -50,6 +74,7 @@ export default function Favourites({
   }, [user]);
 
   function handleLogout() {
+<<<<<<< HEAD
     setPage('search');
     setUser({
       username: '',
@@ -67,6 +92,22 @@ export default function Favourites({
         <div className='CocktailList'>
           {displayedFavourites.map((cocktail) => (
             <CocktailComponent
+=======
+    setPage("search");
+    setUser("");
+  }
+
+  return (
+    <div className="list-page">
+      <div>
+        <p onClick={() => setPage("search")}>Search-page</p>
+        <p onClick={() => handleLogout()}>Logout</p>
+      </div>
+      <div>
+        <div className="CocktailList">
+          {displayedFavourites.map((cocktail) => (
+            <Cocktail
+>>>>>>> origin/riccardo2
               page={page}
               setPage={setPage}
               handleRemoveFromFavourites={handleRemoveFromFavourites}
