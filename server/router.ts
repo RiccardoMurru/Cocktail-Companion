@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/login', controller.login);
 router.post('/register', controller.register);
 
-router.post('/user-profile', authMiddleware, controller.getUser);
+router.get('/user-profile', authMiddleware, controller.getUser);
 router.put('/addfave', authMiddleware, controller.addFavourite);
 router.put('/remove-fave', authMiddleware, controller.removeFavourite);
 

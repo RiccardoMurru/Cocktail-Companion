@@ -106,8 +106,7 @@ export default function SearchPage({
           <p
             onClick={() =>
               setUser({
-                username: '',
-                password: '',
+                username: ''
               })
             }>
             Logout

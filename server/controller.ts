@@ -16,7 +16,7 @@ import UserModel from './models/user';
 //       const hashedPassword = bcrypt.hashSync(password, 10);
 
 //       UserModel.create({ username, password: hashedPassword });
-      
+
 //       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET as string, {
 //         expiresIn: '1h' // Token expires in 1 hour, you can adjust this as needed
 //       } as SignOptions);
@@ -39,14 +39,20 @@ export async function register(req: Request, res: Response): Promise<void> {
     if (!user) {
       const hashedPassword = bcrypt.hashSync(password, 10);
 
-      const newUser = await UserModel.create({ username, password: hashedPassword });
-
-      // Generate JWT token
-      const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET as string, {
-        expiresIn: '1h' 
+      const newUser = await UserModel.create({
+        username,
+        password: hashedPassword
       });
 
-      res.status(201).json({ message: 'User registered successfully', token });
+      const token = jwt.sign(
+        { username: newUser.username },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: '1h'
+        }
+      );
+
+      res.status(201).json({ token });
     } else {
       res.status(400).json({ message: 'Registration failed, username already exists' });
     }

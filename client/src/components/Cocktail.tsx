@@ -61,11 +61,11 @@ export default function CocktailComponent({
   }
   async function toggleFave(user: User, faveId: string) {
     if (isFave === true) {
-      const updatedUser = await removeFavourite(user.username, faveId);
+      const updatedUser = await removeFavourite(faveId);
       setUser(updatedUser);
     }
     if (isFave === false) {
-      const updatedUser = await addFavourite(user.username, faveId);
+      const updatedUser = await addFavourite(faveId);
       setUser(updatedUser);
     }
     setIsFave(!isFave);
@@ -89,7 +89,7 @@ export default function CocktailComponent({
         </div>
         <button
           className='fave-button'
-          onClick={() => handleRemoveFromFavourites(user, cocktail.idDrink)}
+          onClick={() => handleRemoveFromFavourites(cocktail.idDrink)}
         >
           Remove From Favourites
         </button>
