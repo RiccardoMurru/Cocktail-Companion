@@ -131,3 +131,47 @@ export async function getCocktails(url: string) {
     throw err;
   }
 }
+
+export function selectedIngredientsHighlight(
+  selectedIngs: string[],
+  page: string,
+  cocktail: Cocktail
+) {
+  const ingredientsWithMeasures: string[] = [];
+  const comparisonArr: string[] = [];
+  for (let i = 0; i < 15; i++) {
+    const ingredientValue = cocktail.ingredients![i];
+    const measureValue = cocktail.measures![i];
+    if (ingredientValue) {
+      if (measureValue) {
+        const standardizedIngredient = ingredientValue.toLowerCase();
+        const standardizedMeasure = measureValue
+          ? measureValue.toLowerCase()
+          : '';
+        ingredientsWithMeasures.push(
+          standardizedMeasure + ' ' + standardizedIngredient
+        );
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes(standardizedIngredient)
+        ) {
+          comparisonArr.push(
+            standardizedMeasure + ' ' + standardizedIngredient
+          );
+        }
+      } else {
+        ingredientsWithMeasures.push(ingredientValue.toLowerCase());
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes(ingredientValue.toLowerCase())
+        ) {
+          comparisonArr.push(ingredientValue.toLowerCase());
+        }
+      }
+    }
+  }
+  return {
+    comparisonArr,
+    ingredientsWithMeasures
+  };
+}

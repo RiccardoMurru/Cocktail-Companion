@@ -1,5 +1,4 @@
 import React from 'react';
-import { removeFavourite } from '../apiComs/myApi';
 import { getCocktailById } from '../apiComs/cocktailDbApi';
 import { useState, useEffect } from 'react';
 import CocktailComponent from './Cocktail';
@@ -19,11 +18,9 @@ export default function Favourites({ setPage, page }: PageProps) {
     const cocktailList = [];
     if (userFavourites) {
       for (let i = 0; i < userFavourites.length; i++) {
-        let stringifiedUserFav = userFavourites[i].toString();
         const cocktail: Cocktail | Cocktail[] = await getCocktailById(
-          stringifiedUserFav
+          userFavourites[i]
         );
-        //check if it exists
         if (!Array.isArray(cocktail)) {
           cocktailList.push(cocktail);
         }
@@ -31,18 +28,7 @@ export default function Favourites({ setPage, page }: PageProps) {
       setDisplayedFavourites(cocktailList);
     }
   }
-  // add type for user and faveId
-  async function handleRemoveFromFavourites(faveId: string) {
-    for (let i = 0; i < displayedFavourites.length; i++) {
-      if (displayedFavourites[i].idDrink === faveId) {
-        const newFavourites = displayedFavourites.slice();
-        newFavourites.splice(i, 1);
-        setDisplayedFavourites(newFavourites);
-      }
-    }
-    const updatedUser = await removeFavourite(faveId);
-    setUser(updatedUser);
-  }
+
   useEffect(() => {
     loadFavourites(user!);
   }, [user]);
@@ -66,7 +52,6 @@ export default function Favourites({ setPage, page }: PageProps) {
             <CocktailComponent
               page={page}
               setPage={setPage}
-              handleRemoveFromFavourites={handleRemoveFromFavourites}
               cocktail={cocktail}
               key={cocktail.idDrink}
             />

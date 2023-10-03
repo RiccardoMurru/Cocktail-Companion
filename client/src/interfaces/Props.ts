@@ -1,4 +1,3 @@
-import { User } from './User';
 import { Cocktail } from './Cocktail';
 
 export interface PageProps {
