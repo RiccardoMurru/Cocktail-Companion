@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import CocktailList from './CocktailList';
 import Navbar from './Navbar';
@@ -13,22 +13,22 @@ import {
 } from '../apiComs/cocktailDbApi';
 import { PageProps } from '../interfaces/Props';
 import { Cocktail } from '../interfaces/Cocktail';
+import Cookies from 'js-cookie';
+import { useAuth } from '../context/authContext';
 
-export default function SearchPage({
-  user,
-  setUser,
-  page,
-  setPage,
-}: PageProps) {
+export default function SearchPage({ page, setPage }: PageProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingList, setIngList] = useState<string[]>([]);
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
   const [selectedIngs, setSelectedIngs] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fillIngredientsAndCategories();
   }, []);
+
+  const { user, logout } = useAuth();
 
   async function handleAddToSelected(ingredient: string): Promise<void> {
     try {
@@ -87,28 +87,23 @@ export default function SearchPage({
     return <Navigate to='/login' />;
   }
 
-  if (user.username)
+  if (Cookies.get('token'))
     return (
       <div className='list-page'>
         <header className='page-header'>
           <div className='header-wrapper'>
             <img className='logo' src={logo} />
             <div className='button-container'>
-              <Link to='/favourites'>Favourites</Link>
-              <Link
-                to='/'
-                onClick={() =>
-                  setUser({
-                    username: '',
-                  })
-                }>
-                Logout
-              </Link>
+              <button onClick={() => {
+                setPage('favourites')
+                navigate('/favourites')
+              }}>Favourites</button>
+              <button onClick={logout}>Logout</button>
             </div>
           </div>
         </header>
         <h2 className='welcome'>
-          <span>Welcome back {user.username}!</span>
+          <span>Welcome back {user!.username}!</span>
           <span>What are we drinking today?</span>{' '}
         </h2>
         <Navbar
@@ -126,8 +121,6 @@ export default function SearchPage({
             setPage={setPage}
             selectedIngs={selectedIngs}
             cocktails={cocktails}
-            user={user}
-            setUser={setUser}
           />
         ) : (
           <p>No ingredients selected.</p>
@@ -168,8 +161,6 @@ export default function SearchPage({
           setPage={setPage}
           selectedIngs={selectedIngs}
           cocktails={cocktails}
-          user={user}
-          setUser={setUser}
         />
       ) : (
         <p>No selected ingredient</p>

@@ -1,10 +1,11 @@
 import { useState } from 'react';
+
+import { AuthProvider } from './context/authContext';
 import SearchPage from './components/SearchPage';
 import Login from './components/Login';
-import './styles/App.css';
 import Favourites from './components/Favourites';
-import { User } from './interfaces/User';
 import Register from './components/Register';
+import './styles/App.css';
 import {
   BrowserRouter as Router,
   Route,
@@ -14,67 +15,56 @@ import {
 
 function App() {
   const [page, setPage] = useState<string>('search');
-  const [user, setUser] = useState<User>({
-    username: '',
-    favourites: [],
-    ingredients: [],
-  });
 
   return (
-    <Router>
-      <div className='App'>
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <SearchPage
-                className='list-page'
-                page='search'
-                setPage={setPage}
-                user={user}
-                setUser={setUser}
-              />
-            }
-          />
-          <Route
-            path='/favourites'
-            element={
-              <Favourites
-                user={user}
-                setUser={setUser}
-                className='list-page'
-                page='favourites'
-                setPage={setPage}
-              />
-            }
-          />
-          <Route
-            path='/login'
-            element={
-              <Login
-                className='login-page'
-                user={user}
-                setUser={setUser}
-                page='login'
-                setPage={setPage}
-              />
-            }
-          />
-          <Route
-            path='/register'
-            element={
-              <Register
-                className='register-page'
-                user={user}
-                setUser={setUser}
-                page='register'
-                setPage={setPage}
-              />
-            }
-          />
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <div className='App'>
+          <Routes>
+            <Route
+              path='/'
+              element={
+                <SearchPage
+                  className='list-page'
+                  page='search'
+                  setPage={setPage}
+                />
+              }
+            />
+            <Route
+              path='/favourites'
+              element={
+                <Favourites
+                  className='list-page'
+                  page='favourites'
+                  setPage={setPage}
+                />
+              }
+            />
+            <Route
+              path='/login'
+              element={
+                <Login
+                  className='login-page'
+                  page='login'
+                  setPage={setPage}
+                />
+              }
+            />
+            <Route
+              path='/register'
+              element={
+                <Register
+                  className='register-page'
+                  page='register'
+                  setPage={setPage}
+                />
+              }
+            />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 

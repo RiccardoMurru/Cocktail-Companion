@@ -1,30 +1,33 @@
-'use strict';
-
-import React from 'react';
-import { getUser } from '../apiComs/myApi';
+import React, { useState } from 'react';
+import { useAuth } from '../context/authContext';
 import { PageProps } from '../interfaces/Props';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/LOGO.png';
-import { Link } from 'react-router-dom';
 
-export default function Login({ setUser, setPage }: PageProps) {
+export default function Login({ setPage }: PageProps) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { login, setUser } = useAuth();
+  const navigate = useNavigate();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    try {
+      const userData = await login(username, password);
 
-    // Cast event.target to HTMLFormElement
-    const form = event.target as HTMLFormElement;
-
-    // Access input values using their name attributes
-    const username = form.username.value;
-    const password = form.password.value;
-
-    const response = await getUser(username, password);
-
-    if (response.error) {
-      window.alert('Username or password incorrect');
-    } else {
-      setUser(response);
-      setPage('search');
+      if (userData) {
+        userData.username = username;
+        setUser(userData);
+        setPage('search');
+        navigate('/');
+        setPassword('');
+      } else {
+        setError('Username or password incorrect');
+      }
+    } catch (err) {
+      setError('An error occurred during login');
+      console.error(err);
     }
   }
 
@@ -49,6 +52,8 @@ export default function Login({ setUser, setPage }: PageProps) {
             name='username'
             required={true}
             type='text'
+            value={username}
+            onChange={e => setUsername(e.target.value)}
           />
         </div>
         <div className='item-form'>
@@ -59,10 +64,13 @@ export default function Login({ setUser, setPage }: PageProps) {
             name='password'
             required={true}
             type='password'
+            value={password}
+            onChange={e => setPassword(e.target.value)}
           />
         </div>
         <button type='submit'>Login</button>
       </form>
+      {error && <div className='error-message'>{error}</div>}
     </div>
   );
 }

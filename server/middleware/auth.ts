@@ -18,7 +18,13 @@ export function authMiddleware(
     return res.status(403).json({ message: 'Forbidden' });
   }
 
-  const token = authorization.split(' ')[1];
+  let token = '';
+
+  if (Array.isArray(authorization)) {
+    token = authorization[0].split(' ')[1];
+  } else {
+    token = authorization.split(' ')[1];
+  }
 
   if (!token) {
     return res.status(403).json({ message: 'Forbidden' });

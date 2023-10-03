@@ -8,8 +8,6 @@ import { Cocktail } from '../interfaces/Cocktail';
 export default function CocktailList({
   cocktails,
   selectedIngs,
-  user,
-  setUser,
   page,
   setPage
 }: CocktailListProps) {

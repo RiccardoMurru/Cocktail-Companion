@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { removeFavourite } from '../apiComs/myApi';
 import { getCocktailById } from '../apiComs/cocktailDbApi';
 import { useState, useEffect } from 'react';
@@ -6,16 +7,16 @@ import CocktailComponent from './Cocktail';
 import { PageProps } from '../interfaces/Props';
 import { User } from '../interfaces/User';
 import { Cocktail } from '../interfaces/Cocktail';
+import { useAuth } from '../context/authContext';
+import logo from '../assets/LOGO.png';
 
-export default function Favourites({
-  user,
-  setUser,
-  setPage,
-  page
-}: PageProps) {
+export default function Favourites({ setPage, page }: PageProps) {
   const [displayedFavourites, setDisplayedFavourites] = useState<Cocktail[]>(
     []
   );
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
+
   async function loadFavourites(user: User): Promise<void> {
     const userFavourites = user.favourites;
     const cocktailList = [];
@@ -46,36 +47,44 @@ export default function Favourites({
     setUser(updatedUser);
   }
   useEffect(() => {
-    loadFavourites(user);
+    loadFavourites(user!);
   }, [user]);
 
   function handleLogout() {
     setPage('search');
     setUser({
-      username: ''
+      username: '',
     });
   }
 
   return (
     <div className='list-page'>
-      <div>
-        <p onClick={() => setPage('search')}>Search-page</p>
-        <p onClick={() => handleLogout()}>Logout</p>
-      </div>
-      <div>
-        <div className='CocktailList'>
-          {displayedFavourites.map((cocktail) => (
-            <CocktailComponent
-              page={page}
-              setPage={setPage}
-              handleRemoveFromFavourites={handleRemoveFromFavourites}
-              user={user}
-              setUser={setUser}
-              cocktail={cocktail}
-              key={cocktail.idDrink}
-            />
-          ))}
+      <header className='page-header'>
+        <div className='header-wrapper'>
+          <img className='logo' src={logo} />
+          <div className='button-container'>
+            <button
+              onClick={() => {
+                setPage('search');
+                navigate('/');
+              }}>
+              Back
+            </button>
+            <button onClick={() => handleLogout()}>Logout</button>
+          </div>
         </div>
+      </header>
+      <h2 className='favourites-title'>Your favourites:</h2>
+      <div className='CocktailList'>
+        {displayedFavourites.map(cocktail => (
+          <CocktailComponent
+            page={page}
+            setPage={setPage}
+            handleRemoveFromFavourites={handleRemoveFromFavourites}
+            cocktail={cocktail}
+            key={cocktail.idDrink}
+          />
+        ))}
       </div>
     </div>
   );

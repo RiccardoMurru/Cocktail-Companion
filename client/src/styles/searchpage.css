@@ -60,6 +60,7 @@
 .button-container {
   display: flex;
   justify-content: flex-end;
+  button,
   a,
   a:link {
     display: flex;
@@ -104,6 +105,7 @@
   }
 }
 
+.favourites-title,
 .welcome {
   color: var(--matchedIngredient);
   font-size: 30px;

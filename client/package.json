@@ -13,6 +13,7 @@
   "dependencies": {
     "autoprefixer": "^10.4.16",
     "axios": "^1.5.0",
+    "js-cookie": "^3.0.5",
     "postcss": "^8.4.31",
     "postcss-nested": "^6.0.1",
     "react": "^18.2.0",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.5",
+    "@types/js-cookie": "^3.0.4",
     "@types/react": "^18.2.23",
     "@types/react-dom": "^18.2.8",
     "@typescript-eslint/eslint-plugin": "^6.7.3",

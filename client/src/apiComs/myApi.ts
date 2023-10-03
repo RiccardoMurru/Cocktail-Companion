@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { AxiosRequestConfig } from 'axios';
+import Cookies from 'js-cookie';
+
 import { useAuth } from '../context/authContext';
 
 const rootUrl = 'http://localhost:3001';
 
 export async function register(username: string, password: string) {
-  const { user } = useAuth();
-
+  const token = Cookies.get('token');
   try {
-    if (user) {
+    if (token) {
       throw new Error('User is already authenticated');
     }
 
@@ -30,54 +31,52 @@ export async function register(username: string, password: string) {
   }
 }
 
-export async function getUser(username: string, password: string) {
-  const { user } = useAuth();
-
+export async function getUser() {
   try {
-    if (!user) {
+    const token = Cookies.get('token');
+    if (!token) {
       throw new Error('User not authenticated');
     }
 
-    const credentialsObj = {
-      username: username,
-      password: password,
-    };
-
-    const res = await axios.post(`${rootUrl}/user-profile`, credentialsObj, {
+    const res = await axios.get(`${rootUrl}/user-profile`, {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`,
-      },
+        Authorization: `Bearer ${token}`
+      }
     } as AxiosRequestConfig);
 
     const userData = res.data;
     return userData;
   } catch (err) {
-    console.log('Error retrieving profile');
+    console.log('Error retrieving user profile:', err);
+    throw err;
   }
 }
 
 export async function addFavourite(faveId: string) {
-  const { user } = useAuth();
-
   try {
-    if (!user) {
+    const token = Cookies.get('token');
+    console.log('faveId on add Favourite before the if', faveId);
+    console.log('token on add Favourite before the if', token);
+    if (!token) {
       throw new Error('User not authenticated');
     }
-
+    console.log('faveId on add Favourite', faveId);
+    console.log('token on add Favourite', token);
     const dataObj = {
-      username: user.username,
-      faveId,
+      faveId
     };
+    console.log(dataObj);
 
-    const res = await axios.put(`${rootUrl}/addfave`, dataObj, {
+    const res = await axios.put(`${rootUrl}/add-fave`, dataObj, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`,
-      },
+        Authorization: `Bearer ${token}`
+      }
     } as AxiosRequestConfig);
+    console.log('res: ', res);
 
     const updatedUser = res.data;
+    console.log(res.data);
     return updatedUser;
   } catch (err) {
     console.log('Error saving favourite');
@@ -85,23 +84,21 @@ export async function addFavourite(faveId: string) {
 }
 
 export async function removeFavourite(faveId: string) {
-  const { user } = useAuth();
-
   try {
-    if (!user) {
+    const token = Cookies.get('token');
+    if (!token) {
       throw new Error('User not authenticated');
     }
 
     const dataObj = {
-      token: user.token,
-      faveId,
+      faveId
     };
 
     const res = await axios.put(`${rootUrl}/remove-fave`, dataObj, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`,
-      },
+        Authorization: `Bearer ${token}`
+      }
     } as AxiosRequestConfig);
 
     const updatedUser = res.data;
