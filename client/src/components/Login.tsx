@@ -5,7 +5,7 @@ import { getUser } from '../apiComs/myApi';
 import { PageProps } from '../interfaces/Props';
 import logo from '../assets/LOGO.png';
 
-export default function Login({ setUser, setPage }: PageProps) {
+export default function Login({ user, setUser, setPage }: PageProps) {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
