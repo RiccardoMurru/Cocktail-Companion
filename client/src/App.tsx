@@ -14,7 +14,7 @@ function App() {
     username: '',
     password: '',
     favourites: [],
-    ingredients: [],
+    ingredients: []
   });
 
   // if (page === 'search')

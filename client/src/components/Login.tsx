@@ -3,8 +3,10 @@
 import React from 'react';
 import { getUser } from '../apiComs/myApi';
 import { PageProps } from '../interfaces/Props';
+import logo from '../assets/LOGO.png';
 
-export default function Login({ user, setUser, setPage }: PageProps) {
+export default function Login({ setUser, setPage }: PageProps) {
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -27,23 +29,34 @@ export default function Login({ user, setUser, setPage }: PageProps) {
 
   return (
     <div className='login-page'>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <input
-          className='form-input'
-          name='username'
-          placeholder='Enter username here'
-          required={true}
-        ></input>
-        <input
-          className='form-input'
-          name='password'
-          placeholder='Enter password here'
-          required={true}
-        ></input>
-        {/* <button type='submit'>Login</button> */}
-        <button type='submit'>
-          {user.username ? 'Logged In' : 'Login'}
-        </button>
+      <header className='page-header'>
+        <div className='header-wrapper'>
+          <img className='logo' src={logo} />
+          <button onClick={() => setPage('search')}>Back</button>
+        </div>
+      </header>
+      <form onSubmit={e => handleSubmit(e)}>
+        <div className='item-form'>
+          <label htmlFor='username'>Username</label>
+          <input
+            id='username'
+            className='form-input'
+            name='username'
+            required={true}
+            type='text'
+          />
+        </div>
+        <div className='item-form'>
+          <label htmlFor='password'>Password</label>
+          <input
+            id='password'
+            className='form-input'
+            name='password'
+            required={true}
+            type='password'
+          />
+        </div>
+        <button type='submit'>Login</button>
       </form>
     </div>
   );

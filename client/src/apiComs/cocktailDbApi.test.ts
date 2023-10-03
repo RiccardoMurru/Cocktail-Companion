@@ -1,4 +1,3 @@
-
 import fetchMock from 'jest-fetch-mock';
 import { getAllIngredients } from './cocktailDbApi';
 fetchMock.enableMocks();
@@ -23,19 +22,27 @@ describe('getAllIngredients', () => {
     );
   });
 });
+
 import { getAllCategories } from './cocktailDbApi';
+
 describe('getAllCategories', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
+<<<<<<< HEAD
+=======
+
+>>>>>>> riccardo2
   it('fetches data from API and returns an array of categories', async () => {
     const mockResponse = {
       drinks: ['Ordinary Drink', 'Shake', 'Other / Unknown']
     };
     fetchMock.mockResponseOnce(JSON.stringify(mockResponse));
     const result = await getAllCategories();
+
     if (result) {
       expect(Array.isArray(result)).toBe(true);
+
       result.forEach((ingredient) => {
         expect(ingredient).toEqual(expect.any(String));
       });
@@ -45,9 +52,12 @@ describe('getAllCategories', () => {
     );
   });
 });
+
 import { getCocktailByIngredient } from './cocktailDbApi';
 import { Cocktail } from '../interfaces/Cocktail';
+
 fetchMock.enableMocks();
+
 describe('getCocktailByIngredient', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
@@ -79,18 +89,24 @@ describe('getCocktailByIngredient', () => {
         }
       ]
     };
+
     const rootUrl = 'https://thecocktaildb.com/api/json/v2/9973533';
+
     fetchMock.mockResponseOnce(JSON.stringify(mockResponse));
+
     const result: Cocktail | Cocktail[] = await getCocktailByIngredient(
       ingredient
     );
+
     if (result) {
       // Check if the function fetches data from the API with the correct URL
       expect(fetchMock).toHaveBeenCalledWith(
         `${rootUrl}/filter.php?i=${ingredient}`
       );
+
       // Check if the result is an array of cocktails
       expect(Array.isArray(result)).toBe(true);
+
       // Check if each cocktail in the result has the expected format
       if (Array.isArray(result)) {
         result.forEach((cocktail) => {
@@ -102,4 +118,3 @@ describe('getCocktailByIngredient', () => {
     }
   });
 });
- 
