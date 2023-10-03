@@ -59,8 +59,6 @@ export default function CocktailList({
         {displayedCocktails.map((cocktail) => (
           <CocktailComponent
             page={page}
-            user={user}
-            setUser={setUser}
             selectedIngs={selectedIngs}
             cocktail={cocktail}
             key={cocktail.idDrink}

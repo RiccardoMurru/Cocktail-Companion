@@ -14,7 +14,7 @@ export default function Favourites({ setPage, page }: PageProps) {
   const [displayedFavourites, setDisplayedFavourites] = useState<Cocktail[]>(
     []
   );
-  const { user, setUser } = useAuth();
+  const { user, setUser, logout } = useAuth();
   const navigate = useNavigate();
 
   async function loadFavourites(user: User): Promise<void> {
@@ -52,9 +52,8 @@ export default function Favourites({ setPage, page }: PageProps) {
 
   function handleLogout() {
     setPage('search');
-    setUser({
-      username: '',
-    });
+    logout();
+    navigate('/');
   }
 
   return (
