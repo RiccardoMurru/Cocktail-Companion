@@ -55,17 +55,12 @@ export async function getUser() {
 export async function addFavourite(faveId: string) {
   try {
     const token = Cookies.get('token');
-    console.log('faveId on add Favourite before the if', faveId);
-    console.log('token on add Favourite before the if', token);
     if (!token) {
       throw new Error('User not authenticated');
     }
-    console.log('faveId on add Favourite', faveId);
-    console.log('token on add Favourite', token);
     const dataObj = {
       faveId
     };
-    console.log(dataObj);
 
     const res = await axios.put(`${rootUrl}/add-fave`, dataObj, {
       headers: {
@@ -73,10 +68,8 @@ export async function addFavourite(faveId: string) {
         Authorization: `Bearer ${token}`
       }
     } as AxiosRequestConfig);
-    console.log('res: ', res);
 
     const updatedUser = res.data;
-    console.log(res.data);
     return updatedUser;
   } catch (err) {
     console.log('Error saving favourite');
