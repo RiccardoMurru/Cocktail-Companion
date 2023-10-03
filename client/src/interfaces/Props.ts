@@ -22,7 +22,7 @@ export interface NavbarProps {
 export interface CocktailProps {
   cocktail: Cocktail;
   selectedIngs?: string[];
-  handleRemoveFromFavourites?: (user: User, idDrink: string) => void;
+  handleRemoveFromFavourites?: (idDrink: string) => void;
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
   page: string;

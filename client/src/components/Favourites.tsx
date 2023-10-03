@@ -34,7 +34,7 @@ export default function Favourites({
     }
   }
   // add type for user and faveId
-  async function handleRemoveFromFavourites(user: User, faveId: string) {
+  async function handleRemoveFromFavourites(faveId: string) {
     for (let i = 0; i < displayedFavourites.length; i++) {
       if (displayedFavourites[i].idDrink === faveId) {
         const newFavourites = displayedFavourites.slice();
@@ -42,7 +42,7 @@ export default function Favourites({
         setDisplayedFavourites(newFavourites);
       }
     }
-    const updatedUser = await removeFavourite(user.username, faveId);
+    const updatedUser = await removeFavourite(faveId);
     setUser(updatedUser);
   }
   useEffect(() => {
@@ -52,8 +52,7 @@ export default function Favourites({
   function handleLogout() {
     setPage('search');
     setUser({
-      username: '',
-      password: ''
+      username: ''
     });
   }
 

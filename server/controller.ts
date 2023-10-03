@@ -11,12 +11,24 @@ export async function register(req: Request, res: Response): Promise<void> {
   try {
     const { username, password } = req.body;
     const user = await UserModel.findOne({ username });
+
     if (!user) {
       const hashedPassword = bcrypt.hashSync(password, 10);
 
-      UserModel.create({ username, password: hashedPassword });
+      const newUser = await UserModel.create({
+        username,
+        password: hashedPassword
+      });
 
-      res.status(201).json({ message: 'User registered successfully' });
+      const token = jwt.sign(
+        { username: newUser.username },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: '1h'
+        }
+      );
+
+      res.status(201).json({ token });
     } else {
       res.status(400).json({ message: 'Registration failed' });
     }

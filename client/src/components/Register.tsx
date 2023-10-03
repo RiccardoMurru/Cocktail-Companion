@@ -1,46 +1,28 @@
-'use strict';
-
 import React, { useState } from 'react';
-import { addUser } from '../apiComs/myApi';
 import { PageProps } from '../interfaces/Props';
+import { register } from '../apiComs/myApi';
+import { User } from '../interfaces/User';
 
-export default function Register ({
-  setUser,
-  setPage
-}: PageProps) {
-
-  console.log('hello register is here')
+export default function Register({ setUser, setPage }: PageProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    // Check if username already exists
-    const isUsernameAvailable = await checkUsernameAvailability(username);
+    try {
+      const userData: User = await register(username, password);
+      userData.username = username;
 
-    if (!isUsernameAvailable) {
-      setError('Username is already taken');
-      return;
-    }
-
-    // Register the user if the username is available
-    const response = await addUser({ username, password });
-
-    if (response.error) {
-      setError('Error registering user');
-    } else {
-      setUser(response);
+      setUser(userData);
       setPage('search');
+    } catch (err) {
+      setError('Error registering user');
+      console.error(err);
     }
   }
 
-  async function checkUsernameAvailability(username: string) {
-    return true;
-  }
-  
   return (
     <div className='register-page'>
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -64,5 +46,5 @@ export default function Register ({
         {error && <div className='error-message'>{error}</div>}
       </form>
     </div>
-  )
+  );
 }
