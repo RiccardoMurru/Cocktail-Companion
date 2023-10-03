@@ -90,21 +90,27 @@ export default function SearchPage({
   if (user.username)
     return (
       <div className='list-page'>
-        <div className='img-container'>
-          <img className='logo' src={logo} />
-        </div>
-        <div className='navigation-buttons'>
-          <p onClick={() => setPage('favourites')}>Favourites</p>
-          <p
-            onClick={() =>
-              setUser({
-                username: '',
-              })
-            }>
-            Logout
-          </p>
-        </div>
-        <h2>Welcome back {user.username}! What are we drinking today?</h2>
+        <header className='page-header'>
+          <div className='header-wrapper'>
+            <img className='logo' src={logo} />
+            <div className='button-container'>
+              <Link to='/favourites'>Favourites</Link>
+              <Link
+                to='/'
+                onClick={() =>
+                  setUser({
+                    username: '',
+                  })
+                }>
+                Logout
+              </Link>
+            </div>
+          </div>
+        </header>
+        <h2 className='welcome'>
+          <span>Welcome back {user.username}!</span>
+          <span>What are we drinking today?</span>{' '}
+        </h2>
         <Navbar
           className='NavBar'
           setIngList={setIngList}
@@ -133,8 +139,6 @@ export default function SearchPage({
       <header className='page-header'>
         <div className='header-wrapper'>
           <img className='logo' src={logo} />
-          {/* <button onClick={() => setPage('login')}>Login</button>
-          <button onClick={() => setPage('register')}>Register</button> */}
           <div className='button-container'>
             <Link to='/login' className='login-button'>
               Login

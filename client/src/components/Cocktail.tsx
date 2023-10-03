@@ -133,12 +133,12 @@ export default function CocktailComponent({
         </ul>
         <h3>How to make it:</h3>
         <p>{cocktail.instructions}</p>
+        <button
+          className='fave-button'
+          onClick={() => toggleFave(user, cocktail.idDrink)}>
+          {isFave ? 'Remove From Favourites' : 'Add To Favourites'}
+        </button>
       </div>
-      <button
-        className='fave-button'
-        onClick={() => toggleFave(user, cocktail.idDrink)}>
-        {isFave ? 'Remove From Favourites' : 'Add To Favourites'}
-      </button>
     </div>
   );
 }
