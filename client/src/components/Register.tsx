@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { PageProps } from '../interfaces/Props';
 import { register } from '../apiComs/myApi';
 import { User } from '../interfaces/User';
+import { useAuth } from '../context/authContext';
 
-export default function Register({ setUser, setPage }: PageProps) {
+export default function Register({ setPage }: PageProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  const { setUser } = useAuth();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

@@ -2,19 +2,24 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
-  ReactNode
+  ReactNode,
+  useEffect
 } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
 import { User } from '../interfaces/User';
+const rootUrl = 'http://localhost:3001';
 
 const AuthContext = createContext<{
   user: User | null;
-  login: (userData: User) => void;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  login: (username: string, password: string) => Promise<User | null>;
   logout: () => void;
 }>({
   user: null,
-  login: () => {},
+  setUser: () => {},
+  login: () => Promise.resolve(null),
   logout: () => {}
 });
 
@@ -22,38 +27,69 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('token');
 
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
 
-    axios
-      .get('/user-profile')
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((error) => {
-        console.log('Failed to fetch user data: ', error);
-      });
+      axios
+        .get(`${rootUrl}/user-profile`)
+        .then((response) => {
+          setUser(response.data);
+          console.log('response.data: ', response.data);
+          console.log(user);
+        })
+        .catch((error) => {
+          console.error('Failed to fetch user data: ', error);
+        });
+    }
   }, []);
 
-  const login = (userData: User) => {
-    const { token } = userData;
+  const login = async (
+    username: string,
+    password: string
+  ): Promise<User | null> => {
+    try {
+      console.log('username and pw in login function, ', username, password);
+      const response = await axios.post(`${rootUrl}/login`, {
+        username,
+        password
+      });
 
-    localStorage.setItem('token', token!);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    setUser(userData);
+      if (response.status === 200) {
+        const tokenData = response.data;
+        const { token } = tokenData;
+
+        const userData: User = { token };
+
+        Cookies.set('token', token as string, { expires: 1 });
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        userData.favourites = [];
+        setUser(userData);
+
+        return userData;
+      } else {
+        console.error(
+          'Login failed: Unexpected response status',
+          response.status
+        );
+        return null;
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      return null;
+    }
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    Cookies.remove('token');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
   };
 
   const contextValue = {
     user,
+    setUser,
     login,
     logout
   };

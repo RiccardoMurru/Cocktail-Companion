@@ -3,8 +3,6 @@ import { Cocktail } from './Cocktail';
 
 export interface PageProps {
   className?: string;
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
   page: string;
   setPage: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -23,8 +21,6 @@ export interface CocktailProps {
   cocktail: Cocktail;
   selectedIngs?: string[];
   handleRemoveFromFavourites?: (idDrink: string) => void;
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
   page: string;
   setPage: React.Dispatch<React.SetStateAction<string>>;
 }

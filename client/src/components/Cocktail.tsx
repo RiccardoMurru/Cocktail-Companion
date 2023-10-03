@@ -3,19 +3,20 @@ import { useState, useEffect } from 'react';
 import { addFavourite, removeFavourite } from '../apiComs/myApi';
 import { User } from '../interfaces/User';
 import { CocktailProps } from '../interfaces/Props';
+import { useAuth } from '../context/authContext';
+import Cookies from 'js-cookie';
 export default function CocktailComponent({
   cocktail,
   selectedIngs,
   handleRemoveFromFavourites,
-  user,
-  setUser,
   page
 }: CocktailProps) {
-  const [isFave, setIsFave] = useState(false);
+  //const [isFave, setIsFave] = useState(false);
+  const { user, setUser } = useAuth();
   //this useEffect works if logged in to check if a drink is already favourites so it renders with a remove button
-  useEffect(() => {
-    initialCheckIsFave(cocktail.idDrink);
-  }, [user]);
+  // useEffect(() => {
+  //   initialCheckIsFave(cocktail.idDrink);
+  // }, [user]);
   const ingredientsWithMeasures: string[] = [];
   const comparisonArr: string[] = []; //used in rendering to make ingredients that you've searched for highlighted green
   for (let i = 0; i < 15; i++) {
@@ -50,25 +51,20 @@ export default function CocktailComponent({
     }
   }
 
-  function initialCheckIsFave(faveId: string) {
-    if (user) {
-      if (user.favourites) {
-        for (let i = 0; i < user.favourites.length; i++) {
-          if (Number(faveId) === user.favourites[i]) setIsFave(true);
-        }
-      }
-    }
-  }
-  async function toggleFave(user: User, faveId: string) {
-    if (isFave === true) {
-      const updatedUser = await removeFavourite(faveId);
-      setUser(updatedUser);
-    }
-    if (isFave === false) {
-      const updatedUser = await addFavourite(faveId);
-      setUser(updatedUser);
-    }
-    setIsFave(!isFave);
+  // function initialCheckIsFave(faveId: string) {
+  //   if (user) {
+  //     if (user.favourites) {
+  //       for (let i = 0; i < user.favourites.length; i++) {
+  //         if (faveId === user.favourites[i]) setIsFave(true);
+  //       }
+  //     }
+  //   }
+  // } // [] <-
+  async function toggleFave(faveId: string) {
+    const updatedUser = user!.favourites!.includes(faveId)
+      ? await removeFavourite(faveId)
+      : await addFavourite(faveId);
+    setUser(updatedUser);
   }
   //checks if cocktail being rendered on favourites page as this function would not be handed down otherwise
   if (handleRemoveFromFavourites)
@@ -79,7 +75,10 @@ export default function CocktailComponent({
           <h2>{cocktail.drink}</h2>
           <ul>
             {ingredientsWithMeasures.map((ing) => (
-              <li key={ing}>
+              <li
+                key={ing}
+                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}
+              >
                 <span>{ing}</span>
               </li>
             ))}
@@ -96,7 +95,7 @@ export default function CocktailComponent({
       </div>
     );
   //renders this if not logged in
-  if (!user.username)
+  if (!Cookies.get('token'))
     return (
       <div className='Cocktail'>
         <img className='cocktail-img' src={cocktail.drinkThumb} />
@@ -138,9 +137,11 @@ export default function CocktailComponent({
       </div>
       <button
         className='fave-button'
-        onClick={() => toggleFave(user, cocktail.idDrink)}
+        onClick={() => toggleFave(cocktail.idDrink)}
       >
-        {isFave ? 'Remove From Favourites' : 'Add To Favourites'}
+        {user!.favourites?.includes(cocktail.idDrink)
+          ? 'Remove From Favourites'
+          : 'Add To Favourites'}
       </button>
     </div>
   );

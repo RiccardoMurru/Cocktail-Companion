@@ -6,16 +6,14 @@ import CocktailComponent from './Cocktail';
 import { PageProps } from '../interfaces/Props';
 import { User } from '../interfaces/User';
 import { Cocktail } from '../interfaces/Cocktail';
+import { useAuth } from '../context/authContext';
 
-export default function Favourites({
-  user,
-  setUser,
-  setPage,
-  page
-}: PageProps) {
+export default function Favourites({ setPage, page }: PageProps) {
   const [displayedFavourites, setDisplayedFavourites] = useState<Cocktail[]>(
     []
   );
+  const { user, setUser } = useAuth();
+
   async function loadFavourites(user: User): Promise<void> {
     const userFavourites = user.favourites;
     const cocktailList = [];
@@ -46,7 +44,7 @@ export default function Favourites({
     setUser(updatedUser);
   }
   useEffect(() => {
-    loadFavourites(user);
+    loadFavourites(user!);
   }, [user]);
 
   function handleLogout() {
@@ -69,8 +67,6 @@ export default function Favourites({
               page={page}
               setPage={setPage}
               handleRemoveFromFavourites={handleRemoveFromFavourites}
-              user={user}
-              setUser={setUser}
               cocktail={cocktail}
               key={cocktail.idDrink}
             />

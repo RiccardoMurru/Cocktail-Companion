@@ -1,60 +1,31 @@
 import { useState } from 'react';
+
+import { AuthProvider } from './context/authContext';
 import SearchPage from './components/SearchPage';
 import Login from './components/Login';
-import './styles/App.css';
 import Favourites from './components/Favourites';
-import { User } from './interfaces/User';
 import Register from './components/Register';
+import './styles/App.css';
 
 function App() {
   const [page, setPage] = useState<string>('search');
-  const [user, setUser] = useState<User>({
-    username: '',
-    password: '',
-    favourites: [],
-    ingredients: []
-  });
 
-  if (page === 'search')
-    return (
-      <SearchPage
-        page=''
-        className='list-page'
-        user={user}
-        setUser={setUser}
-        setPage={setPage}
-      ></SearchPage>
-    );
-  if (page === 'favourites')
-    return (
-      <Favourites
-        className='list-page'
-        user={user}
-        setUser={setUser}
-        page={page}
-        setPage={setPage}
-      />
-    );
-  if (page === 'login')
-    return (
-      <Login
-        page={page}
-        user={user}
-        className='login-page'
-        setUser={setUser}
-        setPage={setPage}
-      ></Login>
-    );
-  if (page === 'register')
-    return (
-      <Register
-        className='register-page'
-        user={user}
-        setUser={setUser}
-        page={page}
-        setPage={setPage}
-      ></Register>
-    );
+  return (
+    <AuthProvider>
+      {page === 'search' && (
+        <SearchPage page='' className='list-page' setPage={setPage} />
+      )}
+      {page === 'favourites' && (
+        <Favourites className='list-page' page={page} setPage={setPage} />
+      )}
+      {page === 'login' && (
+        <Login page={page} className='login-page' setPage={setPage} />
+      )}
+      {page === 'register' && (
+        <Register className='register-page' page={page} setPage={setPage} />
+      )}
+    </AuthProvider>
+  );
 }
 
 export default App;

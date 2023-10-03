@@ -12,12 +12,9 @@ import {
 } from '../apiComs/cocktailDbApi';
 import { PageProps } from '../interfaces/Props';
 import { Cocktail } from '../interfaces/Cocktail';
-export default function SearchPage({
-  user,
-  setUser,
-  page,
-  setPage
-}: PageProps) {
+import Cookies from 'js-cookie';
+import { useAuth } from '../context/authContext';
+export default function SearchPage({ page, setPage }: PageProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [selectedIngs, setSelectedIngs] = useState<string[]>([]);
@@ -27,6 +24,9 @@ export default function SearchPage({
   useEffect(() => {
     fillIngredientsAndCategories();
   }, []);
+
+  const { user, logout } = useAuth();
+  console.log(user);
 
   async function handleAddToSelected(ingredient: string): Promise<void> {
     try {
@@ -81,7 +81,7 @@ export default function SearchPage({
       throw err;
     }
   }
-  if (user.username)
+  if (Cookies.get('token'))
     return (
       <div className='list-page'>
         <div className='img-container'>
@@ -89,17 +89,9 @@ export default function SearchPage({
         </div>
         <div className='navigation-buttons'>
           <p onClick={() => setPage('favourites')}>Favourites</p>
-          <p
-            onClick={() =>
-              setUser({
-                username: ''
-              })
-            }
-          >
-            Logout
-          </p>
+          <p onClick={logout}>Logout</p>
         </div>
-        <h2>Welcome back {user.username}! What are we drinking today?</h2>
+        <h2>Welcome back {user!.username}! What are we drinking today?</h2>
         <Navbar
           className='NavBar'
           selectedIngs={selectedIngs}
@@ -118,8 +110,6 @@ export default function SearchPage({
             page={page}
             selectedIngs={selectedIngs}
             cocktails={cocktails}
-            user={user}
-            setUser={setUser}
             setPage={setPage}
           />
         )}
@@ -152,8 +142,6 @@ export default function SearchPage({
           setPage={setPage}
           selectedIngs={selectedIngs}
           cocktails={cocktails}
-          user={user}
-          setUser={setUser}
         />
       ) : (
         <p>No ingredients selected.</p>
