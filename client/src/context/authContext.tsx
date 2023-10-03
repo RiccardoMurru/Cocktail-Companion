@@ -3,7 +3,7 @@ import React, {
   useContext,
   useState,
   ReactNode,
-  useEffect
+  useEffect,
 } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -20,11 +20,12 @@ export const AuthContext = createContext<{
   user: null,
   setUser: () => {},
   login: () => Promise.resolve(null),
-  logout: () => {}
+  logout: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -34,12 +35,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       axios
         .get(`${rootUrl}/user-profile`)
-        .then((response) => {
+        .then(response => {
           setUser(response.data);
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('Failed to fetch user data: ', error);
         });
+    }
+
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      setIsLoggedIn(true);
     }
   }, []);
 
@@ -50,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await axios.post(`${rootUrl}/login`, {
         username,
-        password
+        password,
       });
 
       if (response.status === 200) {
@@ -63,7 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         userData.favourites = [];
         setUser(userData);
-
+        setIsLoggedIn(true);
         return userData;
       } else {
         console.error(
@@ -82,6 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     Cookies.remove('token');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
+    setIsLoggedIn(false);
   };
 
   const contextValue = {

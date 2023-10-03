@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import CocktailList from './CocktailList';
 import Navbar from './Navbar';
@@ -83,65 +83,43 @@ export default function SearchPage({ page, setPage }: PageProps) {
       throw err;
     }
   }
-  function handleLoginClick() {
-    return <Navigate to='/login' />;
-  }
 
-  if (Cookies.get('token'))
-    return (
-      <div className='list-page'>
-        <header className='page-header'>
-          <div className='header-wrapper'>
-            <img className='logo' src={logo} />
-            <div className='button-container'>
-              <button onClick={() => {
-                setPage('favourites')
-                navigate('/favourites')
-              }}>Favourites</button>
-              <button onClick={logout}>Logout</button>
-            </div>
-          </div>
-        </header>
-        <h2 className='welcome'>
-          <span>Welcome back {user!.username}!</span>
-          <span>What are we drinking today?</span>{' '}
-        </h2>
-        <Navbar
-          className='NavBar'
-          setIngList={setIngList}
-          ingList={ingList}
-          ingredients={ingredients}
-          handleAddToSelected={handleAddToSelected}
-          selectedIngs={selectedIngs}
-          categories={categories}
-        />
-        {cocktails.length ? (
-          <CocktailList
-            page=''
-            setPage={setPage}
-            selectedIngs={selectedIngs}
-            cocktails={cocktails}
-          />
-        ) : (
-          <p>No ingredients selected.</p>
-        )}
-      </div>
-    );
   return (
     <div className='list-page'>
       <header className='page-header'>
         <div className='header-wrapper'>
           <img className='logo' src={logo} />
           <div className='button-container'>
-            <Link to='/login' className='login-button'>
-              Login
-            </Link>
-            <Link to='/register' className='register-button'>
-              Register
-            </Link>
+            {Cookies.get('token') ? (
+              <>
+                <button
+                  onClick={() => {
+                    setPage('favourites');
+                    navigate('/favourites');
+                  }}>
+                  Favourites
+                </button>
+                <button onClick={logout}>Logout</button>
+              </>
+            ) : (
+              <>
+                <Link to='/login' className='login-button'>
+                  Login
+                </Link>
+                <Link to='/register' className='register-button'>
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
+      {user && (
+        <h2 className='welcome'>
+          <span>Welcome back {user.username}!</span>
+          <span>What are we drinking today?</span>{' '}
+        </h2>
+      )}
       <Navbar
         className='NavBar'
         setIngList={setIngList}
@@ -163,7 +141,7 @@ export default function SearchPage({ page, setPage }: PageProps) {
           cocktails={cocktails}
         />
       ) : (
-        <p>No selected ingredient</p>
+        <p>No ingredients selected.</p>
       )}
     </div>
   );

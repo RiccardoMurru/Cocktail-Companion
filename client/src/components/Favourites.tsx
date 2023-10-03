@@ -11,6 +11,7 @@ import { useAuth } from '../context/authContext';
 import logo from '../assets/LOGO.png';
 
 export default function Favourites({ setPage, page }: PageProps) {
+
   const [displayedFavourites, setDisplayedFavourites] = useState<Cocktail[]>(
     []
   );
@@ -18,20 +19,20 @@ export default function Favourites({ setPage, page }: PageProps) {
   const navigate = useNavigate();
 
   async function loadFavourites(user: User): Promise<void> {
-    const userFavourites = user.favourites;
-    const cocktailList = [];
-    if (userFavourites) {
-      for (let i = 0; i < userFavourites.length; i++) {
-        let stringifiedUserFav = userFavourites[i].toString();
-        const cocktail: Cocktail | Cocktail[] = await getCocktailById(
-          stringifiedUserFav
-        );
-        //check if it exists
-        if (!Array.isArray(cocktail)) {
-          cocktailList.push(cocktail);
+    if (user) {
+      const userFavourites = user.favourites;
+      const cocktailList = [];
+      if (userFavourites) {
+        for (let i = 0; i < userFavourites.length; i++) {
+          const cocktail: Cocktail | Cocktail[] = await getCocktailById(
+            userFavourites[i]
+          );
+          if (!Array.isArray(cocktail)) {
+            cocktailList.push(cocktail);
+          }
         }
+        setDisplayedFavourites(cocktailList);
       }
-      setDisplayedFavourites(cocktailList);
     }
   }
   // add type for user and faveId
@@ -79,7 +80,6 @@ export default function Favourites({ setPage, page }: PageProps) {
           <CocktailComponent
             page={page}
             setPage={setPage}
-            handleRemoveFromFavourites={handleRemoveFromFavourites}
             cocktail={cocktail}
             key={cocktail.idDrink}
           />

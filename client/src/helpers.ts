@@ -3,6 +3,7 @@
 //for example, if you search vodka, lime juice and orange juice, any cocktail that contains all three
 //will be at the top of the list and will be rendered first, followed by cocktails that match two etc
 
+import { getAllCategories, getAllIngredients } from './apiComs/cocktailDbApi';
 import { Category } from './interfaces/Category';
 import { Cocktail } from './interfaces/Cocktail';
 import { Filter } from './interfaces/Filter';
@@ -130,4 +131,48 @@ export async function getCocktails(url: string) {
     console.log('Error fetching random cocktail:', err);
     throw err;
   }
+}
+
+export function selectedIngredientsHighlight(
+  selectedIngs: string[],
+  page: string,
+  cocktail: Cocktail
+) {
+  const ingredientsWithMeasures: string[] = [];
+  const comparisonArr: string[] = [];
+  for (let i = 0; i < 15; i++) {
+    const ingredientValue = cocktail.ingredients![i];
+    const measureValue = cocktail.measures![i];
+    if (ingredientValue) {
+      if (measureValue) {
+        const standardizedIngredient = ingredientValue.toLowerCase();
+        const standardizedMeasure = measureValue
+          ? measureValue.toLowerCase()
+          : '';
+        ingredientsWithMeasures.push(
+          standardizedMeasure + ' ' + standardizedIngredient
+        );
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes(standardizedIngredient)
+        ) {
+          comparisonArr.push(
+            standardizedMeasure + ' ' + standardizedIngredient
+          );
+        }
+      } else {
+        ingredientsWithMeasures.push(ingredientValue.toLowerCase());
+        if (
+          page !== 'favourites' &&
+          selectedIngs!.includes(ingredientValue.toLowerCase())
+        ) {
+          comparisonArr.push(ingredientValue.toLowerCase());
+        }
+      }
+    }
+  }
+  return {
+    comparisonArr,
+    ingredientsWithMeasures,
+  };
 }
