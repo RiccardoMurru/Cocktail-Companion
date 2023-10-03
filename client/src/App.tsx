@@ -12,7 +12,6 @@ function App() {
   const [page, setPage] = useState<string>('search');
   const [user, setUser] = useState<User>({
     username: '',
-    password: '',
     favourites: [],
     ingredients: []
   });

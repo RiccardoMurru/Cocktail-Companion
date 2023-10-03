@@ -8,7 +8,7 @@ import React, {
 import axios from 'axios';
 import { User } from '../interfaces/User';
 
-const AuthContext = createContext<{
+export const AuthContext = createContext<{
   user: User | null;
   login: (userData: User) => void;
   logout: () => void;
