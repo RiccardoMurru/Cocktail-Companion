@@ -4,6 +4,7 @@ import React from 'react';
 import { getUser } from '../apiComs/myApi';
 import { PageProps } from '../interfaces/Props';
 import logo from '../assets/LOGO.png';
+import { Link } from 'react-router-dom';
 
 export default function Login({ setUser, setPage }: PageProps) {
 
@@ -32,7 +33,11 @@ export default function Login({ setUser, setPage }: PageProps) {
       <header className='page-header'>
         <div className='header-wrapper'>
           <img className='logo' src={logo} />
-          <button onClick={() => setPage('search')}>Back</button>
+          <div className='button-container'>
+            <Link to='/' className='login-button'>
+              back
+            </Link>
+          </div>
         </div>
       </header>
       <form onSubmit={e => handleSubmit(e)}>
