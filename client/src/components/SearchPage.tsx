@@ -9,7 +9,7 @@ import { updateFilteredCocktails } from '../helpers';
 import {
   getAllCategories,
   getAllIngredients,
-  getCocktailByIngredient
+  getCocktailByIngredient,
 } from '../apiComs/cocktailDbApi';
 import { PageProps } from '../interfaces/Props';
 import { Cocktail } from '../interfaces/Cocktail';
@@ -26,7 +26,7 @@ export default function SearchPage({
   user,
   setUser,
   page,
-  setPage
+  setPage,
 }: PageProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([]);
@@ -40,7 +40,7 @@ export default function SearchPage({
 
   async function handleAddToSelected(ingredient: string): Promise<void> {
     try {
-      const updatedIngredients = ingredients.filter((el) => el !== ingredient);
+      const updatedIngredients = ingredients.filter(el => el !== ingredient);
       const newCocktails: Cocktail | Cocktail[] = await getCocktailByIngredient(
         ingredient
       );
@@ -68,7 +68,7 @@ export default function SearchPage({
           updateFilteredCocktails(cocktails, cocktailsToReduce, 'remove')
         );
         const resultingIngredients = selectedIngs.filter(
-          (el) => el !== ingredient
+          el => el !== ingredient
         );
         setSelectedIngs([...resultingIngredients]);
       }
@@ -82,7 +82,7 @@ export default function SearchPage({
       const fetchedIngs = await getAllIngredients();
       const fetchedCats = await getAllCategories();
       if (fetchedIngs) {
-        setIngredients(fetchedIngs.map((el) => el.toLowerCase()));
+        setIngredients(fetchedIngs.map(el => el.toLowerCase()));
       }
       if (fetchedCats) {
         setCategories(fetchedCats);
@@ -92,7 +92,7 @@ export default function SearchPage({
     }
   }
   function handleLoginClick() {
-    return <Navigate to="/login" />;
+    return <Navigate to='/login' />;
   }
 
   if (user.username)
@@ -144,8 +144,16 @@ export default function SearchPage({
           <img className='logo' src={logo} />
           {/* <button onClick={() => setPage('login')}>Login</button>
           <button onClick={() => setPage('register')}>Register</button> */}
-        <Link to="/login" className ='login-button' style={buttonStyle}>Login</Link>
-        <Link to="/register" className ='register-button' style={buttonStyle}>Register</Link>
+          <div className='button-container'>
+            <Link to='/login' className='login-button'>
+              Login
+            </Link>
+            <Link
+              to='/register'
+              className='register-button'>
+              Register
+            </Link>
+          </div>
         </div>
       </header>
       <Navbar
@@ -170,7 +178,9 @@ export default function SearchPage({
           user={user}
           setUser={setUser}
         />
-      ) : <p>No selected ingredient</p>}
+      ) : (
+        <p>No selected ingredient</p>
+      )}
     </div>
   );
 }
