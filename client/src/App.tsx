@@ -60,11 +60,25 @@ return (
     <Routes>
       <Route
         path='/'
-        element={<SearchPage className='list-page' page='search' setPage={setPage} user={user} setUser={setUser}  />}
+        element={<SearchPage className='list-page' user={user} setUser={setUser} page='search' setPage={setPage}   />}
       />
+
+      {/* <Route
+          path="/"
+          element={
+            user.username ? (
+              <SearchPage className='list-page' user={user} setUser={setUser} page='favourites' setPage={setPage} />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+      /> */}
+      <Route 
+        path="/user-search" 
+        element={<SearchPage className='list-page' user={user} setUser={setUser} page='favourites' setPage={setPage} />} />
       <Route
         path='/favourites'
-        element={<Favourites user={user} setUser={setUser} className='list-page'  page='favourites' setPage={setPage}/>}
+        element={<Favourites className='list-page' user={user} setUser={setUser}  page='favourites' setPage={setPage}/>}
       />
       <Route
         path='/login'

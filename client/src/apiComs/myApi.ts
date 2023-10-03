@@ -1,5 +1,6 @@
 const rootUrl = 'http://localhost:3001';
 import axios, { AxiosRequestConfig } from 'axios';
+import Cookies from 'js-cookie';
 import { User } from '../interfaces/User';
 
 export async function addUser(user: User) {
@@ -60,18 +61,38 @@ export async function getUser(username: string, password: string) {
   }
 }
 
+// export async function addFavourite(username: string, faveId: string) {
+//   try {
+//     const dataObj = {
+//       username,
+//       faveId
+//     };
+//     const res = await axios.put(`${rootUrl}/addfave`, dataObj, {
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       mode: 'no-cors'
+//     } as AxiosRequestConfig);
+//     const updatedUser = await res.data;
+//     return updatedUser;
+//   } catch (err) {
+//     console.log('Error saving favourite');
+//   }
+// }
+
 export async function addFavourite(username: string, faveId: string) {
   try {
+    const token = Cookies.get('token'); // Retrieve the token from localStorage or wherever it's stored
     const dataObj = {
       username,
       faveId
     };
     const res = await axios.put(`${rootUrl}/addfave`, dataObj, {
       headers: {
-        'Content-Type': 'application/json'
-      },
-      mode: 'no-cors'
-    } as AxiosRequestConfig);
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+      }
+    });
     const updatedUser = await res.data;
     return updatedUser;
   } catch (err) {
@@ -79,21 +100,49 @@ export async function addFavourite(username: string, faveId: string) {
   }
 }
 
+
+
+
+
+
+// export async function removeFavourite(username: string, faveId: string) {
+//   try {
+//     const dataObj = {
+//       username,
+//       faveId
+//     };
+//     const res = await axios.put(`${rootUrl}/remove-fave`, dataObj, {
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       mode: 'no-cors'
+//     } as AxiosRequestConfig);
+//     const updatedUser = res.data;
+//     return updatedUser;
+//   } catch (err) {
+//     console.log('Error saving favourite');
+//   }
+// }
+
+
+
 export async function removeFavourite(username: string, faveId: string) {
   try {
+    const token = Cookies.get('token'); // Retrieve the token from localStorage or wherever it's stored
     const dataObj = {
       username,
       faveId
     };
     const res = await axios.put(`${rootUrl}/remove-fave`, dataObj, {
       headers: {
-        'Content-Type': 'application/json'
-      },
-      mode: 'no-cors'
-    } as AxiosRequestConfig);
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+      }
+    });
     const updatedUser = res.data;
     return updatedUser;
   } catch (err) {
-    console.log('Error saving favourite');
+    console.log('Error removing favourite');
+    throw err; // Re-throw the error so it can be caught and handled elsewhere in your code
   }
 }
