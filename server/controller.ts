@@ -83,7 +83,6 @@ export async function addFavourite(req: Request, res: Response) {
   try {
     const { username } = req;
     const { faveId } = req.body;
-    console.log(username, faveId);
     const user = await UserModel.findOne({ username: username });
     user.favourites.push(faveId);
     const updatedUser = await user.save();
