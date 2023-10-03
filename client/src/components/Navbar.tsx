@@ -24,7 +24,9 @@ export default function Navbar({
   return (
     <div className='NavBar'>
       <h3>Enter ingredient here!</h3>
-      <form id='ingredient-search' onReset={() => setIngList([])}>
+      <form id='ingredient-search' onSubmit={(e) => {
+        e.preventDefault();
+        setIngList([])} }>
         <input
           className='form-input'
           name='search-bar'
