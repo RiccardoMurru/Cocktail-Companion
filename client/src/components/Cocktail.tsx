@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import { addFavourite, removeFavourite } from '../apiComs/myApi';
 import { User } from '../interfaces/User';
 import { CocktailProps } from '../interfaces/Props';
+
 export default function CocktailComponent({
   cocktail,
   selectedIngs,
   handleRemoveFromFavourites,
   user,
   setUser,
-  page
+  page,
 }: CocktailProps) {
   const [isFave, setIsFave] = useState(false);
   //this useEffect works if logged in to check if a drink is already favourites so it renders with a remove button
@@ -78,7 +79,7 @@ export default function CocktailComponent({
         <div className='cocktail-details'>
           <h2>{cocktail.drink}</h2>
           <ul>
-            {ingredientsWithMeasures.map((ing) => (
+            {ingredientsWithMeasures.map(ing => (
               <li key={ing}>
                 <span>{ing}</span>
               </li>
@@ -89,8 +90,7 @@ export default function CocktailComponent({
         </div>
         <button
           className='fave-button'
-          onClick={() => handleRemoveFromFavourites(cocktail.idDrink)}
-        >
+          onClick={() => handleRemoveFromFavourites(cocktail.idDrink)}>
           Remove From Favourites
         </button>
       </div>
@@ -103,11 +103,10 @@ export default function CocktailComponent({
         <div className='cocktail-details'>
           <h2>{cocktail.drink}</h2>
           <ul>
-            {ingredientsWithMeasures.map((ing) => (
+            {ingredientsWithMeasures.map(ing => (
               <li
                 key={ing}
-                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}
-              >
+                className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}>
                 <span>{ing}</span>
               </li>
             ))}
@@ -124,11 +123,10 @@ export default function CocktailComponent({
       <div className='cocktail-details'>
         <h2>{cocktail.drink}</h2>
         <ul>
-          {ingredientsWithMeasures.map((ing) => (
+          {ingredientsWithMeasures.map(ing => (
             <li
               key={ing}
-              className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}
-            >
+              className={comparisonArr.includes(ing) ? 'matched-ing' : 'ing'}>
               {ing}
             </li>
           ))}
@@ -138,8 +136,7 @@ export default function CocktailComponent({
       </div>
       <button
         className='fave-button'
-        onClick={() => toggleFave(user, cocktail.idDrink)}
-      >
+        onClick={() => toggleFave(user, cocktail.idDrink)}>
         {isFave ? 'Remove From Favourites' : 'Add To Favourites'}
       </button>
     </div>

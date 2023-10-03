@@ -3,7 +3,7 @@ import React, {
   useContext,
   useState,
   useEffect,
-  ReactNode
+  ReactNode,
 } from 'react';
 import axios from 'axios';
 import { User } from '../interfaces/User';
@@ -15,7 +15,7 @@ export const AuthContext = createContext<{
 }>({
   user: null,
   login: () => {},
-  logout: () => {}
+  logout: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -30,10 +30,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     axios
       .get('/user-profile')
-      .then((response) => {
+      .then(response => {
         setUser(response.data);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('Failed to fetch user data: ', error);
       });
   }, []);
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const contextValue = {
     user,
     login,
-    logout
+    logout,
   };
 
   return (

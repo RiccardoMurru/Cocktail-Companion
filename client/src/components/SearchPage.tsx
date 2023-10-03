@@ -14,14 +14,6 @@ import {
 import { PageProps } from '../interfaces/Props';
 import { Cocktail } from '../interfaces/Cocktail';
 
-const buttonStyle = {
-  display: 'inline-block',
-  padding: '10px 20px',
-  backgroundColor: '#F9D077', // Button background color
-  color: '#000000', // Button text color
-  borderRadius: '5px', // Optional: Adds rounded corners to the button
-  textDecoration: 'none', // Removes default underline style for the link
-};
 export default function SearchPage({
   user,
   setUser,
@@ -106,7 +98,7 @@ export default function SearchPage({
           <p
             onClick={() =>
               setUser({
-                username: ''
+                username: '',
               })
             }>
             Logout
@@ -147,9 +139,7 @@ export default function SearchPage({
             <Link to='/login' className='login-button'>
               Login
             </Link>
-            <Link
-              to='/register'
-              className='register-button'>
+            <Link to='/register' className='register-button'>
               Register
             </Link>
           </div>

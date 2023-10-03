@@ -14,13 +14,13 @@ export async function register(username: string, password: string) {
 
     const credentialsObj = {
       username: username,
-      password: password
+      password: password,
     };
 
     const res = await axios.post(`${rootUrl}/register`, credentialsObj, {
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     } as AxiosRequestConfig);
 
     const userData = res.data;
@@ -40,14 +40,14 @@ export async function getUser(username: string, password: string) {
 
     const credentialsObj = {
       username: username,
-      password: password
+      password: password,
     };
 
     const res = await axios.post(`${rootUrl}/user-profile`, credentialsObj, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`
-      }
+        Authorization: `Bearer ${user.token}`,
+      },
     } as AxiosRequestConfig);
 
     const userData = res.data;
@@ -67,14 +67,14 @@ export async function addFavourite(faveId: string) {
 
     const dataObj = {
       username: user.username,
-      faveId
+      faveId,
     };
 
     const res = await axios.put(`${rootUrl}/addfave`, dataObj, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`
-      }
+        Authorization: `Bearer ${user.token}`,
+      },
     } as AxiosRequestConfig);
 
     const updatedUser = res.data;
@@ -94,14 +94,14 @@ export async function removeFavourite(faveId: string) {
 
     const dataObj = {
       token: user.token,
-      faveId
+      faveId,
     };
 
     const res = await axios.put(`${rootUrl}/remove-fave`, dataObj, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.token}`
-      }
+        Authorization: `Bearer ${user.token}`,
+      },
     } as AxiosRequestConfig);
 
     const updatedUser = res.data;
