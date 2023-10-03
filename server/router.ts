@@ -8,7 +8,7 @@ router.post('/login', controller.login);
 router.post('/register', controller.register);
 
 router.get('/user-profile', authMiddleware, controller.getUser);
-router.put('/addfave', authMiddleware, controller.addFavourite);
+router.put('/add-fave', authMiddleware, controller.addFavourite);
 router.put('/remove-fave', authMiddleware, controller.removeFavourite);
 
 export default router;

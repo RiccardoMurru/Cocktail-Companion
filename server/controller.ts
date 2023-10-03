@@ -41,6 +41,7 @@ export async function register(req: Request, res: Response): Promise<void> {
 export async function login(req: Request, res: Response) {
   try {
     const { username, password } = req.body;
+    console.log(username, password);
     const user = await UserModel.findOne({ username });
 
     if (!user || !password) {
@@ -69,7 +70,7 @@ export async function login(req: Request, res: Response) {
 
 export async function getUser(req: Request, res: Response) {
   try {
-    const { username } = req.body;
+    const { username } = req;
     const user = await UserModel.findOne({ username: username });
     res.status(200).send(user);
   } catch (err) {
@@ -80,7 +81,8 @@ export async function getUser(req: Request, res: Response) {
 
 export async function addFavourite(req: Request, res: Response) {
   try {
-    const { username, faveId } = req.body;
+    const { username } = req;
+    const { faveId } = req.body;
     const user = await UserModel.findOne({ username: username });
     user.favourites.push(faveId);
     const updatedUser = await user.save();
@@ -92,7 +94,8 @@ export async function addFavourite(req: Request, res: Response) {
 
 export async function removeFavourite(req: Request, res: Response) {
   try {
-    const { username, faveId } = req.body;
+    const { username } = req;
+    const { faveId } = req.body;
     const user = await UserModel.findOne({ username: username });
     const indexToRemove = user.favourites.indexOf(faveId);
     user.favourites.splice(indexToRemove, 1);
