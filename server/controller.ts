@@ -8,29 +8,6 @@ dotenv.config();
 
 import UserModel from './models/user';
 
-// export async function register(req: Request, res: Response): Promise<void> {
-//   try {
-//     const { username, password } = req.body;
-//     const user = await UserModel.findOne({ username });
-//     if (!user) {
-//       const hashedPassword = bcrypt.hashSync(password, 10);
-
-//       UserModel.create({ username, password: hashedPassword });
-      
-//       const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET as string, {
-//         expiresIn: '1h' // Token expires in 1 hour, you can adjust this as needed
-//       } as SignOptions);
-
-//       res.status(201).json({ message: 'User registered successfully' }, token);
-//     } else {
-//       res.status(400).json({ message: 'Registration failed' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Registration failed' });
-//   }
-// }
-
 export async function register(req: Request, res: Response): Promise<void> {
   try {
     const { username, password } = req.body;
@@ -39,14 +16,20 @@ export async function register(req: Request, res: Response): Promise<void> {
     if (!user) {
       const hashedPassword = bcrypt.hashSync(password, 10);
 
-      const newUser = await UserModel.create({ username, password: hashedPassword });
-
-      // Generate JWT token
-      const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET as string, {
-        expiresIn: '1h' 
+      const newUser = await UserModel.create({
+        username,
+        password: hashedPassword
       });
 
-      res.status(201).json({ message: 'User registered successfully', token });
+      const token = jwt.sign(
+        { username: newUser.username },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: '1h'
+        }
+      );
+
+      res.status(201).json({ token });
     } else {
       res.status(400).json({ message: 'Registration failed, username already exists' });
     }
@@ -87,7 +70,7 @@ export async function login(req: Request, res: Response) {
 
 export async function getUser(req: Request, res: Response) {
   try {
-    const { username } = req.body;
+    const { username } = req;
     const user = await UserModel.findOne({ username: username });
     res.status(200).send(user);
   } catch (err) {
@@ -98,7 +81,8 @@ export async function getUser(req: Request, res: Response) {
 
 export async function addFavourite(req: Request, res: Response) {
   try {
-    const { username, faveId } = req.body;
+    const { username } = req;
+    const { faveId } = req.body;
     const user = await UserModel.findOne({ username: username });
     user.favourites.push(faveId);
     const updatedUser = await user.save();
@@ -110,7 +94,8 @@ export async function addFavourite(req: Request, res: Response) {
 
 export async function removeFavourite(req: Request, res: Response) {
   try {
-    const { username, faveId } = req.body;
+    const { username } = req;
+    const { faveId } = req.body;
     const user = await UserModel.findOne({ username: username });
     const indexToRemove = user.favourites.indexOf(faveId);
     user.favourites.splice(indexToRemove, 1);

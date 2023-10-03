@@ -8,8 +8,6 @@ import { Cocktail } from '../interfaces/Cocktail';
 export default function CocktailList({
   cocktails,
   selectedIngs,
-  user,
-  setUser,
   page,
   setPage
 }: CocktailListProps) {
@@ -61,8 +59,6 @@ export default function CocktailList({
         {displayedCocktails.map((cocktail) => (
           <CocktailComponent
             page={page}
-            user={user}
-            setUser={setUser}
             selectedIngs={selectedIngs}
             cocktail={cocktail}
             key={cocktail.idDrink}

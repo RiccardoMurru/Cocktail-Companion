@@ -1,144 +1,106 @@
-const rootUrl = 'http://localhost:3001';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
+import { AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
-import { User } from '../interfaces/User';
 
-export async function addUser(user: User) {
-  const { username, password } = user;
+import { useAuth } from '../context/authContext';
+
+const rootUrl = 'http://localhost:3001';
+
+export async function register(username: string, password: string) {
+  const token = Cookies.get('token');
   try {
-    const credentialsObj: User = {
+    if (token) {
+      throw new Error('User is already authenticated');
+    }
+
+    const credentialsObj = {
       username: username,
-      password: password
+      password: password,
     };
+
     const res = await axios.post(`${rootUrl}/register`, credentialsObj, {
       headers: {
         'Content-Type': 'application/json',
       },
-      mode: 'no-cors'
     } as AxiosRequestConfig);
-    const user = res.data;
-    return user;
+
+    const userData = res.data;
+    return userData;
   } catch (err) {
-    console.log('Error creating user');
+    console.log('Error registering user');
   }
 }
-// export async function getUser(user: User) {
-//   const { username, password } = user;
-//   try {
-//     const credentialsObj = {
-//       username: username,
-//       password: password
-//     }
-//     const res = await axios.post(`${rootUrl}/user-profile`, credentialsObj, {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       mode: 'no-cors'
-//     } as AxiosRequestConfig);
-//     const user = await res.data
-//     return user
-//   } catch(err) {
-//     console.log('Error retrieving profile')
-//   }
-// }
 
-export async function getUser(username: string, password: string) {
+export async function getUser() {
   try {
-    const credentialsObj = {
-      username: username,
-      password: password
-    };
-    const res = await axios.post(`${rootUrl}/login`, credentialsObj, {
+    const token = Cookies.get('token');
+    if (!token) {
+      throw new Error('User not authenticated');
+    }
+
+    const res = await axios.get(`${rootUrl}/user-profile`, {
       headers: {
-        'Content-Type': 'application/json'
-      },
-      mode: 'no-cors'
+        Authorization: `Bearer ${token}`
+      }
     } as AxiosRequestConfig);
-    const user = await res.data;
-    return user;
+
+    const userData = res.data;
+    return userData;
   } catch (err) {
-    console.log('Error retrieving profile');
+    console.log('Error retrieving user profile:', err);
+    throw err;
   }
 }
 
-// export async function addFavourite(username: string, faveId: string) {
-//   try {
-//     const dataObj = {
-//       username,
-//       faveId
-//     };
-//     const res = await axios.put(`${rootUrl}/addfave`, dataObj, {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       mode: 'no-cors'
-//     } as AxiosRequestConfig);
-//     const updatedUser = await res.data;
-//     return updatedUser;
-//   } catch (err) {
-//     console.log('Error saving favourite');
-//   }
-// }
-
-export async function addFavourite(username: string, faveId: string) {
+export async function addFavourite(faveId: string) {
   try {
-    const token = Cookies.get('token'); // Retrieve the token from localStorage or wherever it's stored
+    const token = Cookies.get('token');
+    console.log('faveId on add Favourite before the if', faveId);
+    console.log('token on add Favourite before the if', token);
+    if (!token) {
+      throw new Error('User not authenticated');
+    }
+    console.log('faveId on add Favourite', faveId);
+    console.log('token on add Favourite', token);
     const dataObj = {
-      username,
       faveId
     };
-    const res = await axios.put(`${rootUrl}/addfave`, dataObj, {
+    console.log(dataObj);
+
+    const res = await axios.put(`${rootUrl}/add-fave`, dataObj, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        Authorization: `Bearer ${token}`
       }
-    });
-    const updatedUser = await res.data;
+    } as AxiosRequestConfig);
+    console.log('res: ', res);
+
+    const updatedUser = res.data;
+    console.log(res.data);
     return updatedUser;
   } catch (err) {
     console.log('Error saving favourite');
   }
 }
 
-
-
-
-
-
-// export async function removeFavourite(username: string, faveId: string) {
-//   try {
-//     const dataObj = {
-//       username,
-//       faveId
-//     };
-//     const res = await axios.put(`${rootUrl}/remove-fave`, dataObj, {
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       mode: 'no-cors'
-//     } as AxiosRequestConfig);
-//     const updatedUser = res.data;
-//     return updatedUser;
-//   } catch (err) {
-//     console.log('Error saving favourite');
-//   }
-// }
-
-
-
-export async function removeFavourite(username: string, faveId: string) {
+export async function removeFavourite(faveId: string) {
   try {
-    const token = Cookies.get('token'); // Retrieve the token from localStorage or wherever it's stored
+    const token = Cookies.get('token');
+    if (!token) {
+      throw new Error('User not authenticated');
+    }
+
     const dataObj = {
-      username,
       faveId
     };
+
     const res = await axios.put(`${rootUrl}/remove-fave`, dataObj, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+        Authorization: `Bearer ${token}`
       }
-    });
+    } as AxiosRequestConfig);
+
     const updatedUser = res.data;
     return updatedUser;
   } catch (err) {

@@ -57,6 +57,35 @@
   }
 }
 
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  button,
+  a,
+  a:link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1em;
+    font-weight: 600;
+    font-family: inherit;
+    background-color: var(--buttonBg);
+    cursor: pointer;
+    color: var(--mainColor);
+    text-transform: uppercase;
+    min-width: 140px;
+    text-decoration: none;
+    &:hover {
+      color: var(--mainColor);
+    }
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
 .btn-container {
   position: fixed;
   bottom: 0;
@@ -73,5 +102,15 @@
   .show-more {
     background: var(--matchedIngredient);
     color: var(--bodyBg);
+  }
+}
+
+.favourites-title,
+.welcome {
+  color: var(--matchedIngredient);
+  font-size: 30px;
+  margin: 50px 0;
+  span {
+    display: block;
   }
 }

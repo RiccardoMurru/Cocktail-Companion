@@ -66,7 +66,7 @@ export function updateFilteredCocktails(
 type drinksType = Ingredient | Category | Glass | Filter | Cocktail;
 
 export function returnValues(array: drinksType[]): string[] {
-  return array.map((item) => {
+  return array.map(item => {
     const values = Object.values(item);
     if (values.length > 0) {
       const value = values[0];
@@ -84,7 +84,7 @@ async function formatCocktail(cocktail: any): Promise<Cocktail> {
   const formattedCocktail: Cocktail = {
     idDrink: cocktail.idDrink,
     ingredients: [],
-    measures: []
+    measures: [],
   };
 
   for (let key in cocktail) {

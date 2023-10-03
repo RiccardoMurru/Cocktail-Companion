@@ -3,8 +3,6 @@ import { Cocktail } from './Cocktail';
 
 export interface PageProps {
   className?: string;
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
   page: string;
   setPage: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -22,9 +20,7 @@ export interface NavbarProps {
 export interface CocktailProps {
   cocktail: Cocktail;
   selectedIngs?: string[];
-  handleRemoveFromFavourites?: (user: User, idDrink: string) => void;
-  user: User;
-  setUser: React.Dispatch<React.SetStateAction<User>>;
+  handleRemoveFromFavourites?: (idDrink: string) => void;
   page: string;
   setPage: React.Dispatch<React.SetStateAction<string>>;
 }
