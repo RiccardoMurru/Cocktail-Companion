@@ -1,0 +1,116 @@
+.list-page {
+  max-width: 1280px;
+  padding: 20px;
+  padding-top: 160px;
+  margin: 0 auto;
+  padding-bottom: 90px;
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+  .ingredient,
+  .selected-ing {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.25s ease-out;
+    &:hover {
+      color: var(--hoverIngredient);
+      &::after {
+        color: var(--mainColor);
+      }
+    }
+    &:not(:last-child) {
+      margin-right: 10px;
+      &::after {
+        content: ' - ';
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.page-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--headerBg);
+  box-shadow: var(--shadow);
+  z-index: 10;
+  .header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 1280px;
+    img {
+      max-width: 150px;
+    }
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  button,
+  a,
+  a:link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1em;
+    font-weight: 600;
+    font-family: inherit;
+    background-color: var(--buttonBg);
+    cursor: pointer;
+    color: var(--mainColor);
+    text-transform: uppercase;
+    min-width: 140px;
+    text-decoration: none;
+    &:hover {
+      color: var(--mainColor);
+    }
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
+.btn-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  .wrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 40px;
+  }
+  .show-more {
+    background: var(--matchedIngredient);
+    color: var(--bodyBg);
+  }
+}
+
+.favourites-title,
+.welcome {
+  color: var(--matchedIngredient);
+  font-size: 30px;
+  margin: 50px 0;
+  span {
+    display: block;
+  }
+}

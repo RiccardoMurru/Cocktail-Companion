@@ -1,0 +1,53 @@
+.register-page,
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 1280px;
+  padding: 20px;
+  padding-top: 160px;
+  margin: 0 auto;
+  padding-bottom: 90px;
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    padding: 50px;
+    background: var(--headerBg);
+    box-shadow: var(--shadow);
+    margin-top: 50px;
+    border-radius: 8px;
+    .item-form {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      &:not(:last-child) {
+        margin-bottom: 30px;
+      }
+    }
+    input {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 50px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 5px 15px;
+      font-size: 1rem;
+      outline: none;
+    }
+    label{
+      display: inline-block;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--labelColor);
+      margin-bottom: 5px;
+    }
+    button {
+      margin-top: 20px;
+      align-self: center;
+    }
+  }
+}

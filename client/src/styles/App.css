@@ -1,0 +1,14 @@
+@import 'searchpage.css';
+@import 'navbar.css';
+@import 'cocktail.css';
+@import 'login.css';
+
+ #root {
+  width: 100%;
+  height: 100%;
+}
+.list-page,
+.login-page {
+  height: 100%;
+  width: 100%;
+}
