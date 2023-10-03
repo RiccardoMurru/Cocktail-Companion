@@ -29,10 +29,6 @@ describe('getAllCategories', () => {
   beforeEach(() => {
     fetchMock.resetMocks();
   });
-<<<<<<< HEAD
-=======
-
->>>>>>> riccardo2
   it('fetches data from API and returns an array of categories', async () => {
     const mockResponse = {
       drinks: ['Ordinary Drink', 'Shake', 'Other / Unknown']
