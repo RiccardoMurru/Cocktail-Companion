@@ -65,6 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (response.status === 200) {
         const tokenData = response.data;
         const { token } = tokenData;
+        
 
         const userData: User = { token };
 

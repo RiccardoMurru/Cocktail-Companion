@@ -107,3 +107,27 @@ export async function removeFavourite(req: Request, res: Response) {
 }
 
 
+export async function getMostLikedDrinks (req: Request, res: Response) {
+  try {
+    const mostLikedRecipes = await UserModel.aggregate([
+      {
+          $unwind: "$favourites"
+      },
+      {
+          $group: {
+              _id: "$favourites",
+              likeCount: { $sum: 1 }
+          }
+      },
+      {
+          $sort: { likeCount: -1 }
+      },
+      {
+          $limit: 10 // Limit the result to the top 10 most liked recipes
+      }
+    ]);
+    res.json(mostLikedRecipes);
+  } catch (err) {
+    res.status(500).send('Something went wrong');
+  }
+}

@@ -12,6 +12,7 @@ import {
   getAllIngredients,
   getCocktailByIngredient,
 } from '../apiComs/cocktailDbApi';
+import { fetchMostLikedDrinksWithDetails } from '../apiComs/myApi'
 import { PageProps } from '../interfaces/Props';
 import { Cocktail } from '../interfaces/Cocktail';
 import Cookies from 'js-cookie';
@@ -27,7 +28,17 @@ export default function SearchPage({ page, setPage }: PageProps) {
 
   useEffect(() => {
     fillIngredientsAndCategories();
+    fetchMostLikedDrinks();
   }, []);
+
+  async function fetchMostLikedDrinks() {
+    try {
+      const mostLikedDrinks = await fetchMostLikedDrinksWithDetails();
+      setCocktails(mostLikedDrinks as Cocktail[]);
+    } catch (error) {
+      console.error('Error fetching most-liked drinks:', error);
+    }
+  }
 
   const { user, logout } = useAuth();
 
