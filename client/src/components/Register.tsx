@@ -9,8 +9,7 @@ import { useAuth } from '../context/authContext';
 export default function Register({ setPage }: PageProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
+  const [registrationStatus, setRegistrationStatus] = useState('');
   const { setUser } = useAuth();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -22,8 +21,10 @@ export default function Register({ setPage }: PageProps) {
 
       setUser(userData);
       setPage('search');
+
+      setRegistrationStatus('success');
     } catch (err) {
-      setError('Error registering user');
+      setRegistrationStatus('error');
       console.error(err);
     }
   }
@@ -66,7 +67,12 @@ export default function Register({ setPage }: PageProps) {
           />
         </div>
         <button type='submit'>Register</button>
-        {error && <div className='error-message'>{error}</div>}
+        {registrationStatus &&
+          (registrationStatus === 'success' ? (
+            <div className='success-message'>User registered successfully.</div>
+          ) : (
+            <div className='error-message'>Error registering user.</div>
+          ))}
       </form>
     </div>
   );

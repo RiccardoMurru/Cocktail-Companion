@@ -4,11 +4,12 @@ import { NavbarProps } from '../interfaces/Props';
 export default function Navbar({
   handleAddToSelected,
   ingredients,
-  ingList,
-  setIngList
+  handleCocktailSelected,
+  allCocktails,
 }: NavbarProps) {
+  const [searchedItemsList, setSearchedItemsList] = useState<string[]>([]);
   const [inputText, setInputText] = useState('');
-
+  const [selectedOption, setSelectedOption] = useState('ingredient');
 
   function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -23,48 +24,69 @@ export default function Navbar({
   }
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    //search ingredients list and return all ingredients that match text in event
     if (event.target) {
       const value = (event.target as HTMLInputElement).value;
 
-      let filteredArr: string[] = ingredients.filter((ingredient: string) =>
-        ingredient.includes(value)
+      let selectedItems: string[] = [];
+
+      if (selectedOption === 'ingredient') {
+        selectedItems = ingredients;
+      } else if (selectedOption === 'cocktail') {
+        selectedItems = allCocktails.map(el => el!.drink!);
+      }
+
+      let filteredArr: string[] = selectedItems.filter((item: string) =>
+        item.includes(value.toLowerCase())
       );
 
       filteredArr.sort((a, b) => {
-        if (a.toLowerCase() === value) return -1;
-        if (b.toLowerCase() === value) return 1;
+        if (a.toLowerCase() === value.toLowerCase()) return -1;
+        if (b.toLowerCase() === value.toLowerCase()) return 1;
         return 0;
       });
+
       setInputText(value);
-      setIngList(filteredArr);
+      setSearchedItemsList(filteredArr);
     }
   }
 
   return (
     <div className='NavBar'>
-      <h3>Enter ingredient here!</h3>
-      <form id='ingredient-search' onSubmit={(e) => handleSubmit(e)}>
+      <h3>
+        Enter {selectedOption === 'ingredient' ? 'ingredient' : 'cocktail'}{' '}
+        here!
+      </h3>
+      <form id='ingredient-search' onSubmit={e => handleSubmit(e)}>
+        <div className='select-item'>
+          <select
+            value={selectedOption}
+            onChange={event => setSelectedOption(event.target.value)}>
+            <option value='ingredient'>Ingredients</option>
+            <option value='cocktail'>Cocktails</option>
+          </select>
+        </div>
         <input
-          id='searchBar'
           className='form-input'
           name='search-bar'
           type='text'
           value={inputText}
-          onChange={(event) => handleChange(event)}
-          placeholder='Search an ingredient...'
+          onChange={event => handleChange(event)}
+          placeholder={`Search ${selectedOption}...`}
         />
       </form>
       <ul className='ingredients-selector'>
         {inputText.length > 1 ? (
-          ingList.length ? (
-            ingList.map((ingredient) => (
+          searchedItemsList.length ? (
+            searchedItemsList.map(item => (
               <li
                 className='ingredient'
-                key={ingredient}
-                onClick={() => handleAddToSelected(ingredient)}
-              >
-                {ingredient}
+                key={item}
+                onClick={() =>
+                  selectedOption === 'cocktail'
+                    ? handleCocktailSelected(item)
+                    : handleAddToSelected(item)
+                }>
+                {item}
               </li>
             ))
           ) : (

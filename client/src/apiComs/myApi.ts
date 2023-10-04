@@ -130,3 +130,13 @@ export async function removeFavourite(faveId: string) {
     throw err; // Re-throw the error so it can be caught and handled elsewhere in your code
   }
 }
+
+export async function getAllCocktails() {
+  try {
+    const { data } = await axios.get(`${rootUrl}/cocktails`);
+    return data ? data : [];
+  } catch (err) {
+    console.log('Error retrieving user profile:', err);
+    throw err;
+  }
+}

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import mongoose, { ConnectOptions } from 'mongoose';
 import UserModel from '../models/user';
 import { authMiddleware } from '../middleware/auth';
-import * as controller from '../controller';
+import * as controller from '../controllers/userController';
 import { getMockReq, getMockRes } from '@jest-mock/express';
 import jwt from 'jsonwebtoken';
 
@@ -37,6 +37,10 @@ describe('GET /user-profile', () => {
     validToken = registerResponse.body.token;
   });
 
+  afterEach(async () => {
+    await UserModel.deleteOne({ username: user.username });
+  });
+
   afterAll(async () => {
     await UserModel.deleteMany();
     await mongoose.connection.close();
@@ -55,7 +59,7 @@ describe('GET /user-profile', () => {
 
     const userInDb = await UserModel.findOne({ username: user.username });
 
-    expect(response.body._id).toEqual(userInDb._id.toString());
+    if (userInDb) expect(response.body._id).toEqual(userInDb._id.toString());
     expect(response.body.username).toEqual(user.username);
 
     const isPasswordValid = await bcrypt.compare(

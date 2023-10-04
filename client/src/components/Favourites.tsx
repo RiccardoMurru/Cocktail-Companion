@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { removeFavourite } from '../apiComs/myApi';
 import { getCocktailById } from '../apiComs/cocktailDbApi';
 import { useState, useEffect } from 'react';
 import CocktailComponent from './Cocktail';
@@ -11,11 +10,10 @@ import { useAuth } from '../context/authContext';
 import logo from '../assets/LOGO.png';
 
 export default function Favourites({ setPage, page }: PageProps) {
-
   const [displayedFavourites, setDisplayedFavourites] = useState<Cocktail[]>(
     []
   );
-  const { user, setUser, logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   async function loadFavourites(user: User): Promise<void> {
@@ -35,18 +33,7 @@ export default function Favourites({ setPage, page }: PageProps) {
       }
     }
   }
-  // add type for user and faveId
-  async function handleRemoveFromFavourites(faveId: string) {
-    for (let i = 0; i < displayedFavourites.length; i++) {
-      if (displayedFavourites[i].idDrink === faveId) {
-        const newFavourites = displayedFavourites.slice();
-        newFavourites.splice(i, 1);
-        setDisplayedFavourites(newFavourites);
-      }
-    }
-    const updatedUser = await removeFavourite(faveId);
-    setUser(updatedUser);
-  }
+
   useEffect(() => {
     loadFavourites(user!);
   }, [user]);
@@ -75,16 +62,20 @@ export default function Favourites({ setPage, page }: PageProps) {
         </div>
       </header>
       <h2 className='favourites-title'>Your favourites:</h2>
-      <div className='CocktailList'>
-        {displayedFavourites.map(cocktail => (
-          <CocktailComponent
-            page={page}
-            setPage={setPage}
-            cocktail={cocktail}
-            key={cocktail.idDrink}
-          />
-        ))}
-      </div>
+      {displayedFavourites.length ? (
+        <div className='CocktailList'>
+          {displayedFavourites.map(cocktail => (
+            <CocktailComponent
+              page={page}
+              setPage={setPage}
+              cocktail={cocktail}
+              key={cocktail.idDrink}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className='favourite-message'>You don't have any favourites yet.</p>
+      )}
     </div>
   );
 }

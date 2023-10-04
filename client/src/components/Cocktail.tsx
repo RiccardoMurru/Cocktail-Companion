@@ -5,7 +5,6 @@ import { useAuth } from '../context/authContext';
 import Cookies from 'js-cookie';
 import { selectedIngredientsHighlight } from '../helpers';
 
-
 export default function CocktailComponent({
   cocktail,
   selectedIngs,
