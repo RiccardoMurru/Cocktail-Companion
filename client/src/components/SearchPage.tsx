@@ -126,7 +126,7 @@ export default function SearchPage({ page, setPage }: PageProps) {
           </div>
         </div>
       </header>
-      {user && (
+      {!selectedIngs.length && user && (
         <h2 className='welcome'>
           <span>Welcome back {user.username}!</span>
           <span>What are we drinking today?</span>{' '}

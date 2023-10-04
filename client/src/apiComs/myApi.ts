@@ -7,20 +7,6 @@ import { useAuth } from '../context/authContext';
 
 const rootUrl = 'http://localhost:3001';
 
-// async function fetchMostLikedDrinks(): Promise<MostLikedDrinks[]> {
-//   try {
-//     const response = await axios.get(`${rootUrl}/most-liked-drinks`);
-//     const mostLikedDrinksData: MostLikedDrinks[] = await response.data;
-
-//     // Sort drinks by likeCount in descending order
-//     const sortedDrinks = mostLikedDrinksData.sort((a, b) => b.likeCount - a.likeCount);
-//     return sortedDrinks;
-//   } catch (error) {
-//     console.error('Error fetching most-liked drinks:', error);
-//     throw error;
-//   }
-// }
-
 export async function fetchMostLikedDrinksWithDetails(): Promise<(MostLikedDrinks| null)[]>{
   try {
     const response = await axios.get(`${rootUrl}/most-liked-drinks`);
