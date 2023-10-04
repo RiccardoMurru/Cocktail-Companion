@@ -1,15 +1,13 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 import CocktailList from './CocktailList';
 import Navbar from './Navbar';
 import logo from '../assets/LOGO.png';
 import MyIngredients from './MyIngredients';
 import { updateFilteredCocktails } from '../helpers';
 import {
-  getAllCategories,
   getAllIngredients,
+  getCocktailById,
   getCocktailByIngredient,
 } from '../apiComs/cocktailDbApi';
 import { PageProps } from '../interfaces/Props';
@@ -17,23 +15,37 @@ import { Cocktail } from '../interfaces/Cocktail';
 import Cookies from 'js-cookie';
 import { useAuth } from '../context/authContext';
 import MostLikedDrinks from './MostLikedDrinks';
+import { getAllCocktails } from '../apiComs/myApi';
 
 export default function SearchPage({ page, setPage }: PageProps) {
-  const [categories, setCategories] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([]);
-  const [ingList, setIngList] = useState<string[]>([]);
-  const [cocktails, setCocktails] = useState<Cocktail[]>([]);
   const [selectedIngs, setSelectedIngs] = useState<string[]>([]);
-
-  
+  const [cocktails, setCocktails] = useState<Cocktail[] | Cocktail>([]);
+  const [allCocktails, setAllCocktails] = useState<Cocktail[]>([]);
 
   const navigate = useNavigate();
-
   useEffect(() => {
-    fillIngredientsAndCategories();
-  }, []);
+    async function fetchData() {
+      try {
+        const fetchedIngs = await getAllIngredients();
+        if (fetchedIngs) {
+          setIngredients(fetchedIngs.map(el => el.toLowerCase()));
+        }
 
-  
+        const data = await getAllCocktails();
+        setAllCocktails(
+          data.map((el: Cocktail) => ({
+            idDrink: el.idDrink,
+            drink: el.drink?.toLowerCase(),
+          }))
+        );
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const { user, logout } = useAuth();
 
@@ -45,7 +57,13 @@ export default function SearchPage({ page, setPage }: PageProps) {
       );
       if (Array.isArray(newCocktails)) {
         if (!selectedIngs.includes(ingredient)) {
-          setCocktails(updateFilteredCocktails(cocktails, newCocktails, 'add'));
+          Array.isArray(cocktails)
+            ? setCocktails(
+                updateFilteredCocktails(cocktails, newCocktails, 'add')
+              )
+            : setCocktails(
+                updateFilteredCocktails([cocktails], newCocktails, 'add')
+              );
           setIngredients(updatedIngredients);
           setSelectedIngs([...selectedIngs, ingredient.toLowerCase()]);
         }
@@ -63,9 +81,13 @@ export default function SearchPage({ page, setPage }: PageProps) {
         await getCocktailByIngredient(ingredient);
 
       if (Array.isArray(cocktailsToReduce)) {
-        setCocktails(
-          updateFilteredCocktails(cocktails, cocktailsToReduce, 'remove')
-        );
+        Array.isArray(cocktails)
+          ? setCocktails(
+              updateFilteredCocktails(cocktails, cocktailsToReduce, 'add')
+            )
+          : setCocktails(
+              updateFilteredCocktails([cocktails], cocktailsToReduce, 'remove')
+            );
         const resultingIngredients = selectedIngs.filter(
           el => el !== ingredient
         );
@@ -76,21 +98,19 @@ export default function SearchPage({ page, setPage }: PageProps) {
     }
   }
 
-  async function fillIngredientsAndCategories(): Promise<void> {
-    try {
-      const fetchedIngs = await getAllIngredients();
-      const fetchedCats = await getAllCategories();
-      if (fetchedIngs) {
-        setIngredients(fetchedIngs.map(el => el.toLowerCase()));
-      }
-      if (fetchedCats) {
-        setCategories(fetchedCats);
-      }
-    } catch (err) {
-      throw err;
+  async function handleCocktailSelected(cocktailName: string) {
+    const selectedCocktail = allCocktails.find(
+      cocktail => cocktail.drink === cocktailName
+    );
+
+    if (selectedCocktail) {
+      const cocktailId = selectedCocktail.idDrink;
+      const cocktail = await getCocktailById(cocktailId);
+      const singleCocktail = Array.isArray(cocktail) ? cocktail[0] : cocktail;
+
+      setCocktails([singleCocktail]);
     }
   }
-
   return (
     <div className='list-page'>
       <header className='page-header'>
@@ -130,31 +150,29 @@ export default function SearchPage({ page, setPage }: PageProps) {
 
       <Navbar
         className='NavBar'
-        setIngList={setIngList}
-        ingList={ingList}
+        allCocktails={allCocktails}
         ingredients={ingredients}
         handleAddToSelected={handleAddToSelected}
         selectedIngs={selectedIngs}
-        categories={categories}
+        handleCocktailSelected={handleCocktailSelected}
       />
       <MyIngredients
         selectedIngs={selectedIngs}
         handleRemoveFromSelected={handleRemoveFromSelected}
       />
-      {cocktails.length ? (
+      {Array.isArray(cocktails) && cocktails.length ? (
         <CocktailList
-          page=''
-          setPage={setPage}
+          page={page}
           selectedIngs={selectedIngs}
           cocktails={cocktails}
+          setPage={setPage}
         />
       ) : (
         <div>
-        <p>No ingredients selected.</p>
-        <MostLikedDrinks />
+          <p>No ingredients selected.</p>
+          <MostLikedDrinks />
         </div>
       )}
-       
     </div>
   );
 }

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import mongoose, { ConnectOptions } from 'mongoose';
 import UserModel from '../models/user';
 import { authMiddleware } from '../middleware/auth';
-import * as controller from '../controller';
+import * as controller from '../controllers/userController';
 import { getMockReq, getMockRes } from '@jest-mock/express';
 import jwt from 'jsonwebtoken';
 
@@ -29,7 +29,7 @@ describe('GET /user-profile', () => {
       process.env.MONGODB_URL as string,
       {
         useNewUrlParser: true,
-        useUnifiedTopology: true,
+        useUnifiedTopology: true
       } as ConnectOptions
     );
 

@@ -1,4 +1,7 @@
 import mongoose, { ConnectOptions } from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function connect() {
   try {
@@ -13,4 +16,4 @@ async function connect() {
 }
 connect();
 
-module.exports = mongoose;
+export default mongoose;
