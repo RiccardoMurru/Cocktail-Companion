@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           console.error('Failed to fetch user data: ', error);
         });
     }
-
   }, [isLoggedIn]);
 
   useEffect(() => {

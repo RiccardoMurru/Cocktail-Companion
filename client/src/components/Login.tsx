@@ -69,8 +69,9 @@ export default function Login({ setPage }: PageProps) {
           />
         </div>
         <button type='submit'>Login</button>
+        {error && <div className='error-message'>{error}</div>}
       </form>
-      {error && <div className='error-message'>{error}</div>}
     </div>
   );
 }
+

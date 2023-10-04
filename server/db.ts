@@ -1,10 +1,13 @@
 import mongoose, { ConnectOptions } from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function connect() {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/cocktail-companion', {
+    await mongoose.connect(`${process.env.MONGODB_URL}`, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     } as ConnectOptions);
     console.log('Connected to DB');
   } catch (err) {
@@ -13,4 +16,4 @@ async function connect() {
 }
 connect();
 
-module.exports = mongoose;
+export default mongoose;

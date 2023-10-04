@@ -1,4 +1,3 @@
-import { User } from './User';
 import { Cocktail } from './Cocktail';
 
 export interface PageProps {
@@ -12,9 +11,8 @@ export interface NavbarProps {
   handleAddToSelected: (ingredient: string) => void;
   ingredients: string[];
   selectedIngs: string[];
-  ingList: string[];
-  setIngList: React.Dispatch<React.SetStateAction<string[]>>;
-  categories: string[];
+  handleCocktailSelected: (cocktail: string) => void;
+  allCocktails: Cocktail[];
 }
 
 export interface CocktailProps {
@@ -34,4 +32,8 @@ export interface CocktailListProps extends PageProps {
 export interface MyIngredientsProps {
   selectedIngs: string[];
   handleRemoveFromSelected: (ingredient: string) => Promise<void>;
+}
+
+export interface MostLikedDrinkProps {
+  cocktail: Cocktail;
 }

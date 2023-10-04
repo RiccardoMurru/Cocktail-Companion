@@ -10,6 +10,7 @@ export default function MyIngredients({
   }
   if (selectedIngs)
     return (
+  <>
       <ul className='selected-ings-list'>
         {selectedIngs.length
           ? selectedIngs.map((ing) => (
@@ -23,5 +24,8 @@ export default function MyIngredients({
             ))
           : undefined}
       </ul>
+      
+  </>
+    
     );
 }

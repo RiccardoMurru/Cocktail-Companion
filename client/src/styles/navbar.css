@@ -1,8 +1,13 @@
 .NavBar {
   h3 {
     margin: 20px 0;
-    font-size: 40px;
+    font-size: 25px;
   }
+  form {
+    display: flex;
+    margin-bottom: 30px;
+  }
+  select,
   input {
     -webkit-appearance: none;
     width: 100%;
@@ -13,9 +18,31 @@
     padding: 5px 15px;
     font-size: 1rem;
     background: var(--inputBg);
-    border: 1px solid var(--border) ;
+    border: 1px solid var(--border);
     outline: none;
-    margin-bottom: 30px;
     color: var(--mainColor);
+  }
+  .select-item {
+    position: relative;
+    width: 200px;
+    margin-right: 20px;
+    &::after {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      content: '\e5cf';
+      font-family: 'Material Symbols Outlined';
+      font-size: 24px;
+    }
+  }
+
+}
+
+@media screen and (min-width: 1024px) {
+  .NavBar {
+    h3 {
+      font-size: 40px;
+    }
   }
 }

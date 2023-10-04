@@ -1,12 +1,9 @@
 
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import jwt, { SignOptions } from 'jsonwebtoken';
-import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
-dotenv.config();
-
-import UserModel from './models/user';
+import UserModel from '../models/user';
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
@@ -31,7 +28,7 @@ export async function register(req: Request, res: Response): Promise<void> {
 
       res.status(201).json({ token });
     } else {
-      res.status(400).json({ message: 'Registration failed, username already exists' });
+      res.status(400).json({ message: 'Registration failed' });
     }
   } catch (error) {
     console.error(error);
@@ -72,7 +69,9 @@ export async function getUser(req: Request, res: Response) {
   try {
     const { username } = req;
     const user = await UserModel.findOne({ username: username });
-    res.status(200).send(user);
+    if (user) {
+      res.status(200).send(user);
+    }
   } catch (err) {
     res.status(500);
     console.log(err);
@@ -84,9 +83,11 @@ export async function addFavourite(req: Request, res: Response) {
     const { username } = req;
     const { faveId } = req.body;
     const user = await UserModel.findOne({ username: username });
-    user.favourites.push(faveId);
-    const updatedUser = await user.save();
-    res.status(200).send(updatedUser);
+    if (user) {
+      user.favourites.push(faveId);
+      const updatedUser = await user.save();
+      res.status(200).send(updatedUser);
+    }
   } catch (err) {
     res.status(500).send('Something went wrong');
   }
@@ -97,10 +98,38 @@ export async function removeFavourite(req: Request, res: Response) {
     const { username } = req;
     const { faveId } = req.body;
     const user = await UserModel.findOne({ username: username });
-    const indexToRemove = user.favourites.indexOf(faveId);
-    user.favourites.splice(indexToRemove, 1);
-    const updatedUser = await user.save();
-    res.status(200).send(updatedUser);
+    if (user) {
+      const indexToRemove = user.favourites.indexOf(faveId);
+      user.favourites.splice(indexToRemove, 1);
+      const updatedUser = await user.save();
+      res.status(200).send(updatedUser);
+    }
+  } catch (err) {
+    res.status(500).send('Something went wrong');
+  }
+}
+
+
+export async function getMostLikedDrinks (req: Request, res: Response) {
+  try {
+    const mostLikedRecipes = await UserModel.aggregate([
+      {
+          $unwind: "$favourites"
+      },
+      {
+          $group: {
+              _id: "$favourites",
+              likeCount: { $sum: 1 }
+          }
+      },
+      {
+          $sort: { likeCount: -1 }
+      },
+      {
+          $limit: 10 // Limit the result to the top 10 most liked recipes
+      }
+    ]);
+    res.json(mostLikedRecipes);
   } catch (err) {
     res.status(500).send('Something went wrong');
   }

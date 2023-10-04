@@ -3,7 +3,6 @@
 //for example, if you search vodka, lime juice and orange juice, any cocktail that contains all three
 //will be at the top of the list and will be rendered first, followed by cocktails that match two etc
 
-import { getAllCategories, getAllIngredients } from './apiComs/cocktailDbApi';
 import { Category } from './interfaces/Category';
 import { Cocktail } from './interfaces/Cocktail';
 import { Filter } from './interfaces/Filter';
@@ -67,7 +66,7 @@ export function updateFilteredCocktails(
 type drinksType = Ingredient | Category | Glass | Filter | Cocktail;
 
 export function returnValues(array: drinksType[]): string[] {
-  return array.map(item => {
+  return array.map((item) => {
     const values = Object.values(item);
     if (values.length > 0) {
       const value = values[0];
@@ -81,11 +80,11 @@ export function returnValues(array: drinksType[]): string[] {
 
 const rootUrl = 'https://thecocktaildb.com/api/json/v2/9973533';
 
-async function formatCocktail(cocktail: any): Promise<Cocktail> {
+export async function formatCocktail(cocktail: any): Promise<Cocktail> {
   const formattedCocktail: Cocktail = {
     idDrink: cocktail.idDrink,
     ingredients: [],
-    measures: [],
+    measures: []
   };
 
   for (let key in cocktail) {
@@ -173,6 +172,6 @@ export function selectedIngredientsHighlight(
   }
   return {
     comparisonArr,
-    ingredientsWithMeasures,
+    ingredientsWithMeasures
   };
 }
