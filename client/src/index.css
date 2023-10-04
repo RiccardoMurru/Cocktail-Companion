@@ -14,6 +14,8 @@
   --labelColor: #666;
   --errorColor: #c1121f;
   --successColor: #035E7B;
+  --topLikedBg: #035E7B;
+  --topLikedBorder: rgba(255,255,255,.2);
   font-family: Raleway, sans-serif;
   line-height: 1.5;
   font-weight: 400;
