@@ -19,7 +19,7 @@ describe('GET /user-profile', () => {
   const request = supertest(`http://localhost:${process.env.PORT}`);
   const user = {
     username: 'user1',
-    password: '123',
+    password: '123'
   };
 
   let validToken: string;
@@ -42,6 +42,7 @@ describe('GET /user-profile', () => {
   });
 
   afterAll(async () => {
+    await UserModel.deleteMany();
     await mongoose.connection.close();
   });
 

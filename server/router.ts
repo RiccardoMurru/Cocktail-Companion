@@ -11,4 +11,5 @@ router.get('/user-profile', authMiddleware, controller.getUser);
 router.put('/add-fave', authMiddleware, controller.addFavourite);
 router.put('/remove-fave', authMiddleware, controller.removeFavourite);
 
+router.get('/most-liked-drinks', controller.getMostLikedDrinks)
 export default router;

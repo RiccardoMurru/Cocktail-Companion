@@ -35,3 +35,7 @@ export interface MyIngredientsProps {
   selectedIngs: string[];
   handleRemoveFromSelected: (ingredient: string) => Promise<void>;
 }
+
+export interface MostLikedDrinkProps {
+  cocktail: Cocktail;
+}

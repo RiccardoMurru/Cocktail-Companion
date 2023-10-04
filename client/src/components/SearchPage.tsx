@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -15,6 +16,7 @@ import { PageProps } from '../interfaces/Props';
 import { Cocktail } from '../interfaces/Cocktail';
 import Cookies from 'js-cookie';
 import { useAuth } from '../context/authContext';
+import MostLikedDrinks from './MostLikedDrinks';
 
 export default function SearchPage({ page, setPage }: PageProps) {
   const [categories, setCategories] = useState<string[]>([]);
@@ -22,11 +24,16 @@ export default function SearchPage({ page, setPage }: PageProps) {
   const [ingList, setIngList] = useState<string[]>([]);
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
   const [selectedIngs, setSelectedIngs] = useState<string[]>([]);
+
+  
+
   const navigate = useNavigate();
 
   useEffect(() => {
     fillIngredientsAndCategories();
   }, []);
+
+  
 
   const { user, logout } = useAuth();
 
@@ -114,12 +121,13 @@ export default function SearchPage({ page, setPage }: PageProps) {
           </div>
         </div>
       </header>
-      {user && (
+      {!selectedIngs.length && user && (
         <h2 className='welcome'>
           <span>Welcome back {user.username}!</span>
           <span>What are we drinking today?</span>{' '}
         </h2>
       )}
+
       <Navbar
         className='NavBar'
         setIngList={setIngList}
@@ -141,8 +149,12 @@ export default function SearchPage({ page, setPage }: PageProps) {
           cocktails={cocktails}
         />
       ) : (
+        <div>
         <p>No ingredients selected.</p>
+        <MostLikedDrinks />
+        </div>
       )}
+       
     </div>
   );
 }
