@@ -5,7 +5,7 @@ export default function Navbar({
   handleAddToSelected,
   ingredients,
   handleCocktailSelected,
-  allCocktails,
+  allCocktails
 }: NavbarProps) {
   const [searchedItemsList, setSearchedItemsList] = useState<string[]>([]);
   const [inputText, setInputText] = useState('');
@@ -13,12 +13,14 @@ export default function Navbar({
 
   function handleSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
-    const value = event.currentTarget;
-    const formElements = value.elements as typeof value.elements & {
-      searchBar: { value: string };
-    };
-    if (ingredients.filter(el => el === formElements.searchBar.value)) {
-      handleAddToSelected(formElements.searchBar.value);
+    const formData = new FormData(event.currentTarget);
+    const value = formData.get('search-bar') as string;
+
+    if (ingredients.includes(value)) {
+      handleAddToSelected(value);
+    }
+    if (selectedOption === 'cocktail') {
+      handleCocktailSelected(value);
     }
     setInputText('');
   }
@@ -32,7 +34,7 @@ export default function Navbar({
       if (selectedOption === 'ingredient') {
         selectedItems = ingredients;
       } else if (selectedOption === 'cocktail') {
-        selectedItems = allCocktails.map(el => el!.drink!);
+        selectedItems = allCocktails.map((el) => el!.drink!);
       }
 
       let filteredArr: string[] = selectedItems.filter((item: string) =>
@@ -56,11 +58,12 @@ export default function Navbar({
         Enter {selectedOption === 'ingredient' ? 'ingredient' : 'cocktail'}{' '}
         here!
       </h3>
-      <form id='ingredient-search' onSubmit={e => handleSubmit(e)}>
+      <form id='ingredient-search' onSubmit={(e) => handleSubmit(e)}>
         <div className='select-item'>
           <select
             value={selectedOption}
-            onChange={event => setSelectedOption(event.target.value)}>
+            onChange={(event) => setSelectedOption(event.target.value)}
+          >
             <option value='ingredient'>Ingredients</option>
             <option value='cocktail'>Cocktails</option>
           </select>
@@ -70,14 +73,14 @@ export default function Navbar({
           name='search-bar'
           type='text'
           value={inputText}
-          onChange={event => handleChange(event)}
+          onChange={(event) => handleChange(event)}
           placeholder={`Search ${selectedOption}...`}
         />
       </form>
       <ul className='ingredients-selector'>
         {inputText.length > 1 ? (
           searchedItemsList.length ? (
-            searchedItemsList.map(item => (
+            searchedItemsList.map((item) => (
               <li
                 className='ingredient'
                 key={item}
@@ -85,7 +88,8 @@ export default function Navbar({
                   selectedOption === 'cocktail'
                     ? handleCocktailSelected(item)
                     : handleAddToSelected(item)
-                }>
+                }
+              >
                 {item}
               </li>
             ))
