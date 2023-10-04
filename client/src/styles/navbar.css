@@ -1,7 +1,7 @@
 .NavBar {
   h3 {
     margin: 20px 0;
-    font-size: 40px;
+    font-size: 25px;
   }
   input {
     -webkit-appearance: none;
@@ -13,9 +13,17 @@
     padding: 5px 15px;
     font-size: 1rem;
     background: var(--inputBg);
-    border: 1px solid var(--border) ;
+    border: 1px solid var(--border);
     outline: none;
     margin-bottom: 30px;
     color: var(--mainColor);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .NavBar {
+    h3 {
+      font-size: 40px;
+    }
   }
 }

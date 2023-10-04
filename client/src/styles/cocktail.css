@@ -5,8 +5,9 @@
   gap: 2rem;
   .Cocktail {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
-    width: 48%;
+    width: 100%;
     padding: 20px;
     border-radius: 5px;
     background: var(--cocktailBg);
@@ -62,4 +63,13 @@
       }
     }
   }
+}
+
+
+@media screen  and (min-width: 1024px){
+  .Cocktail {
+    width: 48%;
+    flex-wrap: nowrap;
+  }
+
 }

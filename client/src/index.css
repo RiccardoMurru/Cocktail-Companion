@@ -12,6 +12,8 @@
   --cocktailBg: #fceeb6;
   --shadow: 0 2px 5px 0px rgba(0,0,0,0.15);
   --labelColor: #666;
+  --errorColor: #c1121f;
+  --successColor: #035E7B;
   font-family: Raleway, sans-serif;
   line-height: 1.5;
   font-weight: 400;

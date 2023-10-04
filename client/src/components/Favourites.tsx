@@ -11,7 +11,6 @@ import { useAuth } from '../context/authContext';
 import logo from '../assets/LOGO.png';
 
 export default function Favourites({ setPage, page }: PageProps) {
-
   const [displayedFavourites, setDisplayedFavourites] = useState<Cocktail[]>(
     []
   );
@@ -75,16 +74,20 @@ export default function Favourites({ setPage, page }: PageProps) {
         </div>
       </header>
       <h2 className='favourites-title'>Your favourites:</h2>
-      <div className='CocktailList'>
-        {displayedFavourites.map(cocktail => (
-          <CocktailComponent
-            page={page}
-            setPage={setPage}
-            cocktail={cocktail}
-            key={cocktail.idDrink}
-          />
-        ))}
-      </div>
+      {displayedFavourites.length ? (
+        <div className='CocktailList'>
+          {displayedFavourites.map(cocktail => (
+            <CocktailComponent
+              page={page}
+              setPage={setPage}
+              cocktail={cocktail}
+              key={cocktail.idDrink}
+            />
+          ))}
+        </div>
+      ) : (
+        <p className='favourite-message'>You don't have any favourites yet.</p>
+      )}
     </div>
   );
 }

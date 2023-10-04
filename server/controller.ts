@@ -31,7 +31,7 @@ export async function register(req: Request, res: Response): Promise<void> {
 
       res.status(201).json({ token });
     } else {
-      res.status(400).json({ message: 'Registration failed, username already exists' });
+      res.status(400).json({ message: 'Registration failed' });
     }
   } catch (error) {
     console.error(error);

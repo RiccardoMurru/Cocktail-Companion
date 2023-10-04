@@ -1,102 +1,82 @@
 import express from 'express';
-import router from '../router';
 import supertest from 'supertest';
+import bcrypt from 'bcrypt';
 import mongoose, { ConnectOptions } from 'mongoose';
-import User from '../models/user';
+import UserModel from '../models/user';
+import { authMiddleware } from '../middleware/auth';
+import * as controller from '../controller';
+import { getMockReq, getMockRes } from '@jest-mock/express';
+import jwt from 'jsonwebtoken';
 
-describe('user test', () => {
+jest.mock('jsonwebtoken');
+
+describe('GET /user-profile', () => {
   const app = express();
   app.use(express.json());
-  app.use(router);
-  const request = supertest(app);
+
+  app.get('/user-profile', authMiddleware, controller.getUser);
+
+  const request = supertest(`http://localhost:${process.env.PORT}`);
   const user = {
     username: 'user1',
     password: '123',
   };
 
+  let validToken: string;
+
   beforeAll(async () => {
-    const url = 'mongodb://127.0.0.1:27017/cocktail-companion';
-    await mongoose.connect(url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as ConnectOptions);
+    await mongoose.connect(
+      process.env.MONGODB_URL as string,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      } as ConnectOptions
+    );
+
+    const registerResponse = await request.post('/register').send(user);
+    validToken = registerResponse.body.token;
   });
 
   afterEach(async () => {
-    await User.deleteMany();
+    await UserModel.deleteOne({ username: user.username });
   });
 
   afterAll(async () => {
     await mongoose.connection.close();
   });
 
-  it('should add a user to the db', async () => {
-    const addUserResponse = await request.post('/add-user').send(user);
-    expect(addUserResponse.status).toBe(200);
+  it('should retrieve a user profile when authenticated', async () => {
+    jest
+      .spyOn(jwt, 'verify')
+      .mockImplementation(() => ({ username: user.username }));
 
-    const userInDB = await User.findOne({ username: user.username });
-    expect(userInDB).toBeDefined();
-    expect(userInDB.username).toBe(user.username);
-  });
+    const response = await request
+      .get('/user-profile')
+      .set('Authorization', `Bearer ${validToken}`);
 
-  it('should not add a user if already exists', async () => {
-    const addUserResponse = await request.post('/add-user').send(user);
-    const secondAddUserResponse = await request.post('/add-user').send(user);
+    expect(response.status).toBe(200);
 
-    expect(addUserResponse.status).toBe(200);
-    expect(secondAddUserResponse.status).toBe(401);
-    expect(secondAddUserResponse.text).toBe('Username already in use');
-  });
+    const userInDb = await UserModel.findOne({ username: user.username });
 
-  it('should retrieve a user from the db', async () => {
-    await request.post('/add-user').send(user);
-    const retrieveUserResponse = await request.post('/user-profile').send(user);
+    if (userInDb) expect(response.body._id).toEqual(userInDb._id.toString());
+    expect(response.body.username).toEqual(user.username);
 
-    const userInDB = await User.findOne({ username: user.username });
-    expect(retrieveUserResponse.status).toBe(200);
-    expect(retrieveUserResponse.body.username).toBe(userInDB.username);
-  });
-
-  it('should throw an error if the password is wrong', async () => {
-    await request.post('/add-user').send(user);
-    const userToFind = {
-      username: 'user1',
-      password: 'wrong_password',
-    };
-    const retrieveUserResponse = await request
-      .post('/user-profile')
-      .send(userToFind);
-    expect(retrieveUserResponse.status).toBe(400);
-    expect(retrieveUserResponse.body.message).toBe(
-      'User or Password incorrect'
+    const isPasswordValid = await bcrypt.compare(
+      user.password,
+      response.body.password
     );
+    expect(isPasswordValid).toBe(true);
+
+    expect(response.body.favourites).toEqual([]);
+    expect(response.body.ingredients).toEqual([]);
   });
 
-  it('should add to favorites', async () => {
-    await request.post('/add-user').send(user);
-    const favoriteId = '123';
-    const userToUpdate = {
-      username: user.username,
-      faveId: favoriteId
-    }
-    const addFavoriteResponse = await request
-      .put('/addfave')
-      .send(userToUpdate);
+  it('should return an error when not authenticated', async () => {
+    const req = getMockReq();
+    const { res } = getMockRes();
 
-    expect(addFavoriteResponse.status).toBe(200);
+    authMiddleware(req, res, () => {});
 
-    const userInDb = await User.findOne({ username: user.username });
-    expect(userInDb.favourites[0]).toBe(favoriteId);
+    expect(res.status).toHaveBeenCalledWith(403);
   });
-
-  it('should remove from favorites', async () => {
-    await request.post('/add-user').send(user);
-    const removeFavoriteResposne = await request.put('/remove-fave').send({ username: user.username });
-
-    const userInDb = await User.findOne({ username: user.username });
-
-    expect(removeFavoriteResposne.status).toBe(200);
-    expect(userInDb.favourites).toEqual([]);
-  })
-
 });

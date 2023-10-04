@@ -36,6 +36,7 @@
       padding: 5px 15px;
       font-size: 1rem;
       outline: none;
+      transition: .25s ease-out;
     }
     label{
       display: inline-block;
@@ -48,6 +49,28 @@
     button {
       margin-top: 20px;
       align-self: center;
+    }
+  }
+  .success-message,
+  .error-message {
+    display: flex;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 40px;
+    font-weight: 600;
+    color: var(--bodyBg);
+  }
+  .success-message {
+    background: var(--successColor);
+  }
+  .error-message {
+    background: var(--errorColor);
+
+  }
+  &:has(.error-message) {
+    input {
+      border: 1px solid var(--errorColor);
     }
   }
 }
