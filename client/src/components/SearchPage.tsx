@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -9,57 +10,30 @@ import { updateFilteredCocktails } from '../helpers';
 import {
   getAllCategories,
   getAllIngredients,
-  getCocktailByIngredient
+  getCocktailByIngredient,
 } from '../apiComs/cocktailDbApi';
-import { updateFilteredCocktails } from '../helpers';
-import CocktailList from './CocktailList';
-import Navbar from './Navbar';
-import MyIngredients from './MyIngredients';
-import logo from '../assets/LOGO.png';
+import { PageProps } from '../interfaces/Props';
+import { Cocktail } from '../interfaces/Cocktail';
 import Cookies from 'js-cookie';
+import { useAuth } from '../context/authContext';
 
-const buttonStyle = {
-  display: 'inline-block',
-  padding: '10px 20px',
-  backgroundColor: '#F9D077',
-  color: '#000000',
-  borderRadius: '5px',
-  textDecoration: 'none',
-};
-
-
-console.log(Cookies.get());
-
-export default function SearchPage({
-  user,
-  setUser,
-  page,
-  setPage
-}: PageProps) {
+export default function SearchPage({ page, setPage }: PageProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [ingList, setIngList] = useState<string[]>([]);
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
   const [selectedIngs, setSelectedIngs] = useState<string[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const usernameFromCookies = Cookies.get('username');
-    const passwordFromCookies = Cookies.get('password');
-
-    // Update the user state
-    setUser(prevUser => ({
-      ...prevUser,
-      username: usernameFromCookies || '', 
-      password: passwordFromCookies || ''
-    }));
-  
     fillIngredientsAndCategories();
   }, []);
 
-  console.log('username from user',user.username)
+  const { user, logout } = useAuth();
+
   async function handleAddToSelected(ingredient: string): Promise<void> {
     try {
-      const updatedIngredients = ingredients.filter((el) => el !== ingredient);
+      const updatedIngredients = ingredients.filter(el => el !== ingredient);
       const newCocktails: Cocktail | Cocktail[] = await getCocktailByIngredient(
         ingredient
       );
@@ -87,7 +61,7 @@ export default function SearchPage({
           updateFilteredCocktails(cocktails, cocktailsToReduce, 'remove')
         );
         const resultingIngredients = selectedIngs.filter(
-          (el) => el !== ingredient
+          el => el !== ingredient
         );
         setSelectedIngs([...resultingIngredients]);
       }
@@ -101,7 +75,7 @@ export default function SearchPage({
       const fetchedIngs = await getAllIngredients();
       const fetchedCats = await getAllCategories();
       if (fetchedIngs) {
-        setIngredients(fetchedIngs.map((el) => el.toLowerCase()));
+        setIngredients(fetchedIngs.map(el => el.toLowerCase()));
       }
       if (fetchedCats) {
         setCategories(fetchedCats);
@@ -156,19 +130,20 @@ export default function SearchPage({
         selectedIngs={selectedIngs}
         categories={categories}
       />
+      <MyIngredients
+        selectedIngs={selectedIngs}
+        handleRemoveFromSelected={handleRemoveFromSelected}
+      />
       {cocktails.length ? (
         <CocktailList
           page=''
           setPage={setPage}
           selectedIngs={selectedIngs}
           cocktails={cocktails}
-          user={user}
-          setUser={setUser}
         />
       ) : (
         <p>No ingredients selected.</p>
       )}
-      {user.username && <MyIngredients selectedIngs={selectedIngs} handleRemoveFromSelected={handleRemoveFromSelected} />}
     </div>
   );
 }
