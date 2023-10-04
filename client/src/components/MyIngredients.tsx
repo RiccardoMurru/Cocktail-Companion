@@ -24,7 +24,7 @@ export default function MyIngredients({
             ))
           : undefined}
       </ul>
-      <h2>Top Cocktails:</h2>
+      
   </>
     
     );
