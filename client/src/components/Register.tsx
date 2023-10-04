@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PageProps } from '../interfaces/Props';
 import { register } from '../apiComs/myApi';
 import { User } from '../interfaces/User';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/LOGO.png';
 import { useAuth } from '../context/authContext';
 
@@ -28,12 +28,21 @@ export default function Register({ setPage }: PageProps) {
       console.error(err);
     }
   }
+  const navigate = useNavigate();
 
   return (
     <div className='register-page'>
       <header className='page-header'>
         <div className='header-wrapper'>
-          <img className='logo' src={logo} />
+          <div
+            className='logo'
+            onClick={() => {
+              setPage('search');
+              navigate('/');
+            }}
+          >
+            <img src={logo} alt='Logo' />
+          </div>
           <div className='button-container'>
             <Link to='/' className='login-button'>
               back
