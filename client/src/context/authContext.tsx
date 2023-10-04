@@ -50,22 +50,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     password: string
   ): Promise<User | null> => {
     try {
-      console.log('username and pw in login function, ', username, password);
       const response = await axios.post(`${rootUrl}/login`, {
         username,
         password
       });
 
       if (response.status === 200) {
-        const tokenData = response.data;
-        const { token } = tokenData;
-
+        const { token } = response.data;
         const userData: User = { token };
 
         Cookies.set('token', token as string, { expires: 1 });
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        userData.favourites = [];
-        setUser(userData);
+
+        const userProfileResponse = await axios.get(`${rootUrl}/user-profile`);
+        setUser(userProfileResponse.data);
 
         return userData;
       } else {

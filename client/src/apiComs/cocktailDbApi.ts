@@ -5,9 +5,7 @@ const rootUrl = 'https://thecocktaildb.com/api/json/v2/9973533';
 
 export async function getAllIngredients() {
   try {
-    const res = await fetch(
-      `https://www.thecocktaildb.com/api/json/v2/9973533/list.php?i=list`
-    );
+    const res = await fetch(`${rootUrl}/list.php?i=list`);
     const handledResponse: Drinks = await res.json();
     return returnValues(handledResponse.drinks);
   } catch (err) {

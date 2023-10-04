@@ -107,3 +107,13 @@ export async function removeFavourite(faveId: string) {
     console.log('Error saving favourite');
   }
 }
+
+export async function getAllCocktails() {
+  try {
+    const { data } = await axios.get(`${rootUrl}/cocktails`);
+    return data ? data : [];
+  } catch (err) {
+    console.log('Error retrieving user profile:', err);
+    throw err;
+  }
+}

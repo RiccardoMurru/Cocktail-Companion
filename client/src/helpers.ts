@@ -80,7 +80,7 @@ export function returnValues(array: drinksType[]): string[] {
 
 const rootUrl = 'https://thecocktaildb.com/api/json/v2/9973533';
 
-async function formatCocktail(cocktail: any): Promise<Cocktail> {
+export async function formatCocktail(cocktail: any): Promise<Cocktail> {
   const formattedCocktail: Cocktail = {
     idDrink: cocktail.idDrink,
     ingredients: [],
