@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import CocktailModel from '../models/cocktai';
+import CocktailModel from '../models/cocktail';
 
 export async function getCocktails(req: Request, res: Response) {
   try {

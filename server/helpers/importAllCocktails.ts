@@ -1,6 +1,6 @@
 import axios from 'axios';
 import mongoose, { ConnectOptions } from 'mongoose';
-import CocktailModel from '../models/cocktai';
+import CocktailModel from '../models/cocktail';
 
 async function formatCocktail(cocktail: any) {
   const formattedCocktail: any = {
