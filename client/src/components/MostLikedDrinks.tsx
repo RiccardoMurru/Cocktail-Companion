@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import { fetchMostLikedDrinksWithDetails } from '../apiComs/myApi';
 import { Cocktail } from '../interfaces/Cocktail';
-import { MostLikedDrinkProps } from '../interfaces/Props';
 
 export default function MostLikedDrinks() {
   const [cocktails, setCocktails] = useState<Cocktail[]>([]);
@@ -21,24 +20,24 @@ export default function MostLikedDrinks() {
   return (
     <div className='MostLikedCocktails'>
       <h2 className='title'>Top Cocktails:</h2>
-        {cocktails.map(cocktail => (
-          <div className='Cocktail' key={cocktail.idDrink}>
-            <img className='cocktail-img' src={cocktail.drinkThumb} />
-            <div className='cocktail-details'>
-              <h2>{cocktail.drink}</h2>
-              <p>
-                <span>Category: </span>
-                {cocktail.category}
-              </p>
-              <p>
-                <span>Glass: </span>
-                {cocktail.glass}
-              </p>
-              <p>
-                <span>Alcoholic: </span>
-                {cocktail.alcoholic}
-              </p>
-              {/* <h4>Ingredients:</h4>
+      {cocktails.map((cocktail) => (
+        <div className='Cocktail' key={cocktail.idDrink}>
+          <img className='cocktail-img' src={cocktail.drinkThumb} />
+          <div className='cocktail-details'>
+            <h2>{cocktail.drink}</h2>
+            <p>
+              <span>Category: </span>
+              {cocktail.category}
+            </p>
+            <p>
+              <span>Glass: </span>
+              {cocktail.glass}
+            </p>
+            <p>
+              <span>Alcoholic: </span>
+              {cocktail.alcoholic}
+            </p>
+            {/* <h4>Ingredients:</h4>
               <ul>
                 {cocktail.ingredients.map((ingredient, index) => (
                   <li key={index}>
@@ -46,11 +45,11 @@ export default function MostLikedDrinks() {
                   </li>
                 ))}
               </ul> */}
-              <h4>Instructions:</h4>
-              <p>{cocktail.instructions}</p>
-            </div>
+            <h4>Instructions:</h4>
+            <p>{cocktail.instructions}</p>
           </div>
-        ))}
+        </div>
+      ))}
     </div>
   );
 }
