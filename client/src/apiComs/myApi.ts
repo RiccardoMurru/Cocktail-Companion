@@ -1,26 +1,32 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 import { getCocktailById } from './cocktailDbApi';
 import { MostLikedDrink } from '../interfaces/MostLikedDrinks';
 
-
 const rootUrl = 'http://localhost:3001';
 
-export async function fetchMostLikedDrinksWithDetails(): Promise<(MostLikedDrink| null)[]>{
+export async function fetchMostLikedDrinksWithDetails(): Promise<
+  (MostLikedDrink | null)[]
+> {
   try {
     const response = await axios.get(`${rootUrl}/most-liked-drinks`);
     const mostLikedDrinksData: MostLikedDrink[] = response.data;
 
-    const sortedDrinks = mostLikedDrinksData.sort((a, b) => b.likeCount - a.likeCount);
+    const sortedDrinks = mostLikedDrinksData.sort(
+      (a, b) => b.likeCount - a.likeCount
+    );
 
     const mostLikedDrinksWithDetails = await Promise.all(
-      sortedDrinks.map(async (drink) => {
+      sortedDrinks.map(async drink => {
         try {
           const detailedDrinkInfo = await getCocktailById(drink._id);
           return { ...drink, ...detailedDrinkInfo };
         } catch (error) {
-          console.error(`Error fetching details for drink with ID ${drink._id}:`, error);
+          console.error(
+            `Error fetching details for drink with ID ${drink._id}:`,
+            error
+          );
           return null;
         }
       })
@@ -32,8 +38,6 @@ export async function fetchMostLikedDrinksWithDetails(): Promise<(MostLikedDrink
     throw error;
   }
 }
-
-
 
 export async function register(username: string, password: string) {
   const token = Cookies.get('token');
@@ -56,7 +60,9 @@ export async function register(username: string, password: string) {
     const userData = res.data;
     return userData;
   } catch (err) {
-    console.log('Error registering user');
+    const { message } =
+      ((err as AxiosError).response?.data as { message?: string }) || {};
+    throw new Error(message);
   }
 }
 
@@ -69,8 +75,8 @@ export async function getUser() {
 
     const res = await axios.get(`${rootUrl}/user-profile`, {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     } as AxiosRequestConfig);
 
     const userData = res.data;
@@ -88,14 +94,14 @@ export async function addFavourite(faveId: string) {
       throw new Error('User not authenticated');
     }
     const dataObj = {
-      faveId
+      faveId,
     };
 
     const res = await axios.put(`${rootUrl}/add-fave`, dataObj, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     } as AxiosRequestConfig);
 
     const updatedUser = res.data;
@@ -113,14 +119,14 @@ export async function removeFavourite(faveId: string) {
     }
 
     const dataObj = {
-      faveId
+      faveId,
     };
 
     const res = await axios.put(`${rootUrl}/remove-fave`, dataObj, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     } as AxiosRequestConfig);
 
     const updatedUser = res.data;
