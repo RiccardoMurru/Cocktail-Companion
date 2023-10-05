@@ -48,7 +48,15 @@ export default function Favourites({ setPage, page }: PageProps) {
     <div className='list-page'>
       <header className='page-header'>
         <div className='header-wrapper'>
-          <img className='logo' src={logo} />
+          <div
+            className='logo'
+            onClick={() => {
+              setPage('search');
+              navigate('/');
+            }}
+          >
+            <img src={logo} alt='Logo' />
+          </div>
           <div className='button-container'>
             <button
               onClick={() => {

@@ -126,7 +126,7 @@ export async function getMostLikedDrinks (req: Request, res: Response) {
           $sort: { likeCount: -1 }
       },
       {
-          $limit: 10 // Limit the result to the top 10 most liked recipes
+          $limit: 10 
       }
     ]);
     res.json(mostLikedRecipes);
