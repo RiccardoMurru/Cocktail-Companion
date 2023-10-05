@@ -20,28 +20,28 @@ export default function MostLikedDrinks() {
   return (
     <div className='MostLikedCocktails'>
       <h2 className='title'>Top Cocktails:</h2>
-        {cocktails.map(cocktail => (
-          <div className='Cocktail' key={cocktail.idDrink}>
-            <img className='cocktail-img' src={cocktail.drinkThumb} />
-            <div className='cocktail-details'>
-              <h2>{cocktail.drink}</h2>
-              <p>
-                <span>Category: </span>
-                {cocktail.category}
-              </p>
-              <p>
-                <span>Glass: </span>
-                {cocktail.glass}
-              </p>
-              <p>
-                <span>Alcoholic: </span>
-                {cocktail.alcoholic}
-              </p>
-              <h4>Instructions:</h4>
-              <p>{cocktail.instructions}</p>
-            </div>
+      {cocktails.map((cocktail) => (
+        <div className='Cocktail' key={cocktail.idDrink}>
+          <img className='cocktail-img' src={cocktail.drinkThumb} />
+          <div className='cocktail-details'>
+            <h2>{cocktail.drink}</h2>
+            <p>
+              <span>Category: </span>
+              {cocktail.category}
+            </p>
+            <p>
+              <span>Glass: </span>
+              {cocktail.glass}
+            </p>
+            <p>
+              <span>Alcoholic: </span>
+              {cocktail.alcoholic}
+            </p>
+            <h4>Instructions:</h4>
+            <p>{cocktail.instructions}</p>
           </div>
-        ))}
+        </div>
+      ))}
     </div>
   );
 }

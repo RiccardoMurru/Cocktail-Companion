@@ -1,13 +1,24 @@
-
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import validator from 'validator';
 
 import UserModel from '../models/user';
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
     const { username, password } = req.body;
+    const orignalUsername = username;
+
+    const sanitizedUsername = validator.blacklist(username, '$.\\<>');
+
+    if (orignalUsername !== sanitizedUsername) {
+      res.status(400).json({
+        message:
+          'Registration failed. Use of characters $, ., , < & > is not allowed. Please try a different username.'
+      });
+      return;
+    }
     const user = await UserModel.findOne({ username });
 
     if (!user) {
@@ -39,6 +50,17 @@ export async function register(req: Request, res: Response): Promise<void> {
 export async function login(req: Request, res: Response) {
   try {
     const { username, password } = req.body;
+    const sanitizedUsername = validator.blacklist(username, '$.\\<>');
+    const orignalUsername = username;
+
+    if (orignalUsername !== sanitizedUsername) {
+      res.status(400).json({
+        message:
+          'Login failed. Use of characters $, ., , < & > is not allowed. Please try a again.'
+      });
+      return;
+    }
+
     const user = await UserModel.findOne({ username });
 
     if (!user || !password) {
@@ -109,24 +131,23 @@ export async function removeFavourite(req: Request, res: Response) {
   }
 }
 
-
-export async function getMostLikedDrinks (req: Request, res: Response) {
+export async function getMostLikedDrinks(req: Request, res: Response) {
   try {
     const mostLikedRecipes = await UserModel.aggregate([
       {
-          $unwind: "$favourites"
+        $unwind: '$favourites'
       },
       {
-          $group: {
-              _id: "$favourites",
-              likeCount: { $sum: 1 }
-          }
+        $group: {
+          _id: '$favourites',
+          likeCount: { $sum: 1 }
+        }
       },
       {
-          $sort: { likeCount: -1 }
+        $sort: { likeCount: -1 }
       },
       {
-          $limit: 10 
+        $limit: 10
       }
     ]);
     res.json(mostLikedRecipes);

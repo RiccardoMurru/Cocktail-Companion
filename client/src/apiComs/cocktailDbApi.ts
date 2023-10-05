@@ -14,26 +14,6 @@ export async function getAllIngredients() {
   }
 }
 
-export async function getAllCategories() {
-  try {
-    const res = await fetch(`${rootUrl}/list.php?c=list`);
-    const handledResponse: Drinks = await res.json();
-    return returnValues(handledResponse.drinks);
-  } catch (err) {
-    console.log('Get all categories failed');
-  }
-}
-
-export async function getAllGlassTypes() {
-  try {
-    const dbArray = await fetch(`${rootUrl}/list.php?g=list`);
-    const handledResponse: Drinks = await dbArray.json();
-    return returnValues(handledResponse.drinks);
-  } catch (err) {
-    console.log('Get all glass types failed');
-  }
-}
-
 export async function getRandomCocktail() {
   return getCocktails('random.php');
 }
