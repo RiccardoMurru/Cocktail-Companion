@@ -37,14 +37,6 @@ export default function MostLikedDrinks() {
               <span>Alcoholic: </span>
               {cocktail.alcoholic}
             </p>
-            {/* <h4>Ingredients:</h4>
-              <ul>
-                {cocktail.ingredients.map((ingredient, index) => (
-                  <li key={index}>
-                    {ingredient} - {cocktail.measures[index]}
-                  </li>
-                ))}
-              </ul> */}
             <h4>Instructions:</h4>
             <p>{cocktail.instructions}</p>
           </div>

@@ -10,9 +10,8 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate,
 } from 'react-router-dom';
-import MostLikedDrinks from './components/MostLikedDrinks';
+
 
 function App() {
   const [page, setPage] = useState<string>('search');

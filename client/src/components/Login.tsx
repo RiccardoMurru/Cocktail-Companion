@@ -35,7 +35,15 @@ export default function Login({ setPage }: PageProps) {
     <div className='login-page'>
       <header className='page-header'>
         <div className='header-wrapper'>
-          <img className='logo' src={logo} />
+          <div
+            className='logo'
+            onClick={() => {
+              setPage('search');
+              navigate('/');
+            }}
+          >
+            <img src={logo} alt='Logo' />
+          </div>
           <div className='button-container'>
             <Link to='/' className='login-button'>
               back
