@@ -12,19 +12,15 @@ export async function fetchMostLikedDrinksWithDetails(): Promise<(MostLikedDrink
     const response = await axios.get(`${rootUrl}/most-liked-drinks`);
     const mostLikedDrinksData: MostLikedDrinks[] = response.data;
 
-    // Sort drinks by likeCount in descending order
     const sortedDrinks = mostLikedDrinksData.sort((a, b) => b.likeCount - a.likeCount);
 
-    // Fetch detailed information for each most-liked drink
     const mostLikedDrinksWithDetails = await Promise.all(
       sortedDrinks.map(async (drink) => {
         try {
           const detailedDrinkInfo = await getCocktailById(drink._id);
-          // Merge detailed information with the most-liked drink data
           return { ...drink, ...detailedDrinkInfo };
         } catch (error) {
           console.error(`Error fetching details for drink with ID ${drink._id}:`, error);
-          // Handle errors or skip the drink in case of an error
           return null;
         }
       })
