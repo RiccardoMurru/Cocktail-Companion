@@ -2,15 +2,15 @@ import axios from 'axios';
 import { AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 import { getCocktailById } from './cocktailDbApi';
-import { MostLikedDrinks } from '../interfaces/MostLikedDrink';
-import { useAuth } from '../context/authContext';
+import { MostLikedDrink } from '../interfaces/MostLikedDrinks';
+
 
 const rootUrl = 'http://localhost:3001';
 
-export async function fetchMostLikedDrinksWithDetails(): Promise<(MostLikedDrinks| null)[]>{
+export async function fetchMostLikedDrinksWithDetails(): Promise<(MostLikedDrink| null)[]>{
   try {
     const response = await axios.get(`${rootUrl}/most-liked-drinks`);
-    const mostLikedDrinksData: MostLikedDrinks[] = response.data;
+    const mostLikedDrinksData: MostLikedDrink[] = response.data;
 
     const sortedDrinks = mostLikedDrinksData.sort((a, b) => b.likeCount - a.likeCount);
 
