@@ -50,6 +50,17 @@ export async function register(req: Request, res: Response): Promise<void> {
 export async function login(req: Request, res: Response) {
   try {
     const { username, password } = req.body;
+    const sanitizedUsername = validator.blacklist(username, '$.\\<>');
+    const orignalUsername = username;
+
+    if (orignalUsername !== sanitizedUsername) {
+      res.status(400).json({
+        message:
+          'Login failed. Use of characters $, ., , < & > is not allowed. Please try a again.'
+      });
+      return;
+    }
+
     const user = await UserModel.findOne({ username });
 
     if (!user || !password) {
