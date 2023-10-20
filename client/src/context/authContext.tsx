@@ -9,7 +9,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 import { User } from '../interfaces/User';
-const rootUrl = 'http://localhost:3001';
+const rootUrl = import.meta.env.VITE_SERVER_URL;
 
 export const AuthContext = createContext<{
   user: User | null;

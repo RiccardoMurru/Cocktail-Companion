@@ -1,7 +1,7 @@
 import { getCocktails, returnValues } from '../helpers';
 import { Drinks } from '../interfaces/Drink';
 
-const rootUrl = 'https://thecocktaildb.com/api/json/v2/9973533';
+const rootUrl = import.meta.env.VITE_API_URL;
 
 export async function getAllIngredients() {
   try {
