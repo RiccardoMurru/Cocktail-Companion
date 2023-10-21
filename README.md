@@ -44,8 +44,8 @@ Cocktail companion is built whith:
 
 ## The team:
 
-Based on Eduard Draghiciu's codebase: [GitHub](https://github.com/Eduardcodes)
+Based on Eduard Draghiciu's codebase: [GitHub](https://github.com/Eduardcodes) - [Linkedin](https://www.linkedin.com/in/eduard%2Ddraghiciu/)
 
 - Riccardo Murru: [GitHub](https://github.com/RiccardoMurru) - [Linkedin](https://www.linkedin.com/in/riccardomurru/)
-- Patricia Bárcena: [GitHub](https://github.com/patri27)
-- Hong Nhung Pham: [GitHub](https://github.com/Rosalina1309)
+- Patricia Bárcena: [GitHub](https://github.com/patri27) - [Linkedin](https://www.linkedin.com/in/patricia-barcena-bescansa/)
+- Hong Nhung Pham: [GitHub](https://github.com/Rosalina1309) - [Linkedin](https://www.linkedin.com/in/hongnhungpham1309/)
